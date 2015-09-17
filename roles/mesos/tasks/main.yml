@@ -23,11 +23,13 @@
 
 - name: configure cluster masters
   template: src=masters.j2 dest={{ mesos_install_prefix }}/etc/mesos/masters
+  when: "'groupname' == 'master'"
   tags:
     - configure
 
 - name: configure cluster slaves
   template: src=slaves.j2 dest={{ mesos_install_prefix }}/etc/mesos/slaves
+  when: "'groupname' == 'workers'"
   tags:
     - configure
 
@@ -46,7 +48,7 @@
 
 - name: start Mesos cluster
   command: "{{ mesos_install_prefix }}/sbin/mesos-start-cluster.sh"
-  when: ansible_hostname == "master"
+  when: "'groupname' == 'master'"
   ignore_errors: true
   tags:
     - configure
