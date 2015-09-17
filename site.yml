@@ -1,48 +1,56 @@
 ---
 - name: apply common configuration to all nodes
   hosts: all
+  sudo: yes
   roles:
     - common
   any_errors_fatal: yes
 
 - name: set up master host for convenience
   hosts: master
+  sudo:	yes
   roles:
     - goodies
   any_errors_fatal: yes
 
 - name: create non-root clusteruser user
   hosts: all
+  sudo:	yes
   roles:
     - clusteruser_common
   any_errors_fatal: yes
 
 - name: setup passwordless SSH for clusteruser - donor key
   hosts: master
+  sudo:	yes
   roles: 
     - { role: sshkey_donor }
   any_errors_fatal: yes
 
 - name: setup passwordless SSH for clusteruser - accept key
   hosts: workers
+  sudo:	yes
   roles:
     - { role: sshkey_acceptor }
   any_errors_fatal: yes
 
 - name: setup passwordless SSH for user root - donor key
   hosts: master
+  sudo:	yes
   roles:
     - { role: sshkey_donor, clusteruser: root, clusteruser_home: '/root' }
   any_errors_fatal: yes
 
 - name: setup passwordless SSH for user root - accept key
   hosts: workers
+  sudo:	yes
   roles:
     - { role: sshkey_acceptor, clusteruser: root, clusteruser_home: '/root' }
   any_errors_fatal: yes
 
 - name: setup nfs master
   hosts: master
+  sudo:	yes
   vars_files:
     - group_vars/components.yml
   roles: 
@@ -50,6 +58,7 @@
 
 - name: setup nfs clients
   hosts: workers
+  sudo:	yes
   vars_files:
     - group_vars/components.yml
   roles: 
@@ -57,6 +66,7 @@
 
 - name: setup mpi cluster
   hosts: all
+  sudo:	yes
   vars_files:
     - group_vars/components.yml
   roles:
@@ -64,6 +74,7 @@
 
 - name: install SBT
   hosts: master
+  sudo:	yes
   vars_files:
     - group_vars/components.yml
   roles:
@@ -72,6 +83,7 @@
 
 - name: install Scala
   hosts: master
+  sudo:	yes
   vars_files:
     - group_vars/components.yml
   roles:
@@ -80,6 +92,7 @@
 
 - name: setup HDFS namenode
   hosts: master
+  sudo:	yes
   vars_files:
     - group_vars/components.yml
   roles:
@@ -88,6 +101,7 @@
 
 - name: setup HDFS datanodes
   hosts: workers
+  sudo:	yes
   vars_files:
     - group_vars/components.yml
   roles:
@@ -96,6 +110,7 @@
 
 - name: deploy standalone Spark
   hosts: all
+  sudo:	yes
   vars_files:
     - group_vars/components.yml
   roles:
@@ -104,6 +119,7 @@
 
 - name: install Mesos
   hosts: all
+  sudo:	yes
   vars_files:
     - group_vars/components.yml
   roles:
@@ -112,6 +128,7 @@
 
 - name: deploy Spark on Mesos
   hosts: master
+  sudo:	yes
   vars_files:
     - group_vars/components.yml
   roles:
@@ -120,6 +137,7 @@
 
 - name: install mysql on Hive master
   hosts: master
+  sudo:	yes
   vars_files:
     - group_vars/components.yml
   roles:
@@ -128,6 +146,7 @@
 
 - name: install Hive
   hosts: master
+  sudo:	yes
   vars_files:
     - group_vars/components.yml
   roles:
@@ -136,6 +155,7 @@
 
 - name: deploy Tachyon
   hosts: all
+  sudo:	yes
   vars_files:
     - group_vars/components.yml
   roles:
@@ -144,6 +164,7 @@
 
 - name: setup YARN resourcemanager
   hosts: master
+  sudo:	yes
   vars_files:
     - group_vars/components.yml
   roles:
@@ -152,6 +173,7 @@
 
 - name: setup YARN nodemanagers
   hosts: workers
+  sudo:	yes
   vars_files:
     - group_vars/components.yml
   roles:
@@ -160,6 +182,7 @@
 
 - name: install Cassandra
   hosts: all
+  sudo:	yes
   vars_files:
     - group_vars/components.yml
   roles:
