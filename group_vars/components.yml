@@ -1,4 +1,4 @@
-install_spark: true
+install_spark: false
 install_mesos: true
 install_mpi: false
 install_mapred: false
