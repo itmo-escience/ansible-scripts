@@ -1,3 +1,5 @@
 swift.yml
 *.log
 .vagrant
+.idea
+hdfs_data

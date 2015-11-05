@@ -1,9 +1,9 @@
-[submodule "roles/java"]
-	path = roles/java
+[submodule "ansible-bdas/roles/java"]
+	path = ansible-bdas/roles/java
 	url = https://github.com/AnsibleShipyard/ansible-java.git
-[submodule "roles/scala"]
-	path = roles/scala
+[submodule "ansible-bdas/roles/scala"]
+	path = ansible-bdas/roles/scala
 	url = https://github.com/AnsibleShipyard/ansible-scala.git
-[submodule "roles/sbt"]
-	path = roles/sbt
+[submodule "ansible-bdas/roles/sbt"]
+	path = ansible-bdas/roles/sbt
 	url = https://github.com/AnsibleShipyard/ansible-sbt.git

@@ -40,31 +40,23 @@ Vagrant.configure("2") do |config|
       #c.vm.box = "ubuntu/trusty64"
       c.vm.box = "ubuntu-trusty64"
       c.vm.hostname = name
-      #c.vm.provision "shell" do |s|
-      #  dns_server = "if ! grep -q \'nameserver 192.168.13.132\' /etc/resolvconf/resolv.conf.d/head; then echo 'nameserver 192.168.13.132'|tee --append /etc/resolvconf/resolv.conf.d/head; fi;resolvconf -u;"
-#	default_iface = "ip route change to default dev eth1;"
-#	hosts_file = "echo '127.0.0.1 localhost'|tee /etc/hosts;echo '#{ip} #{name}'|tee --append /etc/hosts;"
-#	#dns_server = ""
-	#mount_devfiles = "apt-get install cifs-utils;mount -t cifs //192.168.1.225/rendler -o username=nano,password=Yt1NyDpQNm,noperm ./devfiles;"
-#	s.inline = "#{hosts_file}#{dns_server}#{default_iface}apt-add-repository ppa:ansible/ansible -y; apt-get update -y; apt-get install ansible -y;"
-#        
-#	s.privileged = true
-#      end
+    c.vm.provision "shell" do |s|
+        dns_server = "if ! grep -q \'nameserver 192.168.13.132\' /etc/resolvconf/resolv.conf.d/head; then echo 'nameserver 192.168.13.132'|tee --append /etc/resolvconf/resolv.conf.d/head; fi;resolvconf -u;"
+        default_iface = "ip route change to default dev eth1;"
+        hosts_file = "echo '127.0.0.1 localhost'|tee /etc/hosts;echo '#{ip} #{name}'|tee --append /etc/hosts;"
+        #mount_devfiles = "apt-get install cifs-utils;mount -t cifs //192.168.1.225/rendler -o username=nano,password=Yt1NyDpQNm,noperm ./devfiles;"
+        s.inline = "#{hosts_file}#{dns_server}#{default_iface}apt-add-repository ppa:ansible/ansible -y; apt-get update -y; apt-get install ansible -y;"
+        s.privileged = true
+    end
 
       c.vm.provision "shell", path: "install-mesos-python-binding.sh"
  
       c.vm.provider :virtualbox do |vb|
-	#vb.customize ["modifyvm", :id, "--memory", 8129]
-	#vb.customize ["modifyvm", :id, "--cpus", "2"]
       	vb.memory = 8192
-	vb.cpus = 2
+	    vb.cpus = 2
       end
       c.vm.synced_folder "hdfs_data/data_#{name}", "/hdfs_data", create: true, mount_options: ["dmode=777,fmode=777"]
-      #c.vm.provision "ansible" do |ansible|
-      #    ansible.playbook = "playbook.yml"
-      #    ansible.inventory_path="hosts"
-      #    ansible.verbose = "vvvv"
-      #end
+
     end
   end
 end
