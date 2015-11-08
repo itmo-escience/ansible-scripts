@@ -7,13 +7,13 @@ Vagrant.configure("2") do |config|
   config.ssh.insert_key = false
   config.vm.synced_folder Dir.getwd, "/home/vagrant/ansible-mesos-playbook"
 	
-  if Vagrant.has_plugin?("vagrant-proxyconf")
-    config.proxy.http     = "http://proxy.ifmo.ru:3128/"
-    config.proxy.no_proxy = "localhost,127.0.0.1,"
-  end
+  #if Vagrant.has_plugin?("vagrant-proxyconf")
+  #  config.proxy.http     = "http://proxy.ifmo.ru:3128/"
+  #  config.proxy.no_proxy = "localhost,127.0.0.1,"
+  #end
 
   # read data for vagrant run
-  nds = File.open("hosts","r") do |hosts|
+  nds = File.open("./ansible-bdas/hosts","r") do |hosts|
 	nodes = {}
 	while(line = hosts.gets) do
 		if line.start_with?("###")
@@ -37,22 +37,30 @@ Vagrant.configure("2") do |config|
     config.vm.define name, primary: true do |c|
       c.vm.network "public_network", ip: ip, netmask: "255.255.0.0"
       #c.vm.box = "build/mesos-ubuntu"
-      #c.vm.box = "ubuntu/trusty64"
-      c.vm.box = "ubuntu-trusty64"
+      c.vm.box = "ubuntu/trusty64"
+      #c.vm.box = "ubuntu-trusty64"
       c.vm.hostname = name
     c.vm.provision "shell" do |s|
         dns_server = "if ! grep -q \'nameserver 192.168.13.132\' /etc/resolvconf/resolv.conf.d/head; then echo 'nameserver 192.168.13.132'|tee --append /etc/resolvconf/resolv.conf.d/head; fi;resolvconf -u;"
         default_iface = "ip route change to default dev eth1;"
         hosts_file = "echo '127.0.0.1 localhost'|tee /etc/hosts;echo '#{ip} #{name}'|tee --append /etc/hosts;"
         #mount_devfiles = "apt-get install cifs-utils;mount -t cifs //192.168.1.225/rendler -o username=nano,password=Yt1NyDpQNm,noperm ./devfiles;"
-        s.inline = "#{hosts_file}#{dns_server}#{default_iface}apt-add-repository ppa:ansible/ansible -y; apt-get update -y; apt-get install ansible -y;"
+        #s.inline = "#{hosts_file}#{dns_server}#{default_iface}apt-add-repository ppa:ansible/ansible -y; apt-get update -y; apt-get install ansible -y;"
+        #s.inline = "#{hosts_file}#{dns_server}#{default_iface}"
+
+        # TODO: remove this hack later
+        hack_hosts_file_1 = "echo '192.168.92.11 node-92-11'|tee --append /etc/hosts;"
+        hack_hosts_file_2 = "echo '192.168.92.12 node-92-12'|tee --append /etc/hosts;"
+        hack_hosts_file_3 = "echo '192.168.92.13 node-92-13'|tee --append /etc/hosts;"
+
+        s.inline = "#{hosts_file}#{dns_server}#{default_iface}#{hack_hosts_file_1}#{hack_hosts_file_2}#{hack_hosts_file_3}"
         s.privileged = true
     end
 
       c.vm.provision "shell", path: "install-mesos-python-binding.sh"
  
       c.vm.provider :virtualbox do |vb|
-      	vb.memory = 8192
+      	vb.memory = 3189
 	    vb.cpus = 2
       end
       c.vm.synced_folder "hdfs_data/data_#{name}", "/hdfs_data", create: true, mount_options: ["dmode=777,fmode=777"]
