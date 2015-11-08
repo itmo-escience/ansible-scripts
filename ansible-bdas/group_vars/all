@@ -8,5 +8,6 @@ master_hostname: "{{ hostvars[groups['master'][0]]['ansible_hostname'] }}"
 
 clusteruser: "hadoop"
 clusteruser_home: "/home/hadoop"
+sshkeys_path: "../sshkey"
 
 bdas_container: "ampcamp-data"
