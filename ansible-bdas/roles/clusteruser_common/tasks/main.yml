@@ -1,7 +1,7 @@
 ---
 - name: create cluster user on all hosts
 # TODO: replace with using of previously generated sshkey
-  user: name={{ clusteruser }} generate_ssh_key=no state=present
+  user: name={{ clusteruser }} generate_ssh_key=yes state=present
   # ignore 'permission denied' errors when user is already shared across NFS
   ignore_errors: yes
   tags:
@@ -15,7 +15,6 @@
     - authorized_keys
   tags:
     - install
-
 
 - name: disable strict host checking for cluster user
   copy: src=sshconfig dest=/home/{{ clusteruser }}/.ssh/config

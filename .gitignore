@@ -1,5 +1,5 @@
 swift.yml
-.log
+*.log
 .vagrant
 .idea
 hdfs_data
