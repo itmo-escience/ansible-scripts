@@ -8,3 +8,12 @@ node-92-11
 [workers]
 node-92-12
 node-92-13
+
+
+[mongo_master]
+node-92-11 mongodb_master=True # it'n not a really master of MongoDB replica set,
+                                 # use this variable for replica set init only
+
+[mongo_replicas]
+node-92-12
+node-92-13

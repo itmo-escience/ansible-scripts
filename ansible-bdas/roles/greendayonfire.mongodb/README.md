@@ -1,20 +1,15 @@
-# Variables for all hosts
+Ansible role for MongoDB
+============
+This repository forked from [Stouts.mongodb](https://github.com/Stouts/Stouts.mongodb).  
+Ansible role which manage [MongoDB](http://www.mongodb.org/)
 
-iface: eth1
+* Install and configure the MongoDB;
+* Provide handlers for restart and reload;
+* Setup MMS authomation agent;
 
-master_ip: "{{ hostvars[groups['master'][0]]['ansible_' + iface]['ipv4']['address'] }}"
-master_fqdn: "{{ hostvars[groups['master'][0]]['ansible_fqdn'] }}"
-master_hostname: "{{ hostvars[groups['master'][0]]['ansible_hostname'] }}"
+#### Variables
 
-clusteruser: "hadoop"
-clusteruser_home: "/home/hadoop"
-sshkeys_path: "../sshkey"
-
-bdas_container: "ampcamp-data"
-
-
-java_packages: oracle-java8-installer
-
+```yaml
 mongodb_package: mongodb-org
 
 mongodb_force_wait_for_port: false                # When not forced, the role will wait for mongod port to become available only with systemd
@@ -96,3 +91,48 @@ mongodb_user_admin_password: passw0rd
 
 mongodb_root_admin_name: siteRootAdmin
 mongodb_root_admin_password: passw0rd
+```
+
+#### Usage
+
+Add `greendayonfire.mongodb` to your roles and set vars in your playbook file.
+
+Example vars for authorization:
+```yaml
+mongodb_conf_auth: true
+mongodb_users:
+  - {
+    name: testUser,
+    password: passw0rd,
+    roles: readWrite,
+    database: app_development
+}
+```
+Required vars to change on production:
+```yaml
+mongodb_user_admin_password
+mongodb_root_admin_password
+```
+Example vars for replication:
+```yaml
+# mongodb_replication_params should be configured on each replica set node
+mongodb_replication_params:
+  - { host_name: 192.168.56.2, host_port: "{{ mongodb_conf_port }}", host_type: replica }
+  # host_type can be replica(default) and arbiter
+```
+And inventory file for replica set:
+```ini
+[mongo_master]
+192.158.56.2 mongodb_master=True # it'n not a really master of MongoDB replica set, 
+                                 # use this variable for replica set init only
+
+[mongo_replicas]
+192.168.56.3
+192.168.56.4
+```
+
+Licensed under the GPLv2 License. See the [LICENSE.md](LICENSE.md) file for details.
+
+#### Feedback, bug-reports, requests, ...
+
+Are [welcome](https://github.com/UnderGreen/ansible-role-mongodb/issues)!

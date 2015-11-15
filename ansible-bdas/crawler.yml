@@ -1,0 +1,7 @@
+---
+- hosts: all
+  remote_user: vagrant
+  sudo: yes
+  roles:
+       - { role: smola.java }
+       - { role: greendayonfire.mongodb }

@@ -1,23 +1,9 @@
-# Variables for all hosts
-
-iface: eth1
-
-master_ip: "{{ hostvars[groups['master'][0]]['ansible_' + iface]['ipv4']['address'] }}"
-master_fqdn: "{{ hostvars[groups['master'][0]]['ansible_fqdn'] }}"
-master_hostname: "{{ hostvars[groups['master'][0]]['ansible_hostname'] }}"
-
-clusteruser: "hadoop"
-clusteruser_home: "/home/hadoop"
-sshkeys_path: "../sshkey"
-
-bdas_container: "ampcamp-data"
-
-
-java_packages: oracle-java8-installer
+---
 
 mongodb_package: mongodb-org
-
-mongodb_force_wait_for_port: false                # When not forced, the role will wait for mongod port to become available only with systemd
+mongodb_apt_key_url: http://docs.mongodb.org/10gen-gpg-key.asc
+mongodb_apt_key_id: 7F0CEB10
+mongodb_force_wait_for_port: false
 mongodb_pymongo_from_pip: false                   # Install latest PyMongo via PIP or package manager
 mongodb_disable_thp: true
 
