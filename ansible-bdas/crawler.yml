@@ -1,25 +1,25 @@
 ---
-#- name: apply common configuration to all nodes
-#  hosts: all
-#  sudo: yes
-#  roles:
-#    - common
-#  any_errors_fatal: yes
-#
-#- name: apply java 8 and mongodb to all nodes
-#  hosts: all
-#  remote_user: vagrant
-#  sudo: yes
-#  roles:
-#       - { role: smola.java }
-#       - { role: greendayonfire.mongodb }
+- name: apply common configuration to all nodes
+  hosts: all
+  sudo: yes
+  roles:
+    - common
+  any_errors_fatal: yes
+
+- name: apply java 8 and mongodb to all nodes
+  hosts: all
+  remote_user: vagrant
+  sudo: yes
+  roles:
+       - { role: smola.java }
+       - { role: greendayonfire.mongodb }
 
 - name: clone project to all nodes
   hosts: all
   remote_user: vagrant
   sudo: yes
   tasks:
-    - git: repo=https://github.com/itmo-escience/SNCrawler.git
+    - git: repo=git@github.com:itmo-escience/SNCrawler.git
            dest=/SNCrawler
            accept_hostkey=True
            key_file="/home/vagrant/project/sshkey/id_rsa"
