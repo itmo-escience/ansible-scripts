@@ -14,10 +14,12 @@
        - { role: smola.java }
        - { role: greendayonfire.mongodb }
 
-- name: clone project to all nodes
-  hosts: all
+- name: clone and build project on localhost
+  hosts: localhost
   remote_user: vagrant
   sudo: yes
+  tags:
+   -  build
   tasks:
     - git: repo=git@github.com:itmo-escience/SNCrawler.git
            dest=/SNCrawler
@@ -25,3 +27,15 @@
            key_file="/home/vagrant/project/sshkey/id_rsa"
            clone=yes update=yes
 
+    - shell: mvn clean install
+      args:
+        chdir: /SNCrawler
+
+- name: copy project to all
+  hosts: all
+  remote_user: vagrant
+  sudo: yes
+  tags:
+   -  build
+  tasks:
+    - copy: src=/SNCrawler dest=/
