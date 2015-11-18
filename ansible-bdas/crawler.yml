@@ -1,35 +1,37 @@
 ---
+
 - name: apply common configuration to all nodes
   hosts: all
   sudo: yes
+  tags:
+     -  prepare
   roles:
     - common
-  any_errors_fatal: yes
+    - smola.java
+#    - greendayonfire.mongodb
+#  any_errors_fatamongol: yes
 
-- name: apply java 8 and mongodb to all nodes
-  hosts: all
-  remote_user: vagrant
-  sudo: yes
-  roles:
-       - { role: smola.java }
-       - { role: greendayonfire.mongodb }
+
 
 - name: clone and build project on localhost
-  hosts: localhost
+  hosts: controlmachine
   remote_user: vagrant
   sudo: yes
   tags:
    -  build
   tasks:
     - git: repo=git@github.com:itmo-escience/SNCrawler.git
+           version="releases"
            dest=/SNCrawler
            accept_hostkey=True
            key_file="/home/vagrant/project/sshkey/id_rsa"
            clone=yes update=yes
-
+    - apt: name=maven update_cache=yes
     - shell: mvn clean install
       args:
         chdir: /SNCrawler
+
+
 
 - name: copy project to all
   hosts: all
@@ -39,3 +41,52 @@
    -  build
   tasks:
     - copy: src=/SNCrawler dest=/
+
+
+
+- name: stop SNCrawler
+  hosts: all
+  sudo: yes
+  tags:
+    - stop
+  tasks:
+    - name: stop SNCrawler
+      action: "shell pkill -f 'SNCrawler'"
+      ignore_errors: True
+
+
+
+
+- name: start SNCrawler master
+  hosts: master
+  sudo: yes
+  tags:
+    - start
+  tasks:
+    - name: Starting SNCrawler MasterActorRunner
+      shell: "nohup java -cp target/SNCrawler-1.0.jar:target/lib/* crawler.akka.MasterActorRunner {{ hostvars[groups['master'][0]].inventory_hostname }} > output/MasterActor.txt &"
+      args:
+        chdir: "/SNCrawler"
+
+    - name: Starting SNCrawler FollowerFinderActorRunner
+      shell: "nohup java -cp target/SNCrawler-1.0.jar:target/lib/* crawler.akka.FollowerFinderActorRunner {{ hostvars[groups['master'][0]].inventory_hostname }} {{inventory_hostname }} {{inventory_hostname }} > output/FollowerFinderBalancerActor.txt &"
+      args:
+        chdir: "/SNCrawler"
+
+    - name: Starting SNCrawler TwitterStreamActorRunner
+      shell: "nohup java -cp target/SNCrawler-1.0.jar:target/lib/* crawler.akka.TwitterStreamActorRunner {{ hostvars[groups['master'][0]].inventory_hostname }} {{inventory_hostname }} > output/TwitterStreamActor.txt &"
+      args:
+        chdir: "/SNCrawler"
+
+
+
+- name: starting SNCrawler worker
+  hosts: workers
+  sudo: yes
+  tags:
+    - start
+  tasks:
+    - name: Starting SNCrawler FollowerFinderActorRunner
+      shell: "nohup java -cp target/SNCrawler-1.0.jar:target/lib/* crawler.akka.FollowerFinderActorRunner {{ hostvars[groups['master'][0]].inventory_hostname }} {{inventory_hostname }} > output/FollowerFinderActor.txt &"
+      args:
+        chdir: "/SNCrawler"
