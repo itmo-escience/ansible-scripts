@@ -1,0 +1,8 @@
+---
+
+- hosts: all
+  sudo: yes
+  roles:
+    - franklinkim.mongodb
+  vars:
+    mongodb_package: mongodb-org=3.0.1
