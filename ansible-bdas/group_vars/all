@@ -1,5 +1,6 @@
 # Variables for all hosts
 
+
 iface: eth1
 
 master_ip: "{{ hostvars[groups['master'][0]]['ansible_' + iface]['ipv4']['address'] }}"
@@ -12,10 +13,12 @@ sshkeys_path: "../sshkey"
 
 bdas_container: "ampcamp-data"
 
+#SNCrawler vars:
+environment:
+ http_proxy: http://proxy.ifmo.ru:3128
+ HTTP_PROXY: http://proxy.ifmo.ru:3128
 
 java_packages: oracle-java8-installer
-
-
 
 mongodb_package: mongodb-org=3.0.7
 

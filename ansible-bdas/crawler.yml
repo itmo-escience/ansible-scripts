@@ -7,6 +7,9 @@
     - prepare
   roles:
     - smola.java
+  environment:
+        http_proxy: http://proxy.ifmo.ru:3128
+        HTTP_PROXY: http://proxy.ifmo.ru:3128
 
 
 - name: apply mongo to master
@@ -16,6 +19,9 @@
     - prepare
   roles:
     - mongodb
+  environment:
+        http_proxy: http://proxy.ifmo.ru:3128
+        HTTP_PROXY: http://proxy.ifmo.ru:3128
   tasks:
     - action: "shell pkill -f 'mongod'"
       ignore_errors: True
@@ -38,6 +44,13 @@
            key_file="/home/vagrant/project/sshkey/id_rsa"
            clone=yes update=yes
     - apt: name=maven update_cache=yes
+
+- name: build project on localhost
+  hosts: controlmachine
+  remote_user: vagrant
+  tags:
+   -  build
+  tasks:
     - shell: mvn clean install
       args:
         chdir: /SNCrawler
@@ -72,7 +85,7 @@
   hosts: master
   sudo: yes
   tags:
-    - start
+    - start distributed mode
   tasks:
     - name: Starting SNCrawler MasterActorRunner
       shell: "nohup java -cp target/SNCrawler-1.0.jar:target/lib/* crawler.akka.MasterActorRunner {{ master_hostname }} > output/MasterActor.txt &"
@@ -95,9 +108,21 @@
   hosts: workers
   sudo: yes
   tags:
-    - start
+    - start distributed mode
   tasks:
     - name: Starting SNCrawler FollowerFinderActorRunner
       shell: "nohup java -cp target/SNCrawler-1.0.jar:target/lib/* crawler.akka.FollowerFinderActorRunner {{ master_hostname }} {{inventory_hostname }} > output/FollowerFinderActor.txt &"
       args:
         chdir: "/SNCrawler"
+
+
+#- name: starting SNCrawler
+#  hosts: master
+#  sudo: yes
+#  tags:
+#    - start standalone mode
+#  tasks:
+#    - name: Starting SNCrawler StandaloneModeRunner
+#      shell: "nohup java -cp target/SNCrawler-1.0.jar:target/lib/* crawler.akka.StandaloneModeRunner > output/StandaloneMode.txt &"
+#      args:
+#        chdir: "/SNCrawler"
