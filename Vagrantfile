@@ -7,10 +7,10 @@ Vagrant.configure("2") do |config|
   config.ssh.insert_key = false
   config.vm.synced_folder ".", "/home/vagrant/project", :mount_options => ["dmode=777","fmode=666"]
 	
-  #if Vagrant.has_plugin?("vagrant-proxyconf")
-  #  config.proxy.http     = "http://proxy.ifmo.ru:3128/"
-  #  config.proxy.no_proxy = "localhost,127.0.0.1,"
-  #end
+  if Vagrant.has_plugin?("vagrant-proxyconf")
+    config.proxy.http     = "http://proxy.ifmo.ru:3128/"
+    config.proxy.no_proxy = "localhost,127.0.0.1,"
+  end
 
   # read data for vagrant run
   nds = File.open("./ansible-bdas/hosts","r") do |hosts|

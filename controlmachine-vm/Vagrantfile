@@ -6,17 +6,19 @@ Vagrant.configure("2") do |config|
   config.ssh.forward_agent = true
   config.ssh.insert_key = false
   config.vm.synced_folder "..", "/home/vagrant/project", :mount_options => ["dmode=777","fmode=600"]
-	
-  #if Vagrant.has_plugin?("vagrant-proxyconf")
-  #  config.proxy.http     = "http://proxy.ifmo.ru:3128/"
-  #  config.proxy.no_proxy = "localhost,127.0.0.1,"
-  #end
+
+  # TODO: need to add an ability to classify environment to run
+  if Vagrant.has_plugin?("vagrant-proxyconf")
+    config.proxy.http     = "http://proxy.ifmo.ru:3128/"
+    config.proxy.no_proxy = "localhost,127.0.0.1,"
+  end
 
   name = "controlmachine"
   ip = "192.168.92.5"
   # ubuntu
   config.vm.define name, primary: true do |c|
-      c.vm.network "public_network", ip: ip, netmask: "255.255.255.0"
+      #c.vm.network "public_network", ip: ip, netmask: "255.255.255.0"
+      c.vm.network "public_network", ip: ip, netmask: "255.255.0.0"
       c.vm.box = "ubuntu/trusty64"
       c.vm.hostname = name
       c.vm.provision "shell" do |s|
