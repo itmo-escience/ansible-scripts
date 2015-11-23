@@ -1,5 +1,5 @@
 # Mesos masters
-{% for host in groups['workers'] %}
+{% for host in groups['worker'] %}
 {{ hostvars[host]['ansible_' + iface]['ipv4']['address'] }}
 {% endfor %}
 

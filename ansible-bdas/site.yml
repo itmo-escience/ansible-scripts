@@ -14,14 +14,23 @@
     - clusteruser_common
   any_errors_fatal: yes
 
-#- name: install Mesos
-#  hosts: all
-#  sudo:	yes
-#  vars_files:
-#    - group_vars/components.yml
-#  roles:
-#    - { role: mesos, when: install_mesos }
-#  any_errors_fatal: yes
+- name: install Mesos slaves
+  hosts: worker
+  sudo:	yes
+  vars_files:
+    - group_vars/components.yml
+  roles:
+    - { role: mesos_slave}
+  any_errors_fatal: yes
+
+- name: install Mesos masters
+  hosts: master
+  sudo:	yes
+  vars_files:
+    - group_vars/components.yml
+  roles:
+    - { role: mesos_master}
+  any_errors_fatal: yes
 #
 #- name: setup HDFS namenode
 #  hosts: master

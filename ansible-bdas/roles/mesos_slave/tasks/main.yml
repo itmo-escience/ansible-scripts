@@ -1,0 +1,31 @@
+---
+- name: configure cluster masters
+  template: src=masters.j2 dest={{ mesos_install_prefix }}/etc/mesos/masters
+  tags:
+    - configure
+
+#- name: configure cluster slaves
+#  template: src=slaves.j2 dest={{ mesos_install_prefix }}/etc/mesos/slaves
+#  when: install_mode == "master"
+#  tags:
+#    - configure
+
+- name: setup deploy environment for slave
+  template: src=mesos-slave-env.sh.j2 dest={{ mesos_install_prefix }}/etc/mesos/mesos-slave-env.sh
+  tags:
+    - configure
+
+#- name: setup deploy environment
+#  copy: src={{ item }} dest={{ mesos_install_prefix }}/etc/mesos/{{ item }}
+#  with_items:
+#    - mesos-master-env.sh
+#    - mesos-deploy-env.sh
+#  tags:
+#    - configure
+
+#- name: start Mesos cluster
+#  command: "{{ mesos_install_prefix }}/sbin/mesos-start-cluster.sh"
+#  when: install_mode == "master"
+#  ignore_errors: true
+#  tags:
+#    - start

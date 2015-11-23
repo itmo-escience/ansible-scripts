@@ -1,0 +1,20 @@
+---
+- name: Test
+  hosts: all
+  sudo: yes
+  tasks:
+    - name: install some tools for convenience
+      apt: name={{ item }} state=present update_cache=yes force=yes
+      sudo: yes
+      with_items:
+        - vim
+        - tmux
+        - git
+        - htop
+        - nmon
+        - build-essential
+        - python-swiftclient
+        - libgfortran3
+        - python-pycurl
+      tags:
+        - install
