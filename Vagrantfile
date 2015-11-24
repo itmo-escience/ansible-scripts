@@ -35,7 +35,13 @@ Vagrant.configure("2") do |config|
     ip = nds[name]["ansible_ssh_host"]
 
     config.vm.define name, primary: true do |c|
-      c.vm.network "public_network", ip: ip, netmask: "255.255.0.0"
+       c.vm.network "private_network", ip: ip
+   #   c.vm.network "public_network", ip: ip
+   #   c.vm.network "forwarded_port",  guest: 22,  host: 22,  id: "ssh",  auto_correct: true
+      c.vm.network :forwarded_port, guest: 5050, host: 5050, auto_correct: true
+   #   c.vm.network :forwarded_port, guest: 5051, host: 5051, auto_correct: true
+   #   c.ssh.forward_agent = true
+
       #c.vm.box = "build/mesos-ubuntu"
       c.vm.box = "ubuntu/trusty64"
       #c.vm.box = "ubuntu-trusty64"
