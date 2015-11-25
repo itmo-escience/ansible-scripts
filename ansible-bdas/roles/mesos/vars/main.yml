@@ -1,10 +1,11 @@
 ---
+install: true
+configure: true
+start: true
+stop: false
 
 mesos_version: 0.25.0-1.0.ubuntu1404
-mesos_local_address: "{{ansible_eth1.ipv4.address}}"
+mesos_install_prefix: "/usr"
+mesos_master_host: "{{ master_hostname }}"
 mesos_cluster_name: "Cluster01"
-mesos_quorum_count: "1"
-zookeeper_client_port: "2181"
-zookeeper_leader_port: "2888"
-zookeeper_election_port: "3888"
-zookeeper_url: "zk://{{ groups.mesos_masters | join(':' + zookeeper_client_port + ',') }}:{{ zookeeper_client_port }}/mesos"
+mesos_cluster_mode: "masters_file"

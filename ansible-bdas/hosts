@@ -1,9 +1,9 @@
 
 ####
-[master]
+[mesos_masters]
 localhost
 
-[worker]
+[mesos_slaves]
 localhost
 
 
