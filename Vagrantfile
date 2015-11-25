@@ -35,7 +35,13 @@ Vagrant.configure("2") do |config|
     ip = nds[name]["ansible_ssh_host"]
 
     config.vm.define name, primary: true do |c|
-      c.vm.network "public_network", ip: ip, netmask: "255.255.0.0"
+       c.vm.network "private_network", ip: ip
+   #   c.vm.network "public_network", ip: ip
+   #   c.vm.network "forwarded_port",  guest: 22,  host: 22,  id: "ssh",  auto_correct: true
+      c.vm.network :forwarded_port, guest: 5050, host: 5050, auto_correct: true
+   #   c.vm.network :forwarded_port, guest: 5051, host: 5051, auto_correct: true
+   #   c.ssh.forward_agent = true
+
       #c.vm.box = "build/mesos-ubuntu"
       c.vm.box = "ubuntu/trusty64"
       #c.vm.box = "ubuntu-trusty64"
@@ -63,7 +69,7 @@ Vagrant.configure("2") do |config|
       c.vm.provision "shell", path: "install-sshkey.sh"
 
       c.vm.provider :virtualbox do |vb|
-      	vb.memory = 3189
+      	vb.memory = 1500
 	    vb.cpus = 2
       end
       c.vm.synced_folder "hdfs_data/data_#{name}", "/hdfs_data", create: true, mount_options: ["dmode=777,fmode=777"]
@@ -71,3 +77,4 @@ Vagrant.configure("2") do |config|
     end
   end
 end
+

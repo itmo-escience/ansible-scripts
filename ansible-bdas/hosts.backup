@@ -1,0 +1,37 @@
+hostsnode-92-11 ansible_ssh_host=192.168.92.11 zoo_id=1 install_mode="master" consul_bootstrap=true
+node-92-12 ansible_ssh_host=192.168.92.12 zoo_id=2 install_mode="slave"
+node-92-13 ansible_ssh_host=192.168.92.13 zoo_id=3 install_mode="slave"
+####
+[master]
+node-92-11
+
+[workers]
+node-92-12
+node-92-13
+
+
+[mongo_master]
+node-92-11 mongodb_master=True # it'n not a really master of MongoDB replica set,
+                                 # use this variable for replica set init only
+
+[mongo_replicas]
+node-92-12
+node-92-13
+
+
+[controlmachine]
+controlmachine
+
+
+[mesos_masters]
+node-92-11
+
+
+[mesos_slaves]
+node-92-12
+node-92-13
+
+[marathon]
+node-92-11
+
+
