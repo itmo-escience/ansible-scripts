@@ -69,7 +69,7 @@ Vagrant.configure("2") do |config|
       c.vm.provision "shell", path: "install-sshkey.sh"
 
       c.vm.provider :virtualbox do |vb|
-      	vb.memory = 2048
+      	vb.memory = 1500
 	    vb.cpus = 2
       end
       c.vm.synced_folder "hdfs_data/data_#{name}", "/hdfs_data", create: true, mount_options: ["dmode=777,fmode=777"]
@@ -77,3 +77,4 @@ Vagrant.configure("2") do |config|
     end
   end
 end
+

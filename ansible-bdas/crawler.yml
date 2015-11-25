@@ -7,9 +7,9 @@
     - prepare
   roles:
     - smola.java
-  environment:
-        http_proxy: http://proxy.ifmo.ru:3128
-        HTTP_PROXY: http://proxy.ifmo.ru:3128
+#  environment:
+#        http_proxy: http://proxy.ifmo.ru:3128
+#        HTTP_PROXY: http://proxy.ifmo.ru:3128
 
 
 - name: apply mongo to master
@@ -19,9 +19,9 @@
     - prepare
   roles:
     - mongodb
-  environment:
-        http_proxy: http://proxy.ifmo.ru:3128
-        HTTP_PROXY: http://proxy.ifmo.ru:3128
+#  environment:
+#        http_proxy: http://proxy.ifmo.ru:3128
+#        HTTP_PROXY: http://proxy.ifmo.ru:3128
   tasks:
     - action: "shell pkill -f 'mongod'"
       ignore_errors: True
@@ -48,6 +48,7 @@
 - name: build project on localhost
   hosts: controlmachine
   remote_user: vagrant
+  sudo: yes
   tags:
    -  build
   tasks:
@@ -68,6 +69,30 @@
 
 
 
+- name: rewrite config file on master
+  hosts: master
+  sudo: yes
+  tags:
+      - build
+      - test
+  tasks:
+      - name: rewrite config  file
+        template: src=templates/master.akka.conf.j2 dest=/SNCrawler/resources/akka.conf
+
+
+- name: rewrite config file
+  hosts: workers
+  sudo: yes
+  tags:
+      - build
+      - test
+
+  tasks:
+      - name: rewrite config  file
+        template: src=templates/worker.akka.conf.j2 dest=/SNCrawler/resources/akka.conf
+
+
+
 - name: stop SNCrawler
   hosts: all
   sudo: yes
@@ -81,39 +106,52 @@
 
 
 
-- name: start SNCrawler master
+- name: start SNCrawler master mesos_mode
   hosts: master
   sudo: yes
   tags:
-    - start distributed mode
+    - start_mesos_mode
   tasks:
     - name: Starting SNCrawler MasterActorRunner
-      shell: "nohup java -cp target/SNCrawler-1.0.jar:target/lib/* crawler.akka.MasterActorRunner {{ master_hostname }} > output/MasterActor.txt &"
+      shell: "nohup java -cp target/SNCrawler-1.0.jar:target/lib/* -Djava.library.path=/usr/local/lib crawler.mesos.CrawlerMain {{ master_hostname }} > output/MasterActor.txt &"
       args:
         chdir: "/SNCrawler"
 
-    - name: Starting SNCrawler FollowerFinderBalancerActorRunner
-      shell: "nohup java -cp target/SNCrawler-1.0.jar:target/lib/* crawler.akka.FollowerFinderBalancerActorRunner {{ master_hostname }} {{inventory_hostname }} > output/FollowerFinderBalancerActor.txt &"
-      args:
-        chdir: "/SNCrawler"
+# java -cp /SNCrawler/target/SNCrawler-1.0.jar:/SNCrawler/target/lib/* -Djava.library.path=/usr/local/lib crawler.mesos.CrawlerMain node-92-11
 
-    - name: Starting SNCrawler TwitterStreamActorRunner
-      shell: "nohup java -cp target/SNCrawler-1.0.jar:target/lib/* crawler.akka.TwitterStreamActorRunner  {{ master_hostname }} {{inventory_hostname }} > output/TwitterStreamActor.txt &"
-      args:
-        chdir: "/SNCrawler"
-
-
-
-- name: starting SNCrawler worker
-  hosts: workers
-  sudo: yes
-  tags:
-    - start distributed mode
-  tasks:
-    - name: Starting SNCrawler FollowerFinderActorRunner
-      shell: "nohup java -cp target/SNCrawler-1.0.jar:target/lib/* crawler.akka.FollowerFinderActorRunner {{ master_hostname }} {{inventory_hostname }} > output/FollowerFinderActor.txt &"
-      args:
-        chdir: "/SNCrawler"
+#- name: start SNCrawler master
+#  hosts: master
+#  sudo: yes
+#  tags:
+#    - start distributed mode
+#  tasks:
+#    - name: Starting SNCrawler MasterActorRunner
+#      shell: "nohup java -cp target/SNCrawler-1.0.jar:target/lib/* crawler.akka.MasterActorRunner {{ master_hostname }} > output/MasterActor.txt &"
+#      args:
+#        chdir: "/SNCrawler"
+#
+#    - name: Starting SNCrawler FollowerFinderBalancerActorRunner
+#      shell: "nohup java -cp target/SNCrawler-1.0.jar:target/lib/* crawler.akka.FollowerFinderBalancerActorRunner {{ master_hostname }} {{inventory_hostname }} > output/FollowerFinderBalancerActor.txt &"
+#      args:
+#        chdir: "/SNCrawler"
+#
+#    - name: Starting SNCrawler TwitterStreamActorRunner
+#      shell: "nohup java -cp target/SNCrawler-1.0.jar:target/lib/* crawler.akka.TwitterStreamActorRunner  {{ master_hostname }} {{inventory_hostname }} > output/TwitterStreamActor.txt &"
+#      args:
+#        chdir: "/SNCrawler"
+#
+#
+#
+#- name: starting SNCrawler worker
+#  hosts: workers
+#  sudo: yes
+#  tags:
+#    - start distributed mode
+#  tasks:
+#    - name: Starting SNCrawler FollowerFinderActorRunner
+#      shell: "nohup java -cp target/SNCrawler-1.0.jar:target/lib/* crawler.akka.FollowerFinderActorRunner {{ master_hostname }} {{inventory_hostname }} > output/FollowerFinderActor.txt &"
+#      args:
+#        chdir: "/SNCrawler"
 
 
 #- name: starting SNCrawler

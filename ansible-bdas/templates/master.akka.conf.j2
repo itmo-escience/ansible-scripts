@@ -1,0 +1,21 @@
+akka {
+  actor {
+    provider = "akka.cluster.ClusterActorRefProvider"
+  }
+
+  remote {
+    netty.tcp {
+      hostname = "{{master_hostname}}"
+      port = $port
+    }
+  }
+
+  cluster {
+    roles = [$role]
+    seed-nodes = [
+      "akka.tcp://cluster@{{master_hostname}}:2551"
+      ]
+
+   auto-down-unreachable-after = 1s
+  }
+}
