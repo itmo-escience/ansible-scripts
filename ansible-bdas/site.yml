@@ -1,3 +1,19 @@
+# This script currently runs mesos on hosts which is listed in the file 'hosts'
+# It can be run as a single node as a multi node cluster
+# ATTENTION! There is a set of tags: install, configure, start, stop
+# These tags manage lifecycle of the overall system, see examples
+# Examples:
+# 1) Installs, configure and runs the whole cluster
+#   $ ansible-playbook site.yml --skip-tags: 'stop'
+# 2) Stops the cluster
+#  $ ansible-playbook site.yml --tags: 'stop'
+# 3) Resume execution
+#  $ ansible-playbook site.yml --tags: 'start'
+# 4) Reconfigurates the cluster (Affected slave and master services will be restarted automatically)
+#  $ ansible-playbook site.yml --tags: 'configure'
+# 5) Just slaves or masters can be under commmand
+#   ansible-playbook site.yml --tags: "stop,mesos-masters"
+# ansible-playb
 ---
 - name: apply common configuration to all nodes
   hosts: all
@@ -13,22 +29,16 @@
     - clusteruser_common
   any_errors_fatal: yes
 
-- name: install mesos on nodes
-  hosts: mesos_masters:mesos_slaves
-  sudo: True
-  roles:
-     - { role: mesos, install: true, configure: false, start: false }
-
-- name: configure and run the mesos masters
+- name: install, configure and run the mesos masters
   hosts: mesos_masters
   sudo: True
   roles:
-    - { role: mesos, mesos_install_mode: "master", mesos_cluster_mode: "masters_file", install: false, configure: true, start: true, stop: false}
+    - { role: mesos, mesos_install_mode: "master", mesos_cluster_mode: "masters_file", tags: ['mesos-masters']}
 
-#- name: configure and run the mesos masters
-#  hosts: mesos_slaves
-#  sudo: True
-#  roles:
-#    - { role: mesos, mesos_install_mode: "slave", mesos_cluster_mode: "masters_file", install: false}
+- name: install, configure and run the mesos slaves
+  hosts: mesos_slaves
+  sudo: True
+  roles:
+    - { role: mesos, mesos_install_mode: "slave", mesos_cluster_mode: "masters_file", tags: ['mesos-slaves']}
 
 #- include: tests/integration-tests.yml

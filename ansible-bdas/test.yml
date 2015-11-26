@@ -1,20 +1,12 @@
----
-- name: Test
-  hosts: all
-  sudo: yes
-  tasks:
-    - name: install some tools for convenience
-      apt: name={{ item }} state=present update_cache=yes force=yes
-      sudo: yes
-      with_items:
-        - vim
-        - tmux
-        - git
-        - htop
-        - nmon
-        - build-essential
-        - python-swiftclient
-        - libgfortran3
-        - python-pycurl
-      tags:
-        - install
+#---
+#  - name: test
+#    hosts: all
+#    connection: local
+#    sudo: yes
+#    vars:
+#      mesos_cluster_name: "test"
+#      mesos_cluster_mode: "masters_file"
+#      mesos_master_port: 5050
+#    tasks:
+#      - name: configure slave settings
+#        template: src=roles/mesos/templates/mesos-slave.j2 dest=/etc/default/mesos-slave

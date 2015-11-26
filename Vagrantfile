@@ -13,7 +13,7 @@ Vagrant.configure("2") do |config|
   end
 
   # read data for vagrant run
-  nds = File.open("./ansible-bdas/hosts","r") do |hosts|
+  nds = File.open("./ansible-bdas/hosts.backup","r") do |hosts|
 	nodes = {}
 	while(line = hosts.gets) do
 		if line.start_with?("###")
