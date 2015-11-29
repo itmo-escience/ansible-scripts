@@ -1,0 +1,14 @@
+- name: install fluentd
+  gem: name=fluentd state=present
+  tags:
+    - install
+
+- name: configure fluentd
+  template: src=td-agent.conf.j2 dest=/etc/td-agent/td-agent.conf
+  tags:
+    - configure
+
+- name: start fluentd
+  service: name=td-agent state=started enabled=yes
+  tags:
+    - start
