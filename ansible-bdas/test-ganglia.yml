@@ -1,0 +1,19 @@
+---
+#- name: install ganglia monitors
+#  hosts: ganglia_monitors
+#  sudo: True
+#  roles:
+#    - { role: ganglia , tags: ['ganglia-monitors']}
+
+- name: install ganglia meta
+  hosts: ganglia_meta
+  sudo: True
+  roles:
+    - { role: ganglia, is_ganglia_meta: 1,  tags: ['ganglia-meta']}
+
+- name: install ganglia web
+  hosts: ganglia_web
+  sudo: True
+  roles:
+    - { role: ganglia, is_ganglia_web: 1,  tags: ['ganglia-web']}
+
