@@ -35,7 +35,7 @@ Vagrant.configure("2") do |config|
     ip = nds[name]["ansible_ssh_host"]
 
     config.vm.define name, primary: true do |c|
-      c.vm.network "public_network", ip: ip, netmask: "255.255.0.0"
+      c.vm.network "public_network", ip: ip, netmask: "255.255.0.0", bridge: "enp22s0f5"
 
 
       #c.vm.box = "build/mesos-ubuntu"
