@@ -12,9 +12,47 @@
 #        template: src=roles/mesos/templates/mesos-slave.j2 dest=/etc/default/mesos-slave
 
 # an example how to use variables http://docs.ansible.com/ansible/faq.html#how-do-i-loop-over-a-list-of-hosts-in-a-group-inside-of-a-template
-  - name: test
-    hosts: all
-    sudo: yes
-    tasks:
-      - name: test variables
-        debug: msg={{ groups['ganglia_meta'][0] }}
+#  - name: test
+#    hosts: all
+#    sudo: yes
+#    tasks:
+#      - name: test variables
+#        debug: msg={{ groups['ganglia_meta'][0] }}
+
+
+- name: test ganglia-api
+  hosts: ganglia_web
+  sudo: yes
+  vars:
+    ganglia_api_path: /opt/ansible_api
+  tasks:
+    - name: Install Git
+      yum: name=git state=present
+      when: "ansible_os_family == 'RedHat'"
+
+    - name: Install Git
+      apt: name=git state=present
+      when: "ansible_os_family == 'Debian'"
+
+    - name: Install Ganglia API
+      git: repo=https://github.com/guardian/ganglia-api
+           dest={{ ganglia_api_path }}
+           accept_hostkey=True
+           clone=yes update=yes
+           force=yes
+
+    - name: Install pip
+      easy_install: name=pip
+
+    - name: Install VirtualEnv
+      pip: name=virtualenv state=present
+
+    - name: Create virtualenv and setup dependencies
+      pip: virtualenv={{ganglia_api_path}}/ve
+           requirements={{ganglia_api_path}}/requirements.txt
+
+    - name: Configure ganglia-api
+      template: src=roles/ganglia/templates/ganglia-api-settings.py.j2 dest={{ ganglia_api_path }}/ganglia/settings.py
+
+    - name: Start ganglia-api
+      command: "{{ganglia_api_path}}/ve/bin/python {{ganglia_api_path}}/ganglia/ganglia_api.py"
