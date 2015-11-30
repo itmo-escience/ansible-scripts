@@ -1,4 +1,4 @@
-#---
+---
 #  - name: test
 #    hosts: all
 #    connection: local
@@ -10,3 +10,11 @@
 #    tasks:
 #      - name: configure slave settings
 #        template: src=roles/mesos/templates/mesos-slave.j2 dest=/etc/default/mesos-slave
+
+# an example how to use variables http://docs.ansible.com/ansible/faq.html#how-do-i-loop-over-a-list-of-hosts-in-a-group-inside-of-a-template
+  - name: test
+    hosts: all
+    sudo: yes
+    tasks:
+      - name: test variables
+        debug: msg={{ groups['ganglia_meta'][0] }}

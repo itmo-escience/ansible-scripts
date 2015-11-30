@@ -76,7 +76,7 @@
   template: src=slaves.j2 dest={{ mesos_install_prefix }}/etc/mesos/slaves
   when: mesos_install_mode == "master"
   notify:
-   - Restart mesos-master
+   - Restart mesos master
   tags:
        - configure
 
@@ -84,7 +84,7 @@
   template: src=mesos-master.j2 dest=/etc/default/mesos-master
   when: mesos_install_mode == "master"
   notify:
-    - Restart mesos-master
+    - Restart mesos master
   tags:
     - configure
 
@@ -112,7 +112,7 @@
   template: src=mesos-slave.j2 dest=/etc/default/mesos-slave
   when: mesos_install_mode == "slave"
   notify:
-    - Restart mesos-slave
+    - Restart mesos slave
   tags:
     - configure
 

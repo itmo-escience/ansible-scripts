@@ -1,10 +1,29 @@
+- name: Latest version of Ruby is installed
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - ruby1.9.1
+    - ruby1.9.1-dev
+
+- name: Symlink exists for Ruby 1.9.1
+  file: src=/usr/bin/ruby1.9.1 dest=/usr/local/bin/ruby state=link
+
+- name: Symlink exists for Ruby Gems 1.9.1
+  file: src=/usr/bin/gem1.9.1 dest=/usr/local/bin/gem state=link
+
 - name: install fluentd
   gem: name=fluentd state=present
   tags:
     - install
 
+# see http://docs.fluentd.org/articles/config-file#config-file-location
+- name: create config dir
+  command: fluentd --setup /etc/fluent
+  sudo: yes
+  tags:
+    - install
+
 - name: configure fluentd
-  template: src=td-agent.conf.j2 dest=/etc/td-agent/td-agent.conf
+  template: src=fluent.conf.j2 dest=/etc/fluent/fluent.conf
   tags:
     - configure
 

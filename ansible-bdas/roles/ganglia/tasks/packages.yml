@@ -29,7 +29,7 @@
     state=latest
   with_items:
     - ganglia-gmetad
-  when: ansible_os_family == 'RedHat' and is_ganglia_meta == 1
+  when: "ansible_os_family == 'RedHat' and is_ganglia_meta is defined"
 
 - name: Install Ganglia Meta
   apt: >-
@@ -37,7 +37,7 @@
     state=latest
   with_items:
     - gmetad
-  when: ansible_os_family == 'RedHat' and is_ganglia_meta == 1
+  when: "ansible_os_family == 'Debian' and is_ganglia_meta is defined"
 
 # Ganglia Web is installed only on nodes marked is_ganglia_web=1
 

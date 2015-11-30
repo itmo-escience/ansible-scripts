@@ -101,7 +101,7 @@ ganglia_config_gmond:
 
       udp_send_channel:
         bind_hostname: 'yes'
-#	host: 'monitoring-host'
+         # host: 'monitoring-host'
 #        mcast_join: '239.2.11.71'
         port: 8649
         ttl: 1
