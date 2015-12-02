@@ -20,7 +20,6 @@ node-92-16
 node-92-11
 
 [hdfs_datanodes]
-node-92-11
 node-92-12
 node-92-13
 node-92-14
@@ -32,7 +31,6 @@ node-92-16
 node-92-11
 
 [spark_slaves]
-node-92-11
 node-92-12
 node-92-13
 node-92-14
