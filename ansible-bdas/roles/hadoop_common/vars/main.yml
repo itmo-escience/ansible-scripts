@@ -21,8 +21,7 @@ dfs_namenode_name_dir:
 dfs_replication: 3
 dfs_blocksize: 134217728
 dfs_datanode_data_dir:
-  - /datadir1/
-  - /datadir2/
+  - /hdfs_data/
 
 #Variables for <mapred-site_xml>     
 mapred_job_tracker_host: "{{ hdfs_namenode_hostname }}"
