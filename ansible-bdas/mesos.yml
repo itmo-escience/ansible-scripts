@@ -6,7 +6,10 @@
   hosts: mesos_masters
   sudo: True
   roles:
-    - { role: ansible_mesos, mesos_install_mode: "master", tags: ["mesos-master"] }
+    - { role: mesos, mesos_install_mode: "master", tags: ["mesos-master"] }
+  environment:
+              http_proxy: http://proxy.ifmo.ru:3128
+              HTTP_PROXY: http://proxy.ifmo.ru:3128
 
 
 
@@ -14,4 +17,7 @@
   hosts: mesos_slaves
   sudo: True
   roles:
-    - { role: ansible_mesos, mesos_install_mode: "slave", tags: ["mesos-slave"] }
+    - { role: mesos, mesos_install_mode: "slave", tags: ["mesos-slave"] }
+  environment:
+              http_proxy: http://proxy.ifmo.ru:3128
+              HTTP_PROXY: http://proxy.ifmo.ru:3128

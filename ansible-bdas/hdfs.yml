@@ -1,0 +1,23 @@
+---
+
+- name: apply common configuration to all nodes
+  hosts: hdfs_namenodes
+  sudo: yes
+  tags:
+    - prepare
+  roles:
+    - hdfs_namenode
+  environment:
+              http_proxy: http://proxy.ifmo.ru:3128
+              HTTP_PROXY: http://proxy.ifmo.ru:3128
+
+- name: apply common configuration to all nodes
+  hosts: hdfs_datanodes
+  sudo: yes
+  tags:
+    - prepare
+  roles:
+    - hdfs_datanode
+  environment:
+              http_proxy: http://proxy.ifmo.ru:3128
+              HTTP_PROXY: http://proxy.ifmo.ru:3128
