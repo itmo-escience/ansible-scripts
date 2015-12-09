@@ -1,0 +1,14 @@
+CLUSTER={{mesos_cluster_name}}
+LOG_DIR=/var/log/mesos
+WORK_DIR=/var/run/mesos
+ISOLATION=cgroups
+{% if mesos_cluster_mode == "zookeeper" %}
+MASTER=/etc/mesos/zk
+{% else %}
+{%  set masters = [] %}
+{%  for host in groups['mesos_masters'] %}
+{%      set master = hostvars[host]['ansible_' ~ iface]['ipv4']['address'] ~ ':' ~ mesos_master_port ~ ',' %}
+{%      if masters.append(master) %}{% endif %}
+{%  endfor %}
+MASTER={{masters|join(', ')}}
+{% endif %}
