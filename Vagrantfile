@@ -44,11 +44,9 @@ Vagrant.configure("2") do |config|
       c.vm.hostname = name
     c.vm.provision "shell" do |s|
         dns_server = "if ! grep -q \'nameserver 192.168.13.132\' /etc/resolvconf/resolv.conf.d/head; then echo 'nameserver 192.168.13.132'|tee --append /etc/resolvconf/resolv.conf.d/head; fi;resolvconf -u;"
-        #dns_server = ""
         #default_iface = "ip route change to default dev eth1;"
         default_iface = ""
         hosts_file = "echo '127.0.0.1 localhost'|tee /etc/hosts;echo '#{ip} #{name}'|tee --append /etc/hosts;"
-        #s.inline = "#{hosts_file}#{dns_server}#{default_iface}apt-add-repository ppa:ansible/ansible -y; apt-get update -y; apt-get install ansible -y;"
         s.inline = "#{hosts_file}#{dns_server}#{default_iface}"
 
         s.privileged = true
