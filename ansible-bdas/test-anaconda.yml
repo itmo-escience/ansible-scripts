@@ -1,6 +1,7 @@
 # This test requires the role 'andrewrothstein.anaconda' to be installed
 # you can do this with the command: 'ansible-galaxy install andrewrothstein.anaconda'
 # see the reference: https://galaxy.ansible.com/detail#/role/6397
+
 ---
 - name: test ganglia-api
   hosts: all
