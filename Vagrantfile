@@ -9,7 +9,7 @@ Vagrant.configure("2") do |config|
 	
   if Vagrant.has_plugin?("vagrant-proxyconf")
     config.proxy.http     = "http://proxy.ifmo.ru:3128/"
-    config.proxy.no_proxy = "localhost,127.0.0.1,"
+    config.proxy.no_proxy = "localhost,127.0.0.1,192.168."
   end
 
   # read data for vagrant run
