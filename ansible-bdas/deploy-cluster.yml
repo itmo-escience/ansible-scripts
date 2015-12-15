@@ -1,0 +1,27 @@
+---
+
+- name: copy vagrant file to blades
+  hosts: blades
+  remote_user: magistr
+  tasks:
+     - name: copy vagrant file
+       shell: "mkdir /home/magistr/local-cluster"
+       ignore_errors: True
+
+     - name: copy Vagrantfile file
+       copy: src=templates/Vagrantfile dest=/home/magistr/local-cluster/Vagrantfile
+
+     - name: copy Vagrantfile file
+       copy: src=../install-sshkey.sh dest=/home/magistr/local-cluster/install-sshkey.sh
+
+     - name: copy sshkey folder
+       synchronize: src=../sshkey dest=/home/magistr/local-cluster
+
+     - name: copy cluster-description file
+       template: src=templates/cluster-description.yml.j2 dest=/home/magistr/local-cluster/cluster-description.yml
+
+     - name: run vagrant up
+       shell: "export HTTP_PROXY=http://proxy.ifmo.ru:3128 && export http_proxy=http://proxy.ifmo.ru:3128 && vagrant up"
+       args:
+            chdir: "/home/magistr/local-cluster"
+

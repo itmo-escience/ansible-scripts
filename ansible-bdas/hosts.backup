@@ -67,6 +67,11 @@ node-92-14
 node-92-15
 node-92-16
 
+[blades]
+192.168.13.132 my_host_name=node12n my_base_ip_for_vms=192.168.132
+192.168.13.133 my_host_name=node13n my_base_ip_for_vms=192.168.133
+
+
 
 [blades]
 192.168.13.132
