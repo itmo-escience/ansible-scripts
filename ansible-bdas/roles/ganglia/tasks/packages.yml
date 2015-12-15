@@ -65,10 +65,10 @@
   apt: name=git state=present update_cache=yes
   when: "ansible_os_family == 'Debian'"
 
-- name: Install Ganglia API
-  git: repo=git@github.com:itmo-escience/SNCrawler.git
-       version="releases"
-       dest=/opt/ansible_api
-       clone=yes update=yes
+#- name: Install Ganglia API
+#  git: repo=git@github.com:itmo-escience/SNCrawler.git
+#       version="releases"
+#       dest=/opt/ansible_api
+#       clone=yes update=yes
 
 

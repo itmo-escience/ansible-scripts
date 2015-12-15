@@ -1,0 +1,13 @@
+
+- name: clone and build project on localhost
+  hosts: ganglia_web
+  sudo: yes
+  tags:
+    - build
+  tasks:
+    - apt: name=git state=present update_cache=yes
+    - git: repo=git@git@github.com:guardian/ganglia-api.git
+           version="master"
+	   dest=/home/vagrant/g_api
+           accept_hostkey=True
+           clone=yes update=yes

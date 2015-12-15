@@ -1,5 +1,5 @@
-# Mesos masters
+# Mesos slaves
 {% for host in groups['mesos_slaves'] %}
-{{ hostvars[host]['ansible_' + iface]['ipv4']['address'] }}
+{{ host }}
 {% endfor %}
 

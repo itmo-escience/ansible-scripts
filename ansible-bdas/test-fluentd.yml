@@ -1,0 +1,12 @@
+- hosts: fluentd
+  roles:
+    - role: telusdigital.fluentd
+      fluentd_config_name: php
+      fluentd_sources:
+        - path: "/var/log/mesos/"    
+          tag: mesos mester
+
+        - path: "/tmp/mesos/slaves/"
+          tag: mesos slaves
+      
+

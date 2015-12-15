@@ -5,11 +5,11 @@ Vagrant.configure("2") do |config|
   # for building we use the same files as for the regular run
   config.ssh.forward_agent = true
   config.ssh.insert_key = false
-  config.vm.synced_folder ".", "/home/vagrant/project", :mount_options => ["dmode=777","fmode=666"]
+  #config.vm.synced_folder ".", "/home/vagrant/project", :mount_options => ["dmode=700","fmode=600"]
 	
   if Vagrant.has_plugin?("vagrant-proxyconf")
     config.proxy.http     = "http://proxy.ifmo.ru:3128/"
-    config.proxy.no_proxy = "localhost,127.0.0.1,"
+    config.proxy.no_proxy = "localhost,127.0.0.1,192.168."
   end
 
   # read data for vagrant run
@@ -44,12 +44,9 @@ Vagrant.configure("2") do |config|
       c.vm.hostname = name
     c.vm.provision "shell" do |s|
         dns_server = "if ! grep -q \'nameserver 192.168.13.132\' /etc/resolvconf/resolv.conf.d/head; then echo 'nameserver 192.168.13.132'|tee --append /etc/resolvconf/resolv.conf.d/head; fi;resolvconf -u;"
-        #dns_server = ""
         #default_iface = "ip route change to default dev eth1;"
         default_iface = ""
         hosts_file = "echo '127.0.0.1 localhost'|tee /etc/hosts;echo '#{ip} #{name}'|tee --append /etc/hosts;"
-        #mount_devfiles = "apt-get install cifs-utils;mount -t cifs //192.168.1.225/rendler -o username=nano,password=Yt1NyDpQNm,noperm ./devfiles;"
-        #s.inline = "#{hosts_file}#{dns_server}#{default_iface}apt-add-repository ppa:ansible/ansible -y; apt-get update -y; apt-get install ansible -y;"
         s.inline = "#{hosts_file}#{dns_server}#{default_iface}"
 
         s.privileged = true

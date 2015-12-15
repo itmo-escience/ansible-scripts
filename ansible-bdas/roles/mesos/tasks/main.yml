@@ -32,9 +32,10 @@
 
 # Tasks for Master, Slave, and ZooKeeper nodes
 - name: Install mesos package
-  apt: pkg={{item}} state=present update_cache=yes
+  apt: pkg={{item}} state=present
   with_items:
     - mesos
+    - marathon
   sudo: yes
   register: mesos_package_installation
   tags:
@@ -54,6 +55,13 @@
 
 - name: Disable the Mesos Master service
   service: name=mesos-master state=stopped enabled=no
+  sudo: yes
+  when: mesos_package_installation.changed
+  tags:
+    - install
+
+- name: Disable the Mesos Master service
+  service: name=marathon state=stopped enabled=no
   sudo: yes
   when: mesos_package_installation.changed
   tags:
@@ -88,15 +96,15 @@
   tags:
     - configure
 
-- name: Enable the Mesos Master service
-  copy:
-    content: ""
-    dest: /etc/init/mesos-master.override
-    mode: 0644
-  sudo: yes
-  when: mesos_install_mode == "master"
-  tags:
-    - start
+#- name: Enable the Mesos Master service
+#  copy:
+#    content: ""
+#    dest: /etc/init/mesos-master.override
+#    mode: 0644
+#  sudo: yes
+#  when: mesos_install_mode == "master"
+#  tags:
+#    - start
 
 - name: Start mesos-master
   service: name=mesos-master state=started enabled=yes
@@ -104,6 +112,15 @@
   when: mesos_install_mode == "master"
   tags:
     - start
+
+- name: Start marathon
+  service: name=marathon state=started enabled=yes
+  sudo: yes
+  when: mesos_install_mode == "master"
+  tags:
+    - start
+
+
 ####################################
 ### Slave settings
 ####################################
@@ -116,15 +133,15 @@
   tags:
     - configure
 
-- name: Enable the Mesos Slave service
-  copy:
-    content: ""
-    dest: /etc/init/mesos-slave.override
-    mode: 0644
-  sudo: yes
-  when: mesos_install_mode == "slave"
-  tags:
-     - start
+#- name: Enable the Mesos Slave service
+#  copy:
+#    content: ""
+#    dest: /etc/init/mesos-slave.override
+#    mode: 0644
+#  sudo: yes
+#  when: mesos_install_mode == "slave"
+#  tags:
+#     - start
 
 - name: Start mesos-slave
   service: name=mesos-slave state=started enabled=yes
