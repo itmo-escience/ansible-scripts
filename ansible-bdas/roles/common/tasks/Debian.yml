@@ -14,8 +14,8 @@
   tags:
     - install
   
-- name: populate /etc/hosts
-  template: src=etc/hosts.j2 dest=/etc/hosts
-  tags:
-    - configure
+#- name: populate /etc/hosts
+#  template: src=etc/hosts.j2 dest=/etc/hosts
+#  tags:
+#    - configure
 

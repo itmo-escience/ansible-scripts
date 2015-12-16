@@ -1,13 +1,11 @@
 ---
-
-- name: {{ my_host_name }}-11
+{% for id in range(1,my_number_of_vms+1) %}
+- name: {{ my_host_name }}{{ id }}
   ram: 8192
   cpus: 4
-  ip: {{ my_base_ip_for_vms }}.11
+  ip: {{ my_base_ip_for_vms }}{{ id }}
 
-- name: {{ my_host_name }}-12
-  ram: 8192
-  cpus: 4
-  ip: {{ my_base_ip_for_vms }}.12
+{% endfor %}
+
 
 

@@ -1,27 +1,61 @@
 ---
 
+#- name: copy vagrant file to blades
+#  hosts: linux_blades
+#  remote_user: magistr
+#  tasks:
+#     - name: copy vagrant file
+#       shell: "mkdir /home/magistr/project"
+#       ignore_errors: True
+#
+#     - name: copy Vagrantfile file
+#       copy: src=templates/Vagrantfile dest=/home/magistr/project/Vagrantfile
+#
+#     - name: copy sshkey file
+#       copy: src=../install-sshkey.sh dest=/home/magistr/project/install-sshkey.sh
+#
+#     - name: copy sshkey folder
+#       synchronize: src=../sshkey dest=/home/magistr/project
+#
+#     - name: copy cluster-description file
+#       template: src=templates/cluster-description.yml.j2 dest=/home/magistr/project/cluster-description.yml
+#
+#     - name: run vagrant destroy
+#       shell: "export HTTP_PROXY=http://proxy.ifmo.ru:3128 && export http_proxy=http://proxy.ifmo.ru:3128 && vagrant halt "
+#       args:
+#            chdir: "/home/magistr/project"
+#
+#     - name: run vagrant up
+#       shell: "export HTTP_PROXY=http://proxy.ifmo.ru:3128 && export http_proxy=http://proxy.ifmo.ru:3128 && vagrant up"
+#       args:
+#            chdir: "/home/magistr/project"
+
+
 - name: copy vagrant file to blades
-  hosts: blades
-  remote_user: magistr
+  hosts: win_blades
   tasks:
-     - name: copy vagrant file
-       shell: "mkdir /home/magistr/local-cluster"
-       ignore_errors: True
 
-     - name: copy Vagrantfile file
-       copy: src=templates/Vagrantfile dest=/home/magistr/local-cluster/Vagrantfile
+#     - name: ping
+#       win_ping:
 
-     - name: copy Vagrantfile file
-       copy: src=../install-sshkey.sh dest=/home/magistr/local-cluster/install-sshkey.sh
+#     - name: copy blade_files file
+#       win_copy: src=bladefiles/ dest=C:/Users/magistr/Documents/project/
+#
+#     - name: copy cluster-description file
+#       win_template: src=templates/cluster-description.yml.j2 dest=C:\Users\magistr\Documents\project\cluster-description.yml
 
-     - name: copy sshkey folder
-       synchronize: src=../sshkey dest=/home/magistr/local-cluster
 
-     - name: copy cluster-description file
-       template: src=templates/cluster-description.yml.j2 dest=/home/magistr/local-cluster/cluster-description.yml
+     - name: Run powershell script
+       raw: vup.bat
 
-     - name: run vagrant up
-       shell: "export HTTP_PROXY=http://proxy.ifmo.ru:3128 && export http_proxy=http://proxy.ifmo.ru:3128 && vagrant up"
-       args:
-            chdir: "/home/magistr/local-cluster"
+#
+#     - name: run vagrant destroy
+#       shell: "export HTTP_PROXY=http://proxy.ifmo.ru:3128 && export http_proxy=http://proxy.ifmo.ru:3128 && vagrant destroy --force"
+#       args:
+#            chdir: "/home/magistr/project"
+#
+#     - name: run vagrant up
+#       shell: "export HTTP_PROXY=http://proxy.ifmo.ru:3128 && export http_proxy=http://proxy.ifmo.ru:3128 && vagrant up"
+#       args:
+#            chdir: "/home/magistr/project"
 
