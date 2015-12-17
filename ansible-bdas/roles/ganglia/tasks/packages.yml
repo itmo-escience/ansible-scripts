@@ -1,8 +1,7 @@
 ---
-
+#
 # Ganglia Monitor is installed on all nodes.
 # The Python modules support is automatically added.
-
 - name: Install Ganglia Monitor
   yum: >-
     name={{item}}
@@ -22,7 +21,6 @@
   when: "ansible_os_family == 'Debian'"
 
 # Ganglia Meta is installed only on nodes marked is_ganglia_meta=1
-
 - name: Install Ganglia Meta
   yum: >-
     name={{item}}
@@ -40,13 +38,12 @@
   when: "ansible_os_family == 'Debian' and is_ganglia_meta is defined"
 
 # Ganglia Web is installed only on nodes marked is_ganglia_web=1
-
 - name: Install Ganglia Web
   yum: >-
     name={{item}}
     state=latest
   with_items:
-    - ganglia-web
+    - ganglia-web, git
   when: "ansible_os_family == 'RedHat' and is_ganglia_web is defined"
 
 - name: Install Ganglia Web
@@ -58,17 +55,32 @@
   when: "ansible_os_family == 'Debian' and is_ganglia_web is defined"
 
 - name: Install Git
-  yum: name=git state=present update_cache=yes
-  when: "ansible_os_family == 'RedHat'"
+  apt: >-
+    name={{item}}
+    state=latest
+  with_items:
+    - git
+  when: "ansible_os_family == 'Debian' and is_ganglia_api is defined"
 
-- name: Install Git
-  apt: name=git state=present update_cache=yes
-  when: "ansible_os_family == 'Debian'"
+- name: Install Tornado
+  pip: >-
+    name={{item}}
+  with_items:
+    - tornado
+  when: "is_ganglia_api is defined"
 
-#- name: Install Ganglia API
-#  git: repo=git@github.com:itmo-escience/SNCrawler.git
-#       version="releases"
-#       dest=/opt/ansible_api
-#       clone=yes update=yes
+- name: Install Ganglia API
+  git: repo=https://github.com/guardian/ganglia-api.git
+       dest={{ ganglia_api_dir }}
+       clone=yes
+  when: "is_ganglia_api is defined"
+
+- name: Modify ganglia/ganglia_api.py
+  command: "sudo sed -i \"s/default=8080/default=API_SERVER.split(':')[-1]/g\" {{ ganglia_api_dir }}/ganglia/ganglia_api.py"
+  when: "is_ganglia_api is defined"
+
+
+
+
 
 
