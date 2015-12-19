@@ -1,29 +1,32 @@
 ---
-# This playbook deploys the entire Mesos cluster infrastructure.
-# RUN: ansible-playbook mesos.yml
+# Run with   $ ansible-playbook site.yml --skip-tags: 'stop' See: site.yml
 
+- name: apply common configuration to all nodes
+  hosts: all
+  sudo: yes
+  roles:
+    - common
+  any_errors_fatal: yes
+
+- name: create non-root clusteruser user
+  hosts: all
+  sudo:	yes
+  roles:
+    - clusteruser_common
+  any_errors_fatal: yes
 
 
 - name: deploy and configure the mesos masters
   hosts: mesos_masters
   sudo: True
   roles:
-    - { role: common }
     - { role: mesos, mesos_install_mode: "master", tags: ["mesos-master"] }
   any_errors_fatal: yes
-  environment:
-              http_proxy: http://proxy.ifmo.ru:3128
-              HTTP_PROXY: http://proxy.ifmo.ru:3128
-
 
 
 - name: deploy and configure the mesos slaves
   hosts: mesos_slaves
   sudo: True
   roles:
-    - { role: common }
     - { role: mesos, mesos_install_mode: "slave", tags: ["mesos-slave"] }
   any_errors_fatal: yes
-  environment:
-              http_proxy: http://proxy.ifmo.ru:3128
-              HTTP_PROXY: http://proxy.ifmo.ru:3128
