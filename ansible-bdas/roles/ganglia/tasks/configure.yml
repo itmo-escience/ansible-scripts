@@ -5,7 +5,7 @@
 - name: Ensure the gmetad user exists
   user: >-
     name="{{ ganglia_config_gmetad.setuid_username }}"
-    system=yes    
+    system=yes
     state=present
   notify:
     - restart gmetad
@@ -20,7 +20,7 @@
     state=directory
   notify:
     - restart gmetad
-  when: "is_ganglia_meta is defined"    
+  when: "is_ganglia_meta is defined"
 
 - name: Configure the gmetad
   template: >-
@@ -69,7 +69,7 @@
     mode=0755
   with_dict: ganglia_config_gmond
   tags:
-    - gmond    
+    - gmond
 
 - name: Ensure Ganglia Monitor services are enabled and started
   service: >-
@@ -79,7 +79,7 @@
   with_dict: ganglia_config_gmond
   tags:
     - gmond
-    
+
 # Configures the web frontend service in apache
 
 - name: Enable the httpd frontend
@@ -92,3 +92,26 @@
   notify:
     - restart httpd
   when: "is_ganglia_web is defined"
+
+# Configures ganglia-api settings.py
+- name: Configure ganglia-api before run
+  template: >-
+    src=ganglia-api-settings.py.j2
+    dest={{ ganglia_api_dir }}/ganglia/settings.py
+    owner=root
+    group=root
+    mode=0644
+  notify:
+    - restart ganglia-api
+  when: "is_ganglia_api is defined"
+
+- name: Configure ganglia-api to be a daemon
+  template: >-
+    src=ganglia-api-deamon.j2
+    dest=/etc/init.d/ganglia-api-daemon
+    owner=root
+    group=root
+    mode=0751
+  notify:
+    - restart ganglia-api
+  when: "is_ganglia_api is defined"

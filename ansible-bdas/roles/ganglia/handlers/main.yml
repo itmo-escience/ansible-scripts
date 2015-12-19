@@ -11,3 +11,8 @@
     state=restarted
     enabled=yes
 
+- name: restart ganglia-api
+  service: >-
+    name=ganglia-api-daemon
+    state=restarted
+    enabled=yes
