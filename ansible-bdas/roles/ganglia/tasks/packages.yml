@@ -77,8 +77,11 @@
 
 - name: Modify ganglia/ganglia_api.py
   command: "sudo sed -i \"s/default=8080/default=API_SERVER.split(':')[-1]/g\" {{ ganglia_api_dir }}/ganglia/ganglia_api.py"
-  when: "is_ganglia_api is defined"
+  when: "ansible_os_family == 'Debian' and is_ganglia_api is defined"
 
+- name: Modify2 ganglia/ganglia_api.py
+  command: "sudo sed -i \"s/level=logging.INFO/level=logging.ERROR/g\" {{ ganglia_api_dir }}/ganglia/ganglia_api.py"
+  when: "ansible_os_family == 'Debian' and is_ganglia_api is defined"
 
 
 
