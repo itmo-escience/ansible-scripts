@@ -93,6 +93,7 @@
     - restart httpd
   when: "is_ganglia_web is defined"
 
+
 # Configures ganglia-api settings.py
 - name: Configure ganglia-api before run
   template: >-
