@@ -54,13 +54,11 @@
     - ganglia-webfrontend
   when: "ansible_os_family == 'Debian' and is_ganglia_web is defined"
 
-- name: Install Git
-  apt: >-
-    name={{item}}
-    state=latest
-  with_items:
-    - git
-  when: "ansible_os_family == 'Debian' and is_ganglia_api is defined"
+- name: Install Ganglia API
+  git: repo=https://github.com/guardian/ganglia-api.git
+       dest={{ ganglia_api_dir }}
+       clone=yes
+  when: "is_ganglia_api is defined"
 
 - name: Install Tornado
   pip: >-
@@ -69,20 +67,13 @@
     - tornado
   when: "is_ganglia_api is defined"
 
-- name: Install Ganglia API
-  git: repo=https://github.com/guardian/ganglia-api.git
-       dest={{ ganglia_api_dir }}
-       clone=yes
-  when: "is_ganglia_api is defined"
-
 - name: Modify ganglia/ganglia_api.py
   command: "sudo sed -i \"s/default=8080/default=API_SERVER.split(':')[-1]/g\" {{ ganglia_api_dir }}/ganglia/ganglia_api.py"
-  when: "ansible_os_family == 'Debian' and is_ganglia_api is defined"
+  when: "is_ganglia_api is defined"
 
 - name: Modify2 ganglia/ganglia_api.py
   command: "sudo sed -i \"s/level=logging.INFO/level=logging.ERROR/g\" {{ ganglia_api_dir }}/ganglia/ganglia_api.py"
-  when: "ansible_os_family == 'Debian' and is_ganglia_api is defined"
-
+  when: "is_ganglia_api is defined"
 
 
 
