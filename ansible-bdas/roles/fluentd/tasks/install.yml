@@ -1,0 +1,4 @@
+- name: install fluent-plugin-multi-format-parser
+  command: /opt/td-agent/embedded/bin/fluent-gem install fluent-plugin-multi-format-parser
+  sudo: yes
+
