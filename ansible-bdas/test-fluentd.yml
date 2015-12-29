@@ -1,12 +1,24 @@
-- hosts: fluentd
-  roles:
-    - role: telusdigital.fluentd
-      fluentd_config_name: php
-      fluentd_sources:
-        - path: "/var/log/mesos/"    
-          tag: mesos mester
+---
 
-        - path: "/tmp/mesos/slaves/"
-          tag: mesos slaves
-      
+#- hosts: fluentd
+#  roles:
+#    - role: telusdigital.fluentd
+#      fluentd_sources:
+#        - path: "/data/log/php.log"
+#          format: '^\[(?<date_time>(?<date>[^ ]*) (?<time>[^]]*)[^]]*)\] (?<notice>\w+): (?<message>.*)'
+#          tag: elasticsearch.php.service
+#        - path: "/data/log/php-slow.log
+#          format: '^.*'
+#          tag: elasticsearch.php.slow
+#      fluentd_plugins:
+#        - fluent-plugin-multi-format-parser
+
+- name: install fluentd
+  hosts: fluentd
+  sudo: True
+  roles:
+    - role: fluentd
+  environment:
+              http_proxy: http://proxy.ifmo.ru:3128
+              HTTP_PROXY: http://proxy.ifmo.ru:3128
 
