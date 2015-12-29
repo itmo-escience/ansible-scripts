@@ -7,8 +7,8 @@ node-92-16 ansible_ssh_host=192.168.92.16
 ####
 
 [linux_blades]
-#192.168.13.132 my_host_name=node-92-5 my_base_ip_for_vms=192.168.92.5 my_number_of_vms=5
-192.168.13.133 my_host_name=node-92-6 my_base_ip_for_vms=192.168.92.6 my_number_of_vms=5
+192.168.13.132 my_host_name=node-92-5 my_base_ip_for_vms=192.168.92.5
+192.168.13.133 my_host_name=node-92-6 my_base_ip_for_vms=192.168.92.6
 
 [win_blades]
 192.168.13.112 my_host_name=node-92-7 my_base_ip_for_vms=192.168.92.7 my_number_of_vms=5
