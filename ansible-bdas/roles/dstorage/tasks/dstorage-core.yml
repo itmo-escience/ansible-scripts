@@ -1,0 +1,77 @@
+---
+- name: install necessary tools
+  apt: name={{ item }} state=present update_cache=yes
+  with_items:
+    - git
+    - gradle
+  tags:
+    - install
+
+- name: obtain dstorage-core sources
+  git: repo=git@github.com:itmo-escience/dstorage-core.git
+    version={{core_version}}
+    dest={{core_clone_dir}}
+    accept_hostkey=True
+    key_file="/home/vagrant/project/sshkey/id_rsa"
+    clone=yes update=yes
+  tags:
+      - install
+
+- name: build dstorage-core
+  shell: "gradle makeJar"
+  args:
+    chdir: "{{core_clone_dir}}"
+  tags:
+      - install
+
+- name: Ensures {{core_install_dir}} installation dir exists
+  file: path={{core_install_dir}} state=directory
+  tags:
+      - install
+
+- name: install dstorage-core executable to dir {{core_install_dir}}
+  copy: src={{core_clone_dir}}/build/libs/dstorage-core.jar dest={{core_install_dir}}/dstorage-core.jar
+  tags:
+      - install
+
+- name: Create service conf file /etc/init/dstorage-core.conf
+  template: src=dstorage-core.conf.j2 dest=/etc/init/dstorage-core.conf
+  tags:
+     - install
+
+- name: Disable service dstorage-core
+  service: name=dstorage-core state=stopped enabled=no
+  tags:
+      - install
+
+- name: configure dstorage-core Core.cfg
+  template: src=Core.cfg.j2 dest={{core_install_dir}}/Core.cfg
+  notify:
+      - Restart dstorage-core
+  tags:
+      - configure
+
+- name: Ensure Core.ct present
+  copy: src=Core.ct path={{core_install_dir}}/Core.ct
+  notify:
+      - Restart dstorage-core
+  tags:
+      - configure
+
+- name: Ensure clientaccesspolicy.xml present
+  copy: src=clientaccesspolicy.xml path={{core_install_dir}}/clientaccesspolicy.xml
+  notify:
+      - Restart dstorage-core
+  tags:
+      - configure
+
+- name: start and enable service dstorage-core
+  service: name=dstorage-core state=started enabled=yes
+  tags:
+    - start
+
+- name: stop and disable service dstorage-core
+  service: name=dstorage-core state=stopped enabled=no
+  tags:
+    - stop
+

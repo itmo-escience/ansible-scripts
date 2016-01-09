@@ -18,7 +18,7 @@ mongodb_conf_logpath: /var/log/mongodb/mongod.log
 # Specify port number
 mongodb_conf_port: 27017
 # Comma separated list of ip addresses to listen on
-mongodb_conf_bind_ip: 127.0.0.1
+mongodb_conf_bind_ip: 0.0.0.0
 # Enable journaling
 mongodb_conf_journal: no
 # Append to logpath instead of over-writing

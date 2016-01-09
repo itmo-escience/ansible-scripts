@@ -1,0 +1,6 @@
+core_clone_dir: ~/dstorage-core
+core_install_dir: /opt/dstorage-core
+core_version: v0.42.027
+mongodb_address: localhost
+mongodb_port: 27017
+security_level: 0

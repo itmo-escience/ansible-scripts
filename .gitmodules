@@ -7,3 +7,6 @@
 [submodule "ansible-bdas/roles/sbt"]
 	path = ansible-bdas/roles/sbt
 	url = https://github.com/AnsibleShipyard/ansible-sbt.git
+[submodule "ansible-bdas/roles/ansible-oracle-java"]
+	path = ansible-bdas/roles/ansible-oracle-java
+	url = https://github.com/William-Yeh/ansible-oracle-java

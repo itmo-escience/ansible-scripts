@@ -2,10 +2,13 @@
 # vi: set ft=ruby :
 
 Vagrant.configure("2") do |config|
+
+  project_dir = "/home/vagrant/project"
+
   # for building we use the same files as for the regular run
   config.ssh.forward_agent = true
   config.ssh.insert_key = false
-  #config.vm.synced_folder ".", "/home/vagrant/project", :mount_options => ["dmode=700","fmode=600"]
+  config.vm.synced_folder ".", project_dir, :mount_options => ["dmode=700","fmode=600"]
 	
   if Vagrant.has_plugin?("vagrant-proxyconf")
     config.proxy.http     = "http://proxy.ifmo.ru:3128/"
@@ -13,7 +16,7 @@ Vagrant.configure("2") do |config|
   end
 
   # read data for vagrant run
-  nds = File.open("./ansible-bdas/hosts.backup","r") do |hosts|
+  nds = File.open("./ansible-bdas/hosts-test-dstorage","r") do |hosts|
 	nodes = {}
 	while(line = hosts.gets) do
 		if line.start_with?("###")
@@ -35,7 +38,8 @@ Vagrant.configure("2") do |config|
     ip = nds[name]["ansible_ssh_host"]
 
     config.vm.define name, primary: true do |c|
-      c.vm.network "public_network", ip: ip, netmask: "255.255.0.0", bridge: "enp22s0f5"
+      c.vm.network "public_network", ip: ip, netmask: "255.255.255.0"
+      #c.vm.network "public_network", ip: ip, netmask: "255.255.0.0", bridge: "enp22s0f5"
 
 
       #c.vm.box = "build/mesos-ubuntu"
@@ -44,16 +48,14 @@ Vagrant.configure("2") do |config|
       c.vm.hostname = name
     c.vm.provision "shell" do |s|
         dns_server = "if ! grep -q \'nameserver 192.168.13.132\' /etc/resolvconf/resolv.conf.d/head; then echo 'nameserver 192.168.13.132'|tee --append /etc/resolvconf/resolv.conf.d/head; fi;resolvconf -u;"
-        #default_iface = "ip route change to default dev eth1;"
-        default_iface = ""
         hosts_file = "echo '127.0.0.1 localhost'|tee /etc/hosts;echo '#{ip} #{name}'|tee --append /etc/hosts;"
-        s.inline = "#{hosts_file}#{dns_server}#{default_iface}"
+        s.inline = "#{hosts_file}#{dns_server}"
 
         s.privileged = true
     end
 
       #c.vm.provision "shell", path: "install-mesos-python-binding.sh"
-      c.vm.provision "shell", path: "install-sshkey.sh"
+      c.vm.provision "shell", path: "install-sshkey.sh", args: project_dir
 
       c.vm.provider :virtualbox do |vb|
       	vb.memory = 8192
