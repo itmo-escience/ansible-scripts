@@ -5,18 +5,18 @@
 AgentPort = 1515
 
 # Directory for files
-AgentdocRoot = docAgent
-AgentSSDdocRoot = SSDdocAgent
-SSDQuota=1000000
-MEMQuota=1000000
-AgentAddress= 127.0.0.1
+AgentdocRoot = {{agent_hdd_dir}}
+AgentSSDdocRoot = {{agent_ssd_dir}}
+SSDQuota={{agent_ssd_quota}}
+MEMQuota={{agent_mem_quota}}
+AgentAddress= 0.0.0.0
 # Max usage space, bytes
-AgentQuota = 1000000100000
+AgentQuota = {{agent_quota}}
 #ExternalIP=30.22.22.2
 #ExternalPort=9900
 # Core connection conf
-StorageCoreAddress = 127.0.0.1
-StorageCorePort = 8084
+StorageCoreAddress = {{core_address}}
+StorageCorePort = {{core_port}}
 
 Security = {{security_level}}
 #### log config #####
@@ -28,7 +28,7 @@ JavacPath="/usr/bin/javac"
 JarPath="/usr/bin/jar"
 ProtocPath="c:\\DStorage\\protoc.exe"
 # Set path to logs
-log = log
+log = /var/log/dstorage-agent
 
 # Config log messages to a log file
 #log4j.appender.FILE=org.apache.log4j.RollingFileAppender

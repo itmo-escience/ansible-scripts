@@ -1,18 +1,26 @@
 ---
 - name: install necessary tools
-  apt: name={{ item }} state=present update_cache=yes
+  apt: name={{ item }} state=present update_cache=no
   with_items:
     - git
     - gradle
   tags:
     - install
 
+- name: correct /usr/lib/jvm/default-java value
+  file: src=/usr/lib/jvm/java-8-oracle dest=/usr/lib/jvm/default-java state=link
+
+- name: copy repo deploy key to obtain sources
+  copy: src=../repo-keys/dstorage-core/id_rsa dest={{core_repo_key_path}} mode=0700
+  tags:
+    - install
+
 - name: obtain dstorage-core sources
   git: repo=git@github.com:itmo-escience/dstorage-core.git
-    version={{core_version}}
+    version={{core_tag}}
     dest={{core_clone_dir}}
     accept_hostkey=True
-    key_file="/home/vagrant/project/sshkey/id_rsa"
+    key_file="{{core_repo_key_path}}"
     clone=yes update=yes
   tags:
       - install
@@ -29,8 +37,13 @@
   tags:
       - install
 
-- name: install dstorage-core executable to dir {{core_install_dir}}
-  copy: src={{core_clone_dir}}/build/libs/dstorage-core.jar dest={{core_install_dir}}/dstorage-core.jar
+- name: install dstorage-core executable from {{core_clone_dir}}/build/libs to dir {{core_install_dir}}
+  shell: "cp {{core_clone_dir}}/build/libs/dstorage-core-{{core_version}}.jar {{core_install_dir}}/dstorage-core.jar"
+  tags:
+      - install
+
+- name: ensure {{core_install_dir}}/dstorage-core.jar exists
+  file: dest={{core_install_dir}}/dstorage-core.jar state=file
   tags:
       - install
 
@@ -52,14 +65,14 @@
       - configure
 
 - name: Ensure Core.ct present
-  copy: src=Core.ct path={{core_install_dir}}/Core.ct
+  copy: src=Core.ct dest={{core_install_dir}}/Core.ct
   notify:
       - Restart dstorage-core
   tags:
       - configure
 
 - name: Ensure clientaccesspolicy.xml present
-  copy: src=clientaccesspolicy.xml path={{core_install_dir}}/clientaccesspolicy.xml
+  copy: src=clientaccesspolicy.xml dest={{core_install_dir}}/clientaccesspolicy.xml
   notify:
       - Restart dstorage-core
   tags:

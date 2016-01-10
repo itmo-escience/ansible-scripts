@@ -1,10 +1,4 @@
 ---
-
-- name: just debug
-  hosts: all
-  tasks:
-    - debug: msg="{{groups['dstorage-mongodb'][0]}}"
-
 - name: install mongodb for dstorage-core
   hosts: dstorage-mongodb
   sudo: True
@@ -15,10 +9,17 @@
   hosts: dstorage-core
   sudo: True
   roles:
-    - { role: dstorage, dstorage_install_mode: "core", mongodb_address: "{{groups['dstorage-mongodb'][0]}}", java_version: "8", tags: ['dstorage-core']}
+    - { role: dstorage, dstorage_install_mode: "core", mongodb_address: "{{groups['dstorage-mongodb'][0]}}", oracle_java_set_as_default: yes, tags: ['dstorage-core']}
 
 - name: install, configure and run dstorage-agent
   hosts: dstorage-agents
   sudo: True
   roles:
-    - { role: dstorage, dstorage_install_mode: "agent", java_version: "8", tags: ['dstorage-core']}
+    - { role: dstorage,
+        dstorage_install_mode: "agent",
+        oracle_java_set_as_default: yes,
+        ## these two directories have to be created before this script !!!
+        agent_hdd_dir: "/opt/hdd",
+        agent_ssd_dir: "/opt/sdd",
+        core_address: "{{groups['dstorage-core'][0]}}",
+        tags: ['dstorage-core']}

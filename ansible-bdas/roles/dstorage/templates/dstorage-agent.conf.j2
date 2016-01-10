@@ -1,0 +1,17 @@
+author "fonhorst"
+description "start and stop dstorage-agent"
+version "0.1"
+
+start on started networking
+stop on runlevel [!2345]
+
+env APPDIR="{{agent_install_dir}}"
+env APPBIN="dstorage-agent.jar"
+env APPARGS="Agent.cfg"
+
+respawn
+
+script
+  chdir $APPDIR
+  exec java -jar $APPBIN $APPARGS
+end script

@@ -10,3 +10,6 @@
 [submodule "ansible-bdas/roles/ansible-oracle-java"]
 	path = ansible-bdas/roles/ansible-oracle-java
 	url = https://github.com/William-Yeh/ansible-oracle-java
+[submodule "ansible-bdas/roles/oracle-java"]
+	path = ansible-bdas/roles/oracle-java
+	url = https://github.com/ansiblebit/oracle-java

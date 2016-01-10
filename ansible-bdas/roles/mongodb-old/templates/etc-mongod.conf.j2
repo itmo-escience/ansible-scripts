@@ -5,7 +5,7 @@
 
 # Where and how to store data.
 storage:
-  dbPath: /var/lib/mongodb
+  dbPath: {{ mongodb_conf_dbpath }}
   journal:
     enabled: true
 #  engine:
@@ -15,13 +15,13 @@ storage:
 # where to write logging data.
 systemLog:
   destination: file
-  logAppend: true
-  path: {{mongodb_conf_logpath}}
+  logAppend: {{ mongodb_conf_logappend | to_nice_json }}
+  path: {{ mongodb_conf_logpath }}
 
 # network interfaces
 net:
-  port: 27017
-  bindIp: 0.0.0.0
+  port: {{ mongodb_conf_port }}
+  bindIp: {{ mongodb_conf_bind_ip }}
 
 
 #processManagement:

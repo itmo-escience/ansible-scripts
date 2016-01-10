@@ -1,6 +1,6 @@
 ########### Core config ###########
 # Local port for listen
-StoragePort = 8084
+StoragePort = {{core_port}}
 
 Daemon=true
 # Connection Pool. Number of threads to process incoming connections
@@ -74,10 +74,10 @@ Encoding = Windows-1251
 MongoBinPath = /usr/bin/
 
 # path to backup directory
-BackupPath = ./backup
+BackupPath = /tmp/backup
 
 # path to BigData reports, analytics, profiles etc
-BigDataPath = ./bigdata
+BigDataPath = /tmp/bigdata
 
 #### log config #####
 
@@ -86,7 +86,7 @@ log4j.rootLogger=DEBUG, FILE, stdout
 
 
 # Set path to logs
-log = ./log
+log = /var/log/dstorage-core
 
 # Config log messages to a log file
 #log4j.appender.FILE=org.apache.log4j.RollingFileAppender

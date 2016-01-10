@@ -1,22 +1,49 @@
----
 
-- include: install.yml
+- name: Adding APT key
+  apt_key:
+    id: 7F0CEB10
+    url: http://docs.mongodb.org/10gen-gpg-key.asc
   tags:
-    - web
-    - mongodb
     - install
-    - mongodb-install
 
-- include: config.yml
+- name: Add APT repository
+  apt_repository:
+    repo: "deb http://repo.mongodb.org/apt/ubuntu {{ ansible_distribution_release }}/mongodb-org/3.0 multiverse"
+    update_cache: yes
   tags:
-    - web
-    - mongodb
-    - config
-    - mongodb-config
+      - install
 
-- include: service.yml
+- name: Install mongodb
+  apt: name=mongodb-org state=present update_cache=no
   tags:
-    - web
-    - mongodb
-    - service
-    - mongodb-service
+    - install
+
+- name: Disable mongodb (install phase)
+  service: name=mongod state=stopped enabled=no
+  tags:
+    - install
+
+- name: Configure mongodb
+  template: src=etc-mongod.conf.j2 dest=/etc/mongod.conf
+  notify:
+    - Restart mongodb
+  tags:
+    - configure
+
+- name: Configuring logrotate
+  template:
+    src: etc-logrotate.d-mongodb.j2
+    dest: /etc/logrotate.d/mongodb
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Start service mongod
+  service: name=mongod state=started enabled=yes
+  tags:
+    - start
+
+- name: Stop service mongod
+  service: name=mongod state=stopped enabled=no
+  tags:
+    - stop
