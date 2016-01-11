@@ -1,0 +1,11 @@
+#- name: adding storm to environment
+#  script: setenv.sh
+
+
+- name: adding STORM_HOME
+  command: "pwd"
+  environment:
+    PATH: {{ lookup('env', 'PATH') }}:{{ lookup('env', 'STORM_HOME')/bin }}
+
+#- name: start nimbus
+# =

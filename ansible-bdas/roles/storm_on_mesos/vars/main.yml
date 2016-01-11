@@ -1,0 +1,7 @@
+---
+storm_ver : '0.10.0'
+storm_mirror : 'http://mirror.cc.columbia.edu/pub/software/apache/storm'
+proxy_env:
+          http_proxy: http://proxy.ifmo.ru:3128
+          HTTP_PROXY: http://proxy.ifmo.ru:3128
+zkid: "zookeeper"
