@@ -13,7 +13,7 @@
 #  $ ansible-playbook site.yml --tags: 'configure'
 # 5) Just slaves or masters can be under commmand
 #   ansible-playbook site.yml --tags: "stop,mesos-masters"
-# ansible-playb
+# ansible-play
 ---
 - name: apply common configuration to all nodes
   hosts: all

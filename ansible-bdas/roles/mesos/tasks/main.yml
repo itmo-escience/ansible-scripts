@@ -113,12 +113,12 @@
   tags:
     - start
 
-- name: Start marathon
-  service: name=marathon state=started enabled=yes
-  sudo: yes
-  when: mesos_install_mode == "master"
-  tags:
-    - start
+#- name: Start marathon
+#  service: name=marathon state=started enabled=yes
+#  sudo: yes
+#  when: mesos_install_mode == "master"
+#  tags:
+#    - start
 
 
 ####################################

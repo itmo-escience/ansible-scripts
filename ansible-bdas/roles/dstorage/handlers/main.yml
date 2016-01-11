@@ -1,0 +1,9 @@
+---
+
+- name: Restart dstorage-core
+  service: name=dstorage-core state=restarted
+  sudo: yes
+
+- name: Restart dstorage-agent
+  service: name=dstorage-agent state=restarted
+  sudo: yes

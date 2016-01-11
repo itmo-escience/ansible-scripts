@@ -1,0 +1,17 @@
+author "fonhorst"
+description "start and stop dstorage-core"
+version "{{core_version}}"
+
+start on started networking
+stop on runlevel [!2345]
+
+env APPDIR="{{core_install_dir}}"
+env APPBIN="dstorage-core.jar"
+env APPARGS="Core.cfg"
+
+respawn
+
+script
+  chdir $APPDIR
+  exec java -jar $APPBIN $APPARGS
+end script

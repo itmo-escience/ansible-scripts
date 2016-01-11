@@ -1,0 +1,6 @@
+---
+- include: dstorage-core.yml
+  when: dstorage_install_mode == "core"
+
+- include: dstorage-agent.yml
+  when: dstorage_install_mode == "agent"

@@ -1,0 +1,8 @@
+node-92-11 ansible_ssh_host=192.168.92.11
+###
+[dstorage-mongodb]
+node-92-11
+[dstorage-core]
+node-92-11
+[dstorage-agents]
+node-92-11

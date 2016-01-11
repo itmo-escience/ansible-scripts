@@ -1,11 +1,5 @@
 # Variables for all hosts
 
-#ansible_user: magistr 
-#ansible_password: 75M62DmV483K68M
-#ansible_port: 5985 
-#ansible_connection: winrm 
-#ansible_winrm_scheme: http
-
 iface: eth1
 
 # The following is necessary for Python 2.7.9+ when using default WinRM self-signed certificates:
@@ -72,3 +66,6 @@ mongodb_conf_httpinterface: no
 mongodb_service_enabled: yes
 # current state: started, stopped
 mongodb_service_state: started
+
+### TEST SECTION. DON'T USE THESE VARIABLES FOR NORMAL CODE
+test_including: "inside common playbook"
