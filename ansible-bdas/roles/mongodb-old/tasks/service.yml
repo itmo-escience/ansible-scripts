@@ -1,7 +1,0 @@
----
-
-- name: Configuring service
-  service:
-    name: mongod
-    state: "{{ mongodb_service_state }}"
-    enabled: "{{ mongodb_service_enabled }}"

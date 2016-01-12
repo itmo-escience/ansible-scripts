@@ -1,8 +1,0 @@
-#---
-#dependencies:
-#  - role: andrewrothstein.storm
-#  - role: andrewrothstein.mesosphere-zookeeper
-#  - role: pcextreme.supervisor
-
-
-

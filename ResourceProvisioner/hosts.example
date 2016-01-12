@@ -1,0 +1,85 @@
+node-132-1 ansible_ssh_host=192.168.92.11
+node-132-2 ansible_ssh_host=192.168.92.12
+node-132-3 ansible_ssh_host=192.168.92.13
+node-132-4 ansible_ssh_host=192.168.92.14
+
+node-133-1 ansible_ssh_host=192.168.92.15
+node-133-2 ansible_ssh_host=192.168.92.16
+node-133-3 ansible_ssh_host=192.168.92.17
+node-133-4 ansible_ssh_host=192.168.92.18
+
+node-109-1 ansible_ssh_host=192.168.92.19
+node-109-2 ansible_ssh_host=192.168.92.20
+node-109-3 ansible_ssh_host=192.168.92.21
+node-109-4 ansible_ssh_host=192.168.92.22
+
+node-110-1 ansible_ssh_host=192.168.92.23
+node-110-2 ansible_ssh_host=192.168.92.24
+node-110-3 ansible_ssh_host=192.168.92.25
+node-110-4 ansible_ssh_host=192.168.92.26
+
+node-111-1 ansible_ssh_host=192.168.92.27
+node-111-2 ansible_ssh_host=192.168.92.28
+node-111-3 ansible_ssh_host=192.168.92.29
+node-111-4 ansible_ssh_host=192.168.92.30
+
+node-112-1 ansible_ssh_host=192.168.92.31
+node-112-2 ansible_ssh_host=192.168.92.32
+node-112-3 ansible_ssh_host=192.168.92.33
+node-112-4 ansible_ssh_host=192.168.92.34
+####
+
+[controlmachine]
+node-132-3
+
+[dstorage-core]
+node-132-1
+
+[mesos_masters]
+node-132-1
+node-109-1
+node-112-1
+
+[ganglia_meta]
+node-132-2
+
+[ganglia_web]
+node-132-2
+
+[mongodb]
+node-132-1
+
+[mesos_slaves]
+node-132-4
+node-133-[1:4]
+node-109-[2:4]
+node-110-[1:4]
+node-111-[1:4]
+node-112-[2:4]
+
+[dstorage-agents]
+node-132-4
+node-133-[1:4]
+node-109-[2:4]
+node-110-[1:4]
+node-111-[1:4]
+node-112-[2:4]
+
+[ganglia_monitors]
+node-132-[1:4]
+node-133-[1:4]
+node-109-[1:4]
+node-110-[1:4]
+node-111-[1:4]
+node-112-[1:4]
+
+[fluentd]
+node-132-[1:4]
+node-133-[1:4]
+node-109-[1:4]
+node-110-[1:4]
+node-111-[1:4]
+node-112-[1:4]
+
+[snmaster]
+node-132-2

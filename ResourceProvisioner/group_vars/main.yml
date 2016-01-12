@@ -1,0 +1,19 @@
+# Variables for all hosts
+
+iface: eth1
+
+# The following is necessary for Python 2.7.9+ when using default WinRM self-signed certificates:
+ansible_winrm_server_cert_validation: ignore
+
+master_ip: "{{ hostvars[groups['master'][0]]['ansible_' + iface]['ipv4']['address'] }}"
+master_hostname: "{{ hostvars[groups['master'][0]]['ansible_hostname'] }}"
+
+mesos_master_ip: "{{ hostvars[groups['mesos_masters'][0]]['ansible_' + iface]['ipv4']['address'] }}"
+mesos_master_hostname: "{{ hostvars[groups['mesos_masters'][0]]['ansible_hostname'] }}"
+
+#SNCrawler vars:
+environment:
+ http_proxy: http://proxy.ifmo.ru:3128
+ HTTP_PROXY: http://proxy.ifmo.ru:3128
+
+java_packages: oracle-java8-installer

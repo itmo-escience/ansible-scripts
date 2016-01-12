@@ -1,0 +1,121 @@
+---
+- name: apply common configuration to all nodes
+  hosts: mesos_slaves, snmaster
+  sudo: yes
+  tags:
+    - prepare
+  roles:
+    - smola.java
+  environment:
+        http_proxy: http://proxy.ifmo.ru:3128
+        HTTP_PROXY: http://proxy.ifmo.ru:3128
+
+- name: apply mongo to master
+  hosts: mongodb
+  sudo: yes
+  tags:
+    - prepare
+  roles:
+    - mongodb
+  environment:
+        http_proxy: http://proxy.ifmo.ru:3128
+        HTTP_PROXY: http://proxy.ifmo.ru:3128
+
+- name: clone and build project on localhost
+  hosts: controlmachine
+  remote_user: vagrant
+  sudo: yes
+  tags:
+    - build
+  tasks:
+    - apt: name=git state=present update_cache=yes
+    - git: repo=git@github.com:itmo-escience/SNCrawler.git
+           version="releases"
+           dest=/SNCrawler
+           accept_hostkey=True
+           key_file="/home/vagrant/project/sshkey/id_rsa"
+           clone=yes update=yes
+    - apt: name=maven update_cache=yes
+  environment:
+            http_proxy: http://proxy.ifmo.ru:3128
+            HTTP_PROXY: http://proxy.ifmo.ru:3128
+
+- name: build project on localhost
+  hosts: controlmachine
+  remote_user: vagrant
+  sudo: yes
+  tags:
+   -  build
+  tasks:
+    - shell: mvn clean install
+      args:
+        chdir: /SNCrawler
+  environment:
+            http_proxy: http://proxy.ifmo.ru:3128
+            HTTP_PROXY: http://proxy.ifmo.ru:3128 
+
+- name: copy project to all
+  hosts: mesos_slaves, snmaster
+  remote_user: vagrant
+  sudo: yes
+  tags:
+    - build
+  tasks:
+    - copy: src=/SNCrawler dest=/
+  environment:
+            http_proxy: http://proxy.ifmo.ru:3128
+            HTTP_PROXY: http://proxy.ifmo.ru:3128
+
+- name: rewrite config file on master
+  hosts: snmaster
+  sudo: yes
+  tags:
+      - build
+      - test
+  tasks:
+      - name: rewrite config  file
+        template: src=templates/master.akka.conf.j2 dest=/SNCrawler/resources/akka.conf
+  environment:
+            http_proxy: http://proxy.ifmo.ru:3128
+            HTTP_PROXY: http://proxy.ifmo.ru:3128
+
+- name: rewrite config file
+  hosts: mesos_slaves
+  sudo: yes
+  tags:
+      - build
+      - test
+
+  tasks:
+      - name: rewrite config  file
+        template: src=templates/worker.akka.conf.j2 dest=/SNCrawler/resources/akka.conf
+  environment:
+            http_proxy: http://proxy.ifmo.ru:3128
+            HTTP_PROXY: http://proxy.ifmo.ru:3128
+
+- name: stop SNCrawler
+  hosts: snmaster
+  sudo: yes
+  tags:
+    - stop
+  tasks:
+    - name: stop SNCrawler
+      action: "shell pkill -f 'SNCrawler'"
+      ignore_errors: True
+  environment:
+            http_proxy: http://proxy.ifmo.ru:3128
+            HTTP_PROXY: http://proxy.ifmo.ru:3128
+
+- name: start SNCrawler master mesos_mode
+  hosts: snmaster
+  sudo: yes
+  tags:
+    - start_mesos_mode
+  tasks:
+    - name: Starting SNCrawler MasterActorRunner
+      shell: "nohup java -cp target/SNCrawler-1.0.jar:target/lib/* -Djava.library.path=/usr/local/lib crawler.mesos.CrawlerMain {{ master_hostname }} > output/MasterActor.txt &"
+      args:
+        chdir: "/SNCrawler"
+  environment:
+      http_proxy: http://proxy.ifmo.ru:3128
+      HTTP_PROXY: http://proxy.ifmo.ru:3128

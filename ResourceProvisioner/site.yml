@@ -1,0 +1,114 @@
+# This script currently runs mesos on hosts which is listed in the file 'hosts'
+# It can be run as a single node as a multi node cluster
+# ATTENTION! There is a set of tags: install, configure, start, stop
+# These tags manage lifecycle of the overall system, see examples
+# Examples:
+# 1) Installs, configure and runs the whole cluster
+#   $ ansible-playbook site.yml --skip-tags: 'stop'
+# 2) Stops the cluster
+#  $ ansible-playbook site.yml --tags: 'stop'
+# 3) Resume execution
+#  $ ansible-playbook site.yml --tags: 'start'
+# 4) Reconfigurates the cluster (Affected slave and master services will be restarted automatically)
+#  $ ansible-playbook site.yml --tags: 'configure'
+# 5) Just slaves or masters can be under commmand
+#   ansible-playbook site.yml --tags: "stop,mesos_masters"
+# ansible-play
+---
+- name: install mongodb for dstorage-core
+  hosts: mongodb
+  sudo: True
+  roles:
+    - {role: mongodb}
+  environment:
+            http_proxy: http://proxy.ifmo.ru:3128
+            HTTP_PROXY: http://proxy.ifmo.ru:3128
+
+- name: install, configure and run dstorage-core
+  hosts: dstorage-core
+  sudo: True
+  roles:
+    - { role: dstorage, dstorage_install_mode: "core", mongodb_address: "{{groups['dstorage-mongodb'][0]}}", oracle_java_set_as_default: yes, tags: ['dstorage-core']}
+  environment:
+            http_proxy: http://proxy.ifmo.ru:3128
+            HTTP_PROXY: http://proxy.ifmo.ru:3128
+
+- name: install, configure and run dstorage-agent
+  hosts: dstorage-agents
+  sudo: True
+  roles:
+    - { role: dstorage,
+        dstorage_install_mode: "agent",
+        oracle_java_set_as_default: yes,
+        ## these two directories have to be created before this script !!!
+        agent_hdd_dir: "/opt/hdd",
+        agent_ssd_dir: "/opt/sdd",
+        core_address: "{{groups['dstorage-core'][0]}}",
+        tags: ['dstorage-core']}
+  environment:
+            http_proxy: http://proxy.ifmo.ru:3128
+            HTTP_PROXY: http://proxy.ifmo.ru:3128
+
+- name: install, configure and run the mesos masters
+  hosts: mesos_masters
+  sudo: True
+  roles:
+    - { role: mesos, mesos_install_mode: "master", mesos_cluster_mode: "masters_file", tags: ['mesos-masters']}
+  environment:
+            http_proxy: http://proxy.ifmo.ru:3128
+            HTTP_PROXY: http://proxy.ifmo.ru:3128
+
+- name: install, configure and run the mesos slaves
+  hosts: mesos_slaves
+  sudo: True
+  roles:
+    - { role: mesos, mesos_install_mode: "slave", mesos_cluster_mode: "masters_file", tags: ['mesos-slaves']}
+  environment:
+            http_proxy: http://proxy.ifmo.ru:3128
+            HTTP_PROXY: http://proxy.ifmo.ru:3128
+
+- name: install ganglia monitors
+  hosts: ganglia_monitors
+  sudo: True
+  roles:
+    - { role: ganglia , tags: ['ganglia-monitors']}
+  environment:
+             http_proxy: http://proxy.ifmo.ru:3128
+             HTTP_PROXY: http://proxy.ifmo.ru:3128
+
+- name: install ganglia meta
+  hosts: ganglia_meta
+  sudo: True
+  roles:
+    - { role: ganglia, is_ganglia_meta: 1,  tags: ['ganglia-meta']}
+  environment:
+              http_proxy: http://proxy.ifmo.ru:3128
+              HTTP_PROXY: http://proxy.ifmo.ru:3128
+
+- name: install ganglia web
+  hosts: ganglia_web
+  sudo: True
+  roles:
+    - { role: ganglia, is_ganglia_web: 1, tags: ['ganglia-web']}
+  environment:
+              http_proxy: http://proxy.ifmo.ru:3128
+              HTTP_PROXY: http://proxy.ifmo.ru:3128
+
+- name: install ganglia-api
+  hosts: ganglia_web
+  sudo: True
+  roles:
+    - { role: ganglia, is_ganglia_api: 1,  tags: ['ganglia-api']}
+  environment:
+              http_proxy: http://proxy.ifmo.ru:3128
+              HTTP_PROXY: http://proxy.ifmo.ru:3128
+
+- name: install fluentd
+  hosts: fluentd
+  sudo: True
+  roles:
+    - { role: fluentd,  tags: ['fluentd']}
+  environment:
+        http_proxy: http://proxy.ifmo.ru:3128
+        HTTP_PROXY: http://proxy.ifmo.ru:3128
+
