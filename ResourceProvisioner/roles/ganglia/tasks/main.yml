@@ -1,8 +1,135 @@
 ---
+- name: Install Ganglia Monitor
+  apt: name={{item}} state=latest
+  with_items:
+    - ganglia-monitor
+    - ganglia-monitor-python
 
-- include_vars: "main.yml"
-- include_vars: "{{ ansible_os_family }}.yml"
+# Ganglia Meta is installed only on nodes marked is_ganglia_meta=1
+- name: Install Ganglia Meta
+  apt: name={{item}} state=latest
+  with_items:
+    - gmetad
+  when: "is_ganglia_meta is defined"
 
-- include: repositories.yml
-- include: packages.yml
-- include: configure.yml
+# Ganglia Web is installed only on nodes marked is_ganglia_web=1
+- name: Install Ganglia Web
+  apt: name={{item}} state=latest
+  with_items:
+    - ganglia-webfrontend
+  when: "is_ganglia_web is defined"
+
+- name: Install Ganglia API
+  git: repo=https://github.com/smirnp/ganglia-api.git
+       dest={{ ganglia_api_dir }}
+       clone=yes
+  when: "is_ganglia_api is defined"
+
+- name: Install Tornado
+  pip: name={{item}}
+  with_items:
+    - tornado
+  when: "is_ganglia_api is defined"
+
+# Configures the gmetad service.
+- name: Ensure the gmetad user exists
+  user: name="{{ ganglia_config_gmetad.setuid_username }}" system=yes state=present
+  notify:
+    - restart gmetad
+  when: "is_ganglia_meta is defined"
+
+- name: Ensure the gmetad directory exists
+  file: >-
+    path="{{ ganglia_config_gmetad.rrd_rootdir }}"
+    owner="{{ ganglia_config_gmetad.setuid_username }}"
+    group=root
+    mode=0755
+    state=directory
+  notify:
+    - restart gmetad
+  when: "is_ganglia_meta is defined"
+
+- name: Configure the gmetad
+  template: >-
+    src=gmetad.conf.j2
+    dest={{ ganglia_config_dir }}/gmetad.conf
+    owner=root
+    group=root
+    mode=0644
+  notify:
+    - restart gmetad
+  when: "is_ganglia_meta is defined"
+
+# Configure the gmond service
+- name: Disable the default Ganglia Monitor
+  service: >-
+    name=ganglia-monitor
+    enabled=no
+    state=stopped
+
+- name: Configure Ganglia Monitors
+  template: >-
+    src=gmond.conf.j2
+    dest={{ ganglia_config_dir }}/gmond-{{ item.key }}.conf
+    owner=root
+    group=root
+    mode=0644
+  with_dict: ganglia_config_gmond
+  tags:
+    - gmond
+
+- name: Install init scripts for Ganglia Monitors
+  template: >-
+    src=gmond-{{ ansible_os_family }}.service.j2
+    dest={{ ganglia_init_d_dir }}/gmond-{{ item.key }}
+    owner=root
+    group=root
+    mode=0755
+  with_dict: ganglia_config_gmond
+  tags:
+    - gmond
+
+- name: Ensure Ganglia Monitor services are enabled and started
+  service: >-
+    name=gmond-{{ item.key }}
+    enabled=yes
+    state=restarted
+  with_dict: ganglia_config_gmond
+  tags:
+    - gmond
+
+# Configures the web frontend service in apache
+
+- name: Enable the httpd frontend
+  template: >-
+    src=webfrontend-apache.conf.j2
+    dest={{ httpd_conf_d_dir }}/ganglia.conf
+    owner=root
+    group=root
+    mode=0644
+  notify:
+    - restart httpd
+  when: "is_ganglia_web is defined"
+
+# Configures ganglia-api settings.py
+- name: Configure ganglia-api before run
+  template: >-
+    src=ganglia-api-settings.py.j2
+    dest={{ ganglia_api_dir }}/ganglia/settings.py
+    owner=root
+    group=root
+    mode=0644
+  notify:
+    - restart ganglia-api
+  when: "is_ganglia_api is defined"
+
+- name: Configure ganglia-api to be a daemon
+  template: >-
+    src=ganglia-api-deamon.j2
+    dest=/etc/init.d/ganglia-api-daemon
+    owner=root
+    group=root
+    mode=0751
+  notify:
+    - restart ganglia-api
+  when: "is_ganglia_api is defined"

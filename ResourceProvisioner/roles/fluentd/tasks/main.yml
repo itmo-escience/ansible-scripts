@@ -1,11 +1,41 @@
 ---
 
-- include_vars: "main.yml"
-- include_vars: "{{ ansible_os_family }}.yml"
+- name: install fluent-plugin-multi-format-parser
+  command: /opt/td-agent/embedded/bin/fluent-gem install fluent-plugin-multi-format-parser
+  sudo: yes
 
-#- include: install.yml
-- include: configure.yml
+- name: create config dir
+  command: mkdir -p /etc/td-agent
+  sudo: yes
+  tags:
+    - install
 
+- name: creating td-agent.conf
+  template: src=fluentd.conf.j2 dest=/etc/td-agent/td-agent.conf
+
+- name: creating pos-files1
+  command: mkdir -p {{item}}
+  with_items:
+    - /var/log/dstorage-core/
+    - /var/log/dstorage-agent/
+  sudo: yes
+
+- name: creating pos-files2
+  command: touch {{item}}
+  with_items:
+    - /var/log/dstorage-core/logs.pos
+    - /var/log/dstorage-agent/logs.pos
+  sudo: yes
+
+
+- name: configuring chmod
+  command: chmod -R 777 {{item}}
+  with_items:
+      - /var/log/dstorage-core
+      - /var/log/dstorage-agent
+  sudo: yes
+  notify:
+    - restart td-agent
 
 
 

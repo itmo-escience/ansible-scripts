@@ -1,18 +1,9 @@
 ---
 - name: restart httpd
-  service: >-
-    name=apache2
-    state=restarted
-    enabled=yes
+  service: name=apache2 state=restarted enabled=yes
 
 - name: restart gmetad
-  service: >-
-    name=gmetad
-    state=restarted
-    enabled=yes
+  service: name=gmetad state=restarted enabled=yes
 
 - name: restart ganglia-api
-  service: >-
-    name=ganglia-api-daemon
-    state=restarted
-    enabled=yes
+  service: name=ganglia-api-daemon state=restarted enabled=yes

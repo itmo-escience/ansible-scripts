@@ -52,29 +52,12 @@ ganglia_config_gmetad:
     - 'CPU'    
   case_sensitive_hostnames: 0
 
-# Graphite support parameters.  
-# Uncomment and configure these if you're using Graphite.
-  
-#  carbon_server: 'my.graphite.box'
-#  carbon_port: 2003
-#  carbon_protocol: 'tcp'
-#  graphite_prefix: 'datacenter1.gmetad'
-#  graphite_path: '"datacenter1.gmetad.%s.%h.%m'
-#  carbon_timeout: 500
-  
-# Memcached support parameters.
-# Uncomment and configure these if you're using Memcached.
-
-#  memcached_parameters: "--SERVER=127.0.0.1"
-
 
 # Ganglia Monitors
   
   
 ganglia_config_gmond:
-  
-# Mandatory parameters.
-# The key is the cluster name.
+
     'ds1':
       globals:
         daemonize: 'yes'
@@ -317,10 +300,3 @@ ganglia_config_gmond:
             - name: 'disk_total'
               value_threshold: '1.0'
               title: 'Total Disk Space'                  
-               
-    # 'ds2':
-    #   cluster:
-    #     owner: 'unspecified'
-    #     latlong: 'unspecified'
-    #     url: 'unspecified'
-    #   ...

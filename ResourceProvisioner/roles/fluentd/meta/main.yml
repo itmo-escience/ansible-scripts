@@ -1,4 +1,4 @@
-#---
-#dependencies:
-#  - role: kawasakitoshiya.td-agent
+---
+dependencies:
+  - role: kawasakitoshiya.td-agent
 
