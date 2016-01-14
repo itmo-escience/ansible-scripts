@@ -5,27 +5,27 @@
   roles:
     - {role: mongodb}
 
-- name: install, configure and run dstorage-core
-  hosts: dstorage-core
-  sudo: True
-  roles:
-    - { role: dstorage, dstorage_install_mode: "core", mongodb_address: "{{groups['dstorage-mongodb'][0]}}", oracle_java_set_as_default: yes, tags: ['dstorage-core']}
-  environment:
-            http_proxy: http://proxy.ifmo.ru:3128
-            HTTP_PROXY: http://proxy.ifmo.ru:3128
-
-- name: install, configure and run dstorage-agent
-  hosts: dstorage-agents
-  sudo: True
-  roles:
-    - { role: dstorage,
-        dstorage_install_mode: "agent",
-        oracle_java_set_as_default: yes,
-        ## these two directories have to be created before this script !!!
-        agent_hdd_dir: "/opt/hdd",
-        agent_ssd_dir: "/opt/ssd",
-        core_address: "{{groups['dstorage-core'][0]}}",
-        tags: ['dstorage-agents']}
-  environment:
-            http_proxy: http://proxy.ifmo.ru:3128
-            HTTP_PROXY: http://proxy.ifmo.ru:3128
+#- name: install, configure and run dstorage-core
+#  hosts: dstorage-core
+#  sudo: True
+#  roles:
+#    - { role: dstorage, dstorage_install_mode: "core", mongodb_address: "{{groups['dstorage-mongodb'][0]}}", oracle_java_set_as_default: yes, tags: ['dstorage-core']}
+#  environment:
+#            http_proxy: http://proxy.ifmo.ru:3128
+#            HTTP_PROXY: http://proxy.ifmo.ru:3128
+#
+#- name: install, configure and run dstorage-agent
+#  hosts: dstorage-agents
+#  sudo: True
+#  roles:
+#    - { role: dstorage,
+#        dstorage_install_mode: "agent",
+#        oracle_java_set_as_default: yes,
+#        ## these two directories have to be created before this script !!!
+#        agent_hdd_dir: "/opt/hdd",
+#        agent_ssd_dir: "/opt/ssd",
+#        core_address: "{{groups['dstorage-core'][0]}}",
+#        tags: ['dstorage-agents']}
+#  environment:
+#            http_proxy: http://proxy.ifmo.ru:3128
+#            HTTP_PROXY: http://proxy.ifmo.ru:3128

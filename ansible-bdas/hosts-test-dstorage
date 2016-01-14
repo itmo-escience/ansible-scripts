@@ -1,8 +1,16 @@
 node-92-11 ansible_ssh_host=192.168.92.11
+node-92-12 ansible_ssh_host=192.168.92.12
+node-92-51 ansible_ssh_host=192.168.92.51
+node-92-52 ansible_ssh_host=192.168.92.52
 ###
+
+[linux_blades]
+192.168.13.132 my_host_name=node-92-5 my_base_ip_for_vms=192.168.92.5
+
 [dstorage-mongodb]
 node-92-11
 [dstorage-core]
 node-92-11
 [dstorage-agents]
-node-92-11
+node-92-[11:12]
+node-92-[51:52]
