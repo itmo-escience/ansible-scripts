@@ -16,7 +16,7 @@ agent_binary_name: dstorage-agent-0.0.1-jar-with-dependencies.jar
 agent_repo_key_path: /tmp/dstorage-agent-id_rsa
 agent_ssd_quota: 1000000
 agent_mem_quota: 1000000
-agent_quota: 1000100000
+agent_quota: 50000
 
 # this variables should be set in the playbook
 ## agent_hdd_dir:

@@ -26,7 +26,7 @@
       - install
 
 - name: build dstorage-core
-  shell: "gradle makeJar"
+  shell: "gradle makeJar -Dhttp.proxyHost=proxy.ifmo.ru -Dhttp.proxyPort=3128"
   args:
     chdir: "{{core_clone_dir}}"
   tags:

@@ -2,19 +2,19 @@
 
 # TODO: correct checks if there can be situation when only hdd or ssd pnly can be working
 
-- name: check hdd dir {{agent_hdd_dir}}
-  stat: path={{agent_hdd_dir}}
-  register: hdd_dir
-
-- fail: "stop - {{agent_hdd_dir}} doesn't exist"
-  when: hdd_dir.stat.isdir is defined and hdd_dir.stat.isdir
-
-- name: check hdd dir {{agent_ssd_dir}}
-  stat: path={{agent_ssd_dir}}
-  register: ssd_dir
-
-- fail: "stop - {{agent_ssd_dir}} doesn't exist"
-  when: ssd_dir.stat.isdir is defined and ssd_dir.stat.isdir
+#- name: check hdd dir {{agent_hdd_dir}}
+#  stat: path={{agent_hdd_dir}}
+#  register: hdd_dirstat
+#
+#- fail: msg="stop - {{agent_hdd_dir}} doesn't exist"
+#  when: hdd_dir.stat.isdir is defined and hdd_dir.stat.isdir
+#
+#- name: check hdd dir {{agent_ssd_dir}}
+#  stat: path={{agent_ssd_dir}}
+#  register: ssd_dir
+#
+#- fail: msg="stop - {{agent_ssd_dir}} doesn't exist"
+#  when: ssd_dir.stat.isdir is defined and ssd_dir.stat.isdir
 
 - name: install necessary tools
   apt: name={{ item }} state=present update_cache=no
@@ -47,8 +47,14 @@
   tags:
       - install
 
+# TODO: should be changed and implemented correctly!!!
+- name: change maven settings (add proxy)
+  copy: src=maven-settings.xml dest=/etc/maven/settings.xml
+  tags:
+    - install
+
 - name: build dstorage-agent
-  shell: "mvn package"
+  shell: "mvn package -DproxySet=true -DproxyHost=proxy.ifmo.ru -DproxyPort=3128"
   args:
     chdir: "{{agent_clone_dir}}"
   tags:
