@@ -1,8 +1,8 @@
 <source>
   type tail
   refresh_interval 5
-  path /var/log/dstorage-core/*
-  pos_file /var/log/dstorage-core/logs.pos
+  path {{dstorage_log_dir}}/*
+  pos_file {{dstorage_log_dir}}/logs.pos
   format multi_format
    <pattern>
      format /(?<time>[^ ]+ [^ ]+)[ ]+[^{]+Request[^"]+(?<request>[^}]+)/
