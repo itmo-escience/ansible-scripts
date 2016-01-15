@@ -1,11 +1,63 @@
-#- name: adding storm to environment
-#  script: setenv.sh
+---
+
+- name: Ensures /var/log/storm dir exists
+  file: path={{item}} state=directory
+  with_items:
+     - "/var/log/storm"
+     - "{{storm_dir}}/logback"
+     - "{{storm_dir}}/logs"
+
+#- name: creating storm.yml
+#  template: src=storm.yaml.j2 dest=/opt/storm/conf/storm.yaml
+
+#- name: copying Cluster.xml to {{storm_dir}}
+#  template: src=Cluster.xml.j2 dest={{storm_dir}}/logback/Cluster.xml
+
+- name: copying storm.yml & starting zookeeper
+  template: src=storm.yaml.j2 dest=/opt/storm/defaults.yaml
+  notify:
+    - restart zookeeper
+  when: "storm_master is defined"
+
+- name: configure supervisor (nimbus/drpc/ui)
+  template: src=supervisord.j2 dest=/etc/supervisor/conf.d/storm-{{item}}.conf  owner=root group=root mode=0751
+  with_items:
+    - nimbus
+    - drpc
+    - ui
+  notify:
+    - restart supervisor
+  when: "storm_master is defined"
 
 
-- name: adding STORM_HOME
-  command: "pwd"
-  environment:
-    PATH: {{ lookup('env', 'PATH') }}:{{ lookup('env', 'STORM_HOME')/bin }}
+- name: configure supervisor (supervisor/logviewer)
+  template: src="supervisord.j2" dest="/etc/supervisor/conf.d/storm-{{item}}.conf"  owner=root group=root mode=0751
+  with_items:
+    - supervisor
+    - logviewer
+  notify:
+    - restart supervisor
 
-#- name: start nimbus
-# =
+#- set_fact: service_name="storm-nimbus-daemon"
+#- set_fact: daemon="storm nimbus &"
+#
+#- name: Configure storm nimbus to be a daemon
+#  template: src=deamon.j2  dest=/etc/init.d/storm-nimbus-daemon  owner=root group=root mode=0751
+#  notify:
+#    - restart storm-nimbus
+#  when: "start_nimbus is defined"
+
+#- name: Configure storm nimbus to be a daemon
+#  template: >-
+#    src=deamon.j2
+#    dest=/etc/init.d/storm-nimbus-daemon
+#    service_name: storm-nimbus-daemon
+#    daemon: "storm nimbus &"
+#    owner=root
+#    group=root
+#    mode=0751
+#  notify:
+#    - restart storm-nimbus
+#  when: "start_nimbus is defined"
+
+

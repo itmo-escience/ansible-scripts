@@ -97,7 +97,7 @@
   tags:
     - start
 
-- name: stop and disable service dstorage-agent
-  service: name=dstorage-agent state=stopped enabled=no
-  tags:
-    - stop
+#- name: stop and disable service dstorage-agent
+#  service: name=dstorage-agent state=stopped enabled=no
+#  tags:
+#    - stop

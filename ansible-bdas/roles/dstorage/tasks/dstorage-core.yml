@@ -83,8 +83,8 @@
   tags:
     - start
 
-- name: stop and disable service dstorage-core
-  service: name=dstorage-core state=stopped enabled=no
-  tags:
-    - stop
+#- name: stop and disable service dstorage-core
+#  service: name=dstorage-core state=stopped enabled=no
+#  tags:
+#    - stop
 

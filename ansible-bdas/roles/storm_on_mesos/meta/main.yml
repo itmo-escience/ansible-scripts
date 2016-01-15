@@ -1,8 +1,6 @@
 #---
-#dependencies:
-#  - role: andrewrothstein.storm
-#  - role: andrewrothstein.mesosphere-zookeeper
-#  - role: pcextreme.supervisor
-
-
+#
+dependencies:
+ # - { role: andrewrothstein.storm }
+ # - { role: andrewrothstein.mesosphere-zookeeper, when: "storm_master is defined" }
 

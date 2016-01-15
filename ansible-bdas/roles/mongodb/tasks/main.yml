@@ -43,7 +43,7 @@
   tags:
     - start
 
-- name: Stop service mongod
-  service: name=mongod state=stopped enabled=no
-  tags:
-    - stop
+#- name: Stop service mongod
+#  service: name=mongod state=stopped enabled=no
+#  tags:
+#    - stop
