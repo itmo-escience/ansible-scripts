@@ -9,7 +9,7 @@ AgentdocRoot = {{agent_hdd_dir}}
 AgentSSDdocRoot = {{agent_ssd_dir}}
 SSDQuota={{agent_ssd_quota}}
 MEMQuota={{agent_mem_quota}}
-AgentAddress = {{ansible_hostname}}
+AgentAddress = {{ ansible_eth1.ipv4.address }}
 # Max usage space, bytes
 AgentQuota = {{agent_quota}}
 #ExternalIP=30.22.22.2
