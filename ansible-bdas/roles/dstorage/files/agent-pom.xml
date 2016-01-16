@@ -30,6 +30,16 @@
             <systemPath>${basedir}/lib/httpcore-4.4.3.jar</systemPath>-->
         </dependency>
         <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore-ab</artifactId>
+            <version>4.4.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore-nio</artifactId>
+            <version>4.4.4</version>
+        </dependency>
+        <dependency>
             <groupId>jcifs</groupId>
             <artifactId>jcifs</artifactId>
             <version>1.3.17</version>

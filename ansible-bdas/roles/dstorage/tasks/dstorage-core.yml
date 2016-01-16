@@ -15,6 +15,9 @@
   tags:
     - install
 
+- name: clean clone dir - {{core_clone_dir}}
+  file: path={{core_clone_dir}} state=absent
+
 - name: obtain dstorage-core sources
   git: repo=git@github.com:itmo-escience/dstorage-core.git
     version={{core_tag}}

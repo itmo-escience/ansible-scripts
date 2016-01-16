@@ -1,0 +1,10 @@
+---
+- name: install mongodb for dstorage-core
+  hosts: all
+  sudo: True
+  tasks:
+    - name: "apt-key update"
+      shell: "apt-key update"
+
+    - name: "apt-get update"
+      apt: update_cache=yes

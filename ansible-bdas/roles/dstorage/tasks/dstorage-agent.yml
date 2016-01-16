@@ -32,6 +32,9 @@
   tags:
     - install
 
+- name: clean clone dir - {{agent_clone_dir}}
+  file: path={{agent_clone_dir}} state=absent
+
 - name: obtain dstorage-agent sources
   git: repo=git@github.com:itmo-escience/dstorage-agent.git
     version={{agent_tag}}
