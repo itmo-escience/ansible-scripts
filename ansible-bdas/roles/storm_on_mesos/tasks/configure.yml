@@ -13,19 +13,17 @@
 #- name: copying Cluster.xml to {{storm_dir}}
 #  template: src=Cluster.xml.j2 dest={{storm_dir}}/logback/Cluster.xml
 
-- name: copying storm.yml & starting zookeeper
-  template: src=storm.yaml.j2 dest=/opt/storm/defaults.yaml
-  notify:
-    - restart zookeeper
-  when: "storm_master is defined"
+- name: copying storm.yml
+  template: src=storm.yaml.j2 dest=/opt/storm/conf/storm.yaml
 
 - name: configure supervisor (nimbus/drpc/ui)
-  template: src=supervisord.j2 dest=/etc/supervisor/conf.d/storm-{{item}}.conf  owner=root group=root mode=0751
+  template: src="supervisord.j2" dest=/etc/supervisor/conf.d/storm-{{item}}.conf  owner=root group=root mode=0751
   with_items:
     - nimbus
     - drpc
     - ui
   notify:
+    - restart zookeeper
     - restart supervisor
   when: "storm_master is defined"
 
@@ -37,6 +35,19 @@
     - logviewer
   notify:
     - restart supervisor
+
+#sudo mkdir -p /mnt/seizure_data
+#sudo mount -t cifs //192.168.13.101/smirnp /mnt/seizure_data -o user=nano,password=Yt1NyDpQNm
+
+#- name: mount 13.101 share
+#  command: "mkdir -p /mnt/seizure_data"
+#  with_items:
+#    - supervisor
+#    - logviewer
+#  notify:
+#    - restart supervisor
+
+
 
 #- set_fact: service_name="storm-nimbus-daemon"
 #- set_fact: daemon="storm nimbus &"

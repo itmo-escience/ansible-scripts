@@ -1,17 +1,17 @@
 ---
 #storm_ver : '0.10.0'
 #storm_mirror : 'http://mirror.cc.columbia.edu/pub/software/apache/storm'
-storm_ver : '0.11.0'
-#storm_mirror : 'http://mirror.cc.columbia.edu/pub/software/apache/storm'
-#http://mirror.cc.columbia.edu/pub/software/apache/storm/apache-storm-0.11.0/apache-storm-0.11.0.tar.gz
+#http://mirror.cc.columbia.edu/pub/software/apache/storm/apache-storm-0.11.0/apache-storm-0.10.0.tar.gz
+#storm_archive : '{{ storm_name }}.tar.gz'
+
+storm_ver : '2.0.0-SNAPSHOT'
+storm_mirror : 'http://192.168.1.36/storm-2'
 #http://192.168.1.36/apache-storm-0.11.0/apache-storm-0.11.0.tar.gz
-storm_mirror : 'http://192.168.1.36'
+storm_name : 'storm-core-{{ storm_ver }}'
+storm_archive : '{{ storm_name }}.zip'
+storm_url : '{{storm_mirror}}/{{ storm_archive}}'
+
 storm_dir : '/opt/storm'
-
-storm_name : 'apache-storm-{{ storm_ver }}'
-storm_archive : '{{ storm_name }}.tar.gz'
-storm_url : '{{storm_mirror}}/{{storm_name}}/{{ storm_archive}}'
-
 
 proxy_env:
           http_proxy: http://proxy.ifmo.ru:3128
