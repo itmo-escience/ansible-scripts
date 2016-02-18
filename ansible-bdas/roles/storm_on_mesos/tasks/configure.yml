@@ -7,14 +7,21 @@
      - "{{storm_dir}}/logback"
      - "{{storm_dir}}/logs"
 
-#- name: creating storm.yml
-#  template: src=storm.yaml.j2 dest=/opt/storm/conf/storm.yaml
+- name: creating storm.yml
+  template: src=storm.yaml-{{storm_ver}}.j2 dest={{storm_dir}}/conf/storm.yaml
 
-#- name: copying Cluster.xml to {{storm_dir}}
-#  template: src=Cluster.xml.j2 dest={{storm_dir}}/logback/Cluster.xml
+#- name: copying cluster.xml
+#  template: src=cluster.xml.j2 dest={{storm_dir}}/log4j2/cluster.xml
 
-- name: copying storm.yml
-  template: src=storm.yaml.j2 dest=/opt/storm/conf/storm.yaml
+#- name: copying worker.xml
+#  template: src=worker.xml.j2 dest={{storm_dir}}/log4j2/worker.xml
+
+- name: stopping supervisor
+  service: >-
+    name=supervisor
+    state=stopped
+    enabled=yes
+
 
 - name: configure supervisor (nimbus/drpc/ui)
   template: src="supervisord.j2" dest=/etc/supervisor/conf.d/storm-{{item}}.conf  owner=root group=root mode=0751
@@ -24,15 +31,25 @@
     - ui
   notify:
     - restart zookeeper
-    - restart supervisor
+    - start supervisor
   when: "storm_master is defined"
 
+- name: delete previos supervisor conf (supervisor/logviewer)
+  command: "rm -rf /etc/supervisor/conf.d/storm-{{item}}.conf"
+  with_items:
+    - supervisor
+    - logviewer
+  sudo: yes
 
 - name: configure supervisor (supervisor/logviewer)
   template: src="supervisord.j2" dest="/etc/supervisor/conf.d/storm-{{item}}.conf"  owner=root group=root mode=0751
   with_items:
     - supervisor
-    - logviewer
+    #- logviewer
+
+- name: delete storm-local & restart supervisor
+  command: rm -rf '{{storm_dir}}/storm-local'
+  sudo: yes
   notify:
     - restart supervisor
 
@@ -47,28 +64,5 @@
 #  notify:
 #    - restart supervisor
 
-
-
-#- set_fact: service_name="storm-nimbus-daemon"
-#- set_fact: daemon="storm nimbus &"
-#
-#- name: Configure storm nimbus to be a daemon
-#  template: src=deamon.j2  dest=/etc/init.d/storm-nimbus-daemon  owner=root group=root mode=0751
-#  notify:
-#    - restart storm-nimbus
-#  when: "start_nimbus is defined"
-
-#- name: Configure storm nimbus to be a daemon
-#  template: >-
-#    src=deamon.j2
-#    dest=/etc/init.d/storm-nimbus-daemon
-#    service_name: storm-nimbus-daemon
-#    daemon: "storm nimbus &"
-#    owner=root
-#    group=root
-#    mode=0751
-#  notify:
-#    - restart storm-nimbus
-#  when: "start_nimbus is defined"
 
 

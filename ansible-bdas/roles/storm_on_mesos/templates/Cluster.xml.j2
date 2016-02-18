@@ -56,22 +56,22 @@
     <appender-ref ref="A1"/>
   </root>
 
-  <logger name="backtype.storm.messaging.netty">
+  <logger name="org.apache.storm.messaging.netty">
     <level value="WARN" />
     <appender-ref ref="A1" />
   </logger>
 
-  <logger name="backtype.storm">
+  <logger name="org.apache.storm">
     <level value="DEBUG" />
     <appender-ref ref="A1" />
   </logger>
 
-  <logger name="backtype.storm.security.auth.authorizer" additivity="false">
+  <logger name="org.apache.storm.security.auth.authorizer" additivity="false">
     <level value="INFO" />
     <appender-ref ref="ACCESS" />
   </logger>
 
-  <logger name="backtype.storm.metric.LoggingMetricsConsumer" additivity="false" >
+  <logger name="org.apache.storm.metric.LoggingMetricsConsumer" additivity="false" >
     <level value="INFO"/>
     <appender-ref ref="METRICS"/>
   </logger>
