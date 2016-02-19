@@ -11,9 +11,16 @@
     state=restarted
     enabled=yes
 
-- name: restart storm-nimbus
-  service: >-
-    name=storm-nimbus-daemon
-    state=restarted
-    enabled=yes
+#- name: restart storm-nimbus
+#  service: >-
+#    name=storm-nimbus-daemon
+#    state=restarted
+#    enabled=yes
+
+#- name: restart storm-ui
+#  service: >-
+#    name=storm-ui-daemon
+#    state=restarted
+#    enabled=yes
+
 

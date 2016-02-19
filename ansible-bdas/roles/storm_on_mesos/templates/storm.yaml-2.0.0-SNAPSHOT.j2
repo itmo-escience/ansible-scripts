@@ -3,8 +3,8 @@ storm.zookeeper.servers:
 
 nimbus.seeds : ["192.168.92.11"]
 
-# netty transport
-#storm.messaging.transport: "org.apache.storm.messaging.netty.Context"
+java.library.path: "/usr/local/lib:/opt/local/lib:/usr/lib"
+storm.messaging.transport: "org.apache.storm.messaging.netty.Context"
 
 
 drpc.servers:

@@ -10,11 +10,20 @@
 - name: creating storm.yml
   template: src=storm.yaml-{{storm_ver}}.j2 dest={{storm_dir}}/conf/storm.yaml
 
+- name: creating default env variables
+  template: src=storm_env.ini.j2 dest={{storm_dir}}/conf/storm_env.ini
+
 #- name: copying cluster.xml
 #  template: src=cluster.xml.j2 dest={{storm_dir}}/log4j2/cluster.xml
 
 #- name: copying worker.xml
 #  template: src=worker.xml.j2 dest={{storm_dir}}/log4j2/worker.xml
+
+- name: delete previous supervisor conf (supervisor/logviewer)
+  command: "rm -rf /etc/supervisor/conf.d/storm-{{item}}.conf"
+  with_items:
+    - supervisor
+    - logviewer
 
 - name: stopping supervisor
   service: >-
@@ -22,6 +31,13 @@
     state=stopped
     enabled=yes
 
+- name: delete previos supervisor conf (supervisor/logviewer)
+  command: "rm -rf /etc/supervisor/conf.d/storm-{{item}}.conf"
+  with_items:
+    - nimbus
+    - drpc
+    - ui
+  sudo: yes
 
 - name: configure supervisor (nimbus/drpc/ui)
   template: src="supervisord.j2" dest=/etc/supervisor/conf.d/storm-{{item}}.conf  owner=root group=root mode=0751
@@ -31,8 +47,19 @@
     - ui
   notify:
     - restart zookeeper
-    - start supervisor
+    - restart supervisor
   when: "storm_master is defined"
+
+#- name: Configure storm-ui to be a daemon
+#  template: >-
+#    src=deamon.j2
+#    dest=/etc/init.d/storm-ui-daemon
+#    owner=root
+#    group=root
+#    mode=0751
+#  notify:
+#    - restart storm-ui
+#  when: "storm_master is defined"
 
 - name: delete previos supervisor conf (supervisor/logviewer)
   command: "rm -rf /etc/supervisor/conf.d/storm-{{item}}.conf"
@@ -45,7 +72,7 @@
   template: src="supervisord.j2" dest="/etc/supervisor/conf.d/storm-{{item}}.conf"  owner=root group=root mode=0751
   with_items:
     - supervisor
-    #- logviewer
+    - logviewer
 
 - name: delete storm-local & restart supervisor
   command: rm -rf '{{storm_dir}}/storm-local'

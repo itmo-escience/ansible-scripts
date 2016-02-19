@@ -3,11 +3,7 @@ storm.zookeeper.servers:
 
 nimbus.host: "192.168.92.11"
 
-java.library.path: "/usr/local/lib:/opt/local/lib:/usr/lib:/usr/lib/jvm/java-8-oracle"
-
-# netty transport
-#storm.messaging.transport: "backtype.storm.messaging.netty.Context"
-
+storm.messaging.transport: "backtype.storm.messaging.netty.Context"
 
 drpc.servers:
   - "192.168.92.11"
