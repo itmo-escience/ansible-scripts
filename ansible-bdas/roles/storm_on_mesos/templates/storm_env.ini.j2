@@ -4,7 +4,7 @@
 [environment]
 
 # The java implementation to use. If JAVA_HOME is not found we expect java to be in path
-JAVA_HOME: {{ lookup('env','JAVA_HOME') }}
+JAVA_HOME: {{ java_home }}
 
-# JVM options to be used in "storm jar" commad
+# JVM options to be used in "storm jar" command
 #STORM_JAR_JVM_OPTS:

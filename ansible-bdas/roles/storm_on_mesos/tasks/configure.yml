@@ -13,11 +13,11 @@
 - name: creating default env variables
   template: src=storm_env.ini.j2 dest={{storm_dir}}/conf/storm_env.ini
 
-#- name: copying cluster.xml
-#  template: src=cluster.xml.j2 dest={{storm_dir}}/log4j2/cluster.xml
+- name: copying cluster.xml
+  template: src=cluster.xml-{{storm_ver}}.j2 dest={{storm_dir}}/conf/cluster.xml
 
-#- name: copying worker.xml
-#  template: src=worker.xml.j2 dest={{storm_dir}}/log4j2/worker.xml
+- name: copying worker.xml
+  template: src=worker.xml.j2 dest={{storm_dir}}/conf/worker.xml
 
 - name: delete previous supervisor conf (supervisor/logviewer)
   command: "rm -rf /etc/supervisor/conf.d/storm-{{item}}.conf"
