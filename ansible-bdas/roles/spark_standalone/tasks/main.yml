@@ -1,17 +1,17 @@
 ---
 - name: Download Spark pre-built package
-  get_url: url={{ spark_download_url }} dest="/tmp/spark-{{ spark_version }}.tgz"
+  get_url: url={{ spark_download_url }} dest="/tmp/{{ spark_distribution }}.tgz"
   tags:
     - install
 
 - name: Extract Spark archive
-  unarchive: copy=no src="/tmp/spark-{{ spark_version }}.tgz" dest=/opt/
+  unarchive: copy=no src="/tmp/{{ spark_distribution }}.tgz" dest=/usr/lib
   sudo: yes
   tags:
     - install
 
 - name: Create link to Spark directory
-  file: src=/opt/spark-{{ spark_version }} dest={{ spark_root }} state=link
+  file: src=/opt/{{ spark_distribution }} dest={{ spark_root }} state=link
   sudo: yes
   tags:
     - install
