@@ -16,16 +16,6 @@
   tags:
     - install
 
-## not a good way. that's needed to be able to stop mesos cluster which is running under root (despite of it started by clusteruser).
-#- name: put SSH key to host
-#  copy: src={{ sshkeys_path }}/{{ item }} dest=root/.ssh/{{ item }}
-#  with_items:
-#    - id_rsa
-#    - id_rsa.pub
-#    - authorized_keys
-#  tags:
-#    - install
-
 - name: disable strict host checking for cluster user
   copy: src=sshconfig dest=/home/{{ clusteruser }}/.ssh/config
   tags:
@@ -40,7 +30,7 @@
   tags:
     - install
 
-- name: tune limits to count of open files (soft)
+- name: tune limits to count of open files (hard)
   lineinfile: "dest=/etc/security/limits.conf
   insertafter=EOF
   line='* hard nofile 20000'
@@ -49,7 +39,7 @@
   tags:
     - install
 
-- name: tune limits to count of open files (hard)
+- name: tune limits to count of open files (soft)
   lineinfile: "dest=/etc/security/limits.conf
   insertafter=EOF
   line='* soft nofile 20000'
