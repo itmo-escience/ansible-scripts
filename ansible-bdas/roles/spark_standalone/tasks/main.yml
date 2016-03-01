@@ -11,7 +11,7 @@
     - install
 
 - name: Create link to Spark directory
-  file: src=/opt/{{ spark_distribution }} dest={{ spark_root }} state=link
+  file: src=/usr/lib/{{ spark_distribution }} dest={{ spark_root }} state=link
   sudo: yes
   tags:
     - install
