@@ -1,0 +1,33 @@
+---
+- name: Get HDP repositories list
+  get_url: url={{ hdp_repolist_url }} dest="/etc/apt/sources.list.d/hdp.list"
+
+- name: Stat existing policy-rc.d
+  stat: path=/usr/sbin/policy-rc.d
+  register: policy_rc_stat
+
+- name: Move existing policy-rc.d to temp dir
+  command: mv /usr/sbin/policy-rc.d /tmp/policy-rc.d.backup
+  when: policy_rc_stat.stat.exists
+
+- name: Add policy-rc.d to prevent starting daemons
+  copy: src=policy-rc.d dest=/usr/sbin/policy-rc.d
+
+- name: Install required packages
+  apt: name={{ item }} state=present update_cache=yes force=yes
+  with_items:
+    - hadoop
+    - hadoop-hdfs
+    - libhdfs0
+    - hadoop-yarn
+    - hadoop-mapreduce
+    - hadoop-client
+    - openssl
+
+- name: Remove policy-rc.d
+  file: path=/usr/sbin/policy-rc.d state=absent
+
+- name: Move existing policy-rc.d back
+  command: mv /tmp/policy-rc.d.backup /usr/sbin/policy-rc.d
+  when: policy_rc_stat.stat.exists
+
