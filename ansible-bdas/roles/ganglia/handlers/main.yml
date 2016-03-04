@@ -4,15 +4,25 @@
     name=apache2
     state=restarted
     enabled=yes
+  sudo: yes
 
 - name: restart gmetad
   service: >-
     name=gmetad
     state=restarted
     enabled=yes
+  sudo: yes
 
 - name: restart ganglia-api
   service: >-
     name=ganglia-api-daemon
     state=restarted
     enabled=yes
+  sudo: yes
+
+- name: restart iperf-server
+  service: >-
+    name=iperf-server
+    state=started
+    enabled=yes
+  sudo: yes

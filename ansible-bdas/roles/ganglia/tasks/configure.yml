@@ -7,9 +7,10 @@
     name="{{ ganglia_config_gmetad.setuid_username }}"
     system=yes
     state=present
-  notify:
-    - restart gmetad
   when: "is_ganglia_meta is defined"
+  tags:
+    - ganglia-meta
+    - configure
 
 - name: Ensure the gmetad directory exists
   file: >-
@@ -18,9 +19,10 @@
     group=root
     mode=0755
     state=directory
-  notify:
-    - restart gmetad
   when: "is_ganglia_meta is defined"
+  tags:
+    - ganglia-meta
+    - configure
 
 - name: Configure the gmetad
   template: >-
@@ -32,6 +34,9 @@
   notify:
     - restart gmetad
   when: "is_ganglia_meta is defined"
+  tags:
+    - ganglia-meta
+    - configure
 
 # Configure the gmond service
 
@@ -41,6 +46,9 @@
     enabled=no
     state=stopped
   when: "ansible_os_family == 'RedHat'"
+  tags:
+    - ganglia-monitor
+    - configure
 
 - name: Disable the default Ganglia Monitor
   service: >-
@@ -48,6 +56,9 @@
     enabled=no
     state=stopped
   when: "ansible_os_family == 'Debian'"
+  tags:
+    - ganglia-monitor
+    - configure
 
 - name: Configure Ganglia Monitors
   template: >-
@@ -58,7 +69,8 @@
     mode=0644
   with_dict: ganglia_config_gmond
   tags:
-    - gmond
+    - ganglia-monitor
+    - configure
 
 - name: Install init scripts for Ganglia Monitors
   template: >-
@@ -69,7 +81,8 @@
     mode=0755
   with_dict: ganglia_config_gmond
   tags:
-    - gmond
+    - ganglia-monitor
+    - configure
 
 - name: Ensure Ganglia Monitor services are enabled and started
   service: >-
@@ -78,7 +91,8 @@
     state=restarted
   with_dict: ganglia_config_gmond
   tags:
-    - gmond
+    - ganglia-monitor
+    - configure
 
 # Configures the web frontend service in apache
 
@@ -92,7 +106,9 @@
   notify:
     - restart httpd
   when: "is_ganglia_web is defined"
-
+  tags:
+    - ganglia-web
+    - configure
 
 # Configures ganglia-api settings.py
 - name: Configure ganglia-api before run
@@ -102,17 +118,37 @@
     owner=root
     group=root
     mode=0644
-  notify:
-    - restart ganglia-api
   when: "is_ganglia_api is defined"
+  tags:
+    - ganglia-api
+    - configure
 
 - name: Configure ganglia-api to be a daemon
   template: >-
-    src=ganglia-api-deamon.j2
+    src=deamon.j2
     dest=/etc/init.d/ganglia-api-daemon
     owner=root
     group=root
     mode=0751
+  with_dict: ganglia-api-daemon
   notify:
     - restart ganglia-api
   when: "is_ganglia_api is defined"
+  tags:
+    - ganglia-api
+    - configure
+
+
+- name: Configure iperf-server deaemon
+  template: >-
+    src=deamon.j2
+    dest=/etc/init.d/iperf-server
+    owner=root
+    group=root
+    mode=0751
+  with_dict: iperf_daemon
+  notify:
+    - restart iperf-server
+  tags:
+    - iperf
+    - configure

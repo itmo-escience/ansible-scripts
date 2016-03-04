@@ -1,7 +1,7 @@
 
 # Path component of the URL of the web interface.
 ganglia_web_location: /ganglia
-
+ganglia_lib_dir: /usr/lib/ganglia
 
 # These parameters has the default value
 ganglia_config_gmetad:
@@ -135,25 +135,25 @@ ganglia_config_gmond:
         - name: 'core_metrics'
         
         - name: 'cpu_module'
-          path: '{{ ganglia_lib_dir }}/modcpu.so'
+          path: '{{ganglia_lib_dir}}/modcpu.so'
 
         - name: 'disk_module'
-          path: '{{ ganglia_lib_dir }}/moddisk.so'
+          path: '{{ganglia_lib_dir}}/moddisk.so'
 
         - name: 'load_module'
-          path: '{{ ganglia_lib_dir }}/modload.so'
+          path: '{{ganglia_lib_dir}}/modload.so'
 
         - name: 'mem_module'
-          path: '{{ ganglia_lib_dir }}/modmem.so'
+          path: '{{ganglia_lib_dir}}/modmem.so'
 
         - name: 'net_module'
-          path: '{{ ganglia_lib_dir }}/modnet.so'
+          path: '{{ganglia_lib_dir}}/modnet.so'
           
         - name: 'proc_module'
-          path: '{{ ganglia_lib_dir }}/modproc.so'
+          path: '{{ganglia_lib_dir}}/modproc.so'
 
         - name: 'sys_module'
-          path: '{{ ganglia_lib_dir }}/modsys.so'
+          path: '{{ganglia_lib_dir}}/modsys.so'
 
       collection_groups:
         - collect_once: 'yes'
@@ -324,3 +324,18 @@ ganglia_config_gmond:
     #     latlong: 'unspecified'
     #     url: 'unspecified'
     #   ...
+
+#ganglia-api service deamon template
+ganglia_api_daemon:
+    'key1':
+      user: vagrant
+      service_name: ganglia-api-daemon
+      daemon: "python {{ganglia_api_dir}}/ganglia/ganglia_api.py &"
+      daemon_opts: ""
+
+iperf_daemon:
+    'key1':
+      service_name: iperf-server
+      user: vagrant
+      daemon: "/usr/bin/iperf"
+      daemon_opts: "-s"

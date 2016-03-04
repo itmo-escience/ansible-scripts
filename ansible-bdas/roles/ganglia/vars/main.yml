@@ -10,9 +10,3 @@ ganglia_gmond_binary: /usr/sbin/gmond
 
 ganglia_api_dir: /opt/ganglia-api
 
-#ganglia-api service deamon
-user: vagrant
-service_name: ganglia-api-daemon
-daemon: "python {{ganglia_api_dir}}/ganglia/ganglia_api.py &"
-pidfile: /var/run/{{service_name}}.pid
-daemon_opts: ""

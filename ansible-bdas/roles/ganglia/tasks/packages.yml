@@ -10,6 +10,9 @@
     - ganglia-gmond
     - ganglia-gmond-python
   when: "ansible_os_family == 'RedHat'"
+  tags:
+    - ganglia-monitor
+    - install
 
 - name: Install Ganglia Monitor
   apt: >-
@@ -19,6 +22,9 @@
     - ganglia-monitor
     - ganglia-monitor-python
   when: "ansible_os_family == 'Debian'"
+  tags:
+    - ganglia-monitor
+    - install
 
 # Ganglia Meta is installed only on nodes marked is_ganglia_meta=1
 - name: Install Ganglia Meta
@@ -28,6 +34,9 @@
   with_items:
     - ganglia-gmetad
   when: "ansible_os_family == 'RedHat' and is_ganglia_meta is defined"
+  tags:
+    - ganglia-meta
+    - install
 
 - name: Install Ganglia Meta
   apt: >-
@@ -36,6 +45,9 @@
   with_items:
     - gmetad
   when: "ansible_os_family == 'Debian' and is_ganglia_meta is defined"
+  tags:
+    - ganglia-meta
+    - install
 
 # Ganglia Web is installed only on nodes marked is_ganglia_web=1
 - name: Install Ganglia Web
@@ -45,6 +57,9 @@
   with_items:
     - ganglia-web, git
   when: "ansible_os_family == 'RedHat' and is_ganglia_web is defined"
+  tags:
+    - ganglia-web
+    - install
 
 - name: Install Ganglia Web
   apt: >-
@@ -53,12 +68,18 @@
   with_items:
     - ganglia-webfrontend
   when: "ansible_os_family == 'Debian' and is_ganglia_web is defined"
+  tags:
+    - ganglia-web
+    - install
 
 - name: Install Ganglia API
   git: repo=https://github.com/smirnp/ganglia-api.git
        dest={{ ganglia_api_dir }}
        clone=yes
   when: "is_ganglia_api is defined"
+  tags:
+    - ganglia-web
+    - install
 
 - name: Install Tornado
   pip: >-
@@ -66,4 +87,22 @@
   with_items:
     - tornado
   when: "is_ganglia_api is defined"
+  tags:
+    - ganglia-api
+    - install
 
+- name: install iperf
+  apt: >-
+    name=iperf
+    state=latest
+  when: "is_iperf is defined"
+  tags:
+    - iperf
+    - install
+
+- name: add iperf user
+  user: name=iperf shell=/sbin/nologin
+  when: "is_iperf is defined"
+  tags:
+    - iperf
+    - install

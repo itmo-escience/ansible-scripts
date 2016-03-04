@@ -13,6 +13,7 @@ DAEMON={{ ganglia_gmond_binary }}
 DAEMON_ARGS="-c {{ ganglia_config_dir }}/$NAME.conf"
 PIDFILE="/var/run/$NAME.pid"
 SCRIPTNAME="/etc/init.d/$NAME"
+LOGFILE="/var/log/$NAME.log"
 
 # Exit if the package is not installed
 [ -x "$DAEMON" ] || exit 0
@@ -28,7 +29,7 @@ SCRIPTNAME="/etc/init.d/$NAME"
 # and status_of_proc is working.
 . /lib/lsb/init-functions
 
-#
+# >> $LOGFILE
 # Function that starts the daemon/service
 #
 do_start()
@@ -37,9 +38,9 @@ do_start()
     #   0 if daemon has been started
     #   1 if daemon was already running
     #   2 if daemon could not be started
-    start-stop-daemon --start --quiet --pidfile $PIDFILE --exec $DAEMON --test > /dev/null \
+    start-stop-daemon --start --pidfile --quiet $PIDFILE --exec $DAEMON --test  \
         || return 1
-    start-stop-daemon --start --quiet --pidfile $PIDFILE --exec $DAEMON -- \
+    start-stop-daemon --start --pidfile --quiet $PIDFILE --exec $DAEMON -- \
         $DAEMON_ARGS \
         || return 2
     # Add code here, if necessary, that waits for the process to be ready
