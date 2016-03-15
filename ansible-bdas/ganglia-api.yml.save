@@ -1,6 +1,0 @@
----
-- name: install ganglia api
-  hosts: ganglia_web
-  sudo: True
-  tasks:
-	-name: 

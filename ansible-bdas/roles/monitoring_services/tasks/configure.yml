@@ -1,0 +1,49 @@
+---
+
+- name: Configuring deaemons
+  template: >-
+    src=deamon.j2
+    dest=/etc/init.d/{{item.key}}
+    owner=root
+    group=root
+    mode=0751
+  with_dict: repos
+  tags:
+    - configure
+
+- name: restarting daemons
+  service: >-
+    name={{item.key}}
+    state=restarted
+    enabled=yes
+  sudo: yes
+  with_dict: repos
+  tags:
+    - configure
+
+# Configures and starts the td-agent service for
+
+- name: creating td-agent.conf
+  template: src=fluentd.conf.j2 dest=/etc/td-agent/td-agent.conf
+  tags:
+    - configure
+    - td-agent
+
+#- name: creating pos-files2
+#  command: >-
+#    touch {{item}}
+#  with_items:
+#    - {{dstorage_log_dir}}/logs.pos
+#    #- /var/log/dstorage/requests.pos
+#  sudo: yes
+
+
+- name: configuring chmod
+  #command: chmod -R 777 /var/log/dstorage
+  command: chmod -R 777 {{dstorage_log_dir}}
+  sudo: yes
+  notify:
+    - restart td-agent
+  tags:
+    - configure
+    - td-agent

@@ -33,7 +33,7 @@
     state=latest
   with_items:
     - ganglia-gmetad
-  when: "ansible_os_family == 'RedHat' and is_ganglia_meta is defined"
+  when: ansible_os_family == 'RedHat' and ganglia_meta is defined
   tags:
     - ganglia-meta
     - install
@@ -72,6 +72,7 @@
     - ganglia-web
     - install
 
+# Ganglia API
 - name: Install Ganglia API
   git: repo=https://github.com/smirnp/ganglia-api.git
        dest={{ ganglia_api_dir }}
@@ -91,6 +92,7 @@
     - ganglia-api
     - install
 
+# I-perf
 - name: install iperf
   apt: >-
     name=iperf

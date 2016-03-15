@@ -1,0 +1,26 @@
+git_repo_url: git@github.com:itmo-escience/MonitoringSystem.git
+version_tag: c5dd8e04ad1a7b0639eba1ca06f49a3355b7b084
+#git_repo_url: git@gitlab.com:CLAVIRE2/Monitoring.git
+#version_tag: c5dd8e04ad1a7b0639eba1ca06f49a3355b7b084
+clone_dir: /opt/monitoring_services
+repo_key_path: /tmp/monitoring-services
+
+daemon_name: "java -jar "
+daemon_user: vagrant
+
+dstorage_log_dir: /var/log/dstorage-core/
+
+repos:
+   'ComputationsMonitor':
+      namespace: ifmo.escience.dapris.monitoring.computationsMonitor
+      repo_url: git@gitlab.com:CLAVIRE2/Monitoring.ComputationsMonitor.git
+   'InfrastructureMonitor':
+      namespace: ifmo.escience.dapris.monitoring.infrastructureMonitor
+      repo_url: https://gitlab.com/CLAVIRE2/Monitoring.InfrastructureMonitor.git
+
+#   'ProvenanceManager':
+#      repo_url: git@gitlab.com:CLAVIRE2/Monitoring.ProvenanceManager.git
+#   'DatalayerMonitor':
+#      namespace: ifmo.escience.dapris.monitoring.datalayerMonitor
+#      repo_url: git@gitlab.com:CLAVIRE2/Monitoring.DatalayerMonitor.git
+

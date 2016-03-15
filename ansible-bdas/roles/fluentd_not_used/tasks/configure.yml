@@ -1,0 +1,37 @@
+---
+
+# Configures and starts the td-agent service.
+- name: create config dir
+  #command: fluentd --setup /etc/td-agent
+  command: mkdir -p /etc/td-agent
+  sudo: yes
+  tags:
+    - install
+
+- name: creating td-agent.conf
+  template: src=fluentd.conf.j2 dest=/etc/td-agent/td-agent.conf
+
+- name: creating pos-files
+  command: >-
+    mkdir -p {{item}}
+  with_items:
+    - /var/log/dstorage/
+    - /var/log/dstorage/logs/
+    #- /var/log/dstorage/requests/
+  sudo: yes
+
+#- name: creating pos-files2
+#  command: >-
+#    touch {{item}}
+#  with_items:
+#    - {{dstorage_log_dir}}/logs.pos
+#    #- /var/log/dstorage/requests.pos
+#  sudo: yes
+
+
+- name: configuring chmod
+  #command: chmod -R 777 /var/log/dstorage
+  command: chmod -R 777 {{dstorage_log_dir}}
+  sudo: yes
+  notify:
+    - restart td-agent

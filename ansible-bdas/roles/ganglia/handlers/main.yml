@@ -6,7 +6,7 @@
     enabled=yes
   sudo: yes
 
-- name: restart gmetad
+- name: restart ganglia-meta
   service: >-
     name=gmetad
     state=restarted

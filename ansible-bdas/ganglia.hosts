@@ -13,10 +13,12 @@ node-92-52 ansible_ssh_host=192.168.92.52
 [ganglia_monitors]
 #node-92-11
 #node-92-12
-#node-92-13
+node-92-13
 node-92-14
-#node-92-15
-#node-92-16
+node-92-15
+node-92-16
+node-92-51
+node-92-52
 
 [ganglia_meta]
 node-92-11
