@@ -1,0 +1,35 @@
+node-92-11 ansible_ssh_host=192.168.92.11
+node-92-12 ansible_ssh_host=192.168.92.12
+node-92-13 ansible_ssh_host=192.168.92.13
+node-92-14 ansible_ssh_host=192.168.92.14
+node-92-15 ansible_ssh_host=192.168.92.15
+node-92-16 ansible_ssh_host=192.168.92.16
+node-92-51 ansible_ssh_host=192.168.92.51
+node-92-52 ansible_ssh_host=192.168.92.52
+#node-92-61 ansible_ssh_host=192.168.92.61
+#node-92-62 ansible_ssh_host=192.168.92.62
+####
+
+[ganglia_monitors]
+#node-92-11
+#node-92-12
+node-92-13
+node-92-14
+node-92-15
+node-92-16
+node-92-51
+node-92-52
+
+[ganglia_meta]
+node-92-11
+
+[ganglia_web]
+node-92-11
+
+[fluentd]
+node-92-11
+node-92-12
+node-92-13
+node-92-14
+node-92-15
+node-92-16

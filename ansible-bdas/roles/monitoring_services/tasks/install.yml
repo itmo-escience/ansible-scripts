@@ -1,0 +1,61 @@
+- name: create {{clone_dir}} dir
+  file: path={{clone_dir}} state=directory
+  tags:
+    - install
+
+- name: copy sshKeys
+  copy: src=../sshkey/id_rsa dest={{clone_dir}}/id_rsa
+  tags:
+    - install
+
+
+- name: clean dest dirs
+  file: path={{clone_dir}}/{{item.key}} state=absent
+  with_dict: repos
+  tags:
+    - install
+
+- name: copy repo deploy key to obtain sources
+  synchronize: src={{item.key}} dest={{clone_dir}}
+  with_dict: repos
+  tags:
+    - install
+
+- name: copy common Mongo.conf files
+  copy: src=Mongo.conf dest={{clone_dir}}/{{item.key}}
+  with_dict: repos
+  tags:
+    - install
+
+- name: copy common log4j2.xml files
+  copy: src=log4j2.xml dest={{clone_dir}}/{{item.key}}
+  with_dict: repos
+  tags:
+    - install
+
+### Installing fluentd required files
+
+- name: install fluent-plugin-multi-format-parser
+  command: /opt/td-agent/embedded/bin/fluent-gem install fluent-plugin-multi-format-parser
+  sudo: yes
+  tags:
+    - install
+    - td-agent
+
+- name: create /etc/td-agent dir
+  #command: fluentd --setup /etc/td-agent
+  command: mkdir -p /etc/td-agent
+  sudo: yes
+  tags:
+    - install
+    - td-agent
+
+- name: creating pos-files
+  file: path={{item}} state=directory
+  with_items:
+    - /var/log/dstorage/
+    - /var/log/dstorage/logs/
+  sudo: yes
+  tags:
+    - install
+    - td-agent

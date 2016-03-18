@@ -1,0 +1,39 @@
+---
+- name: process ganglia_monitors hosts
+  hosts: ganglia_monitors
+  sudo: True
+  roles:
+    - { role: ganglia, is_ganglia_monitor: 1 }
+  environment:
+              http_proxy: http://proxy.ifmo.ru:3128
+              HTTP_PROXY: http://proxy.ifmo.ru:3128
+
+
+- name: process ganglia meta hosts
+  hosts: ganglia_meta
+  sudo: True
+  roles:
+    - { role: ganglia, is_ganglia_meta: 1 }
+  environment:
+              http_proxy: http://proxy.ifmo.ru:3128
+              HTTP_PROXY: http://proxy.ifmo.ru:3128
+  tags:
+    - ganglia-meta
+
+- name: process ganglia web hosts
+  hosts: ganglia_web
+  sudo: True
+  roles:
+    - { role: ganglia, is_ganglia_meta: 1 }
+  environment:
+              http_proxy: http://proxy.ifmo.ru:3128
+              HTTP_PROXY: http://proxy.ifmo.ru:3128
+
+- name: process ganglia-api hosts
+  hosts: ganglia_web
+  roles:
+    - { role: ganglia, ganglia_api: true  }
+  sudo: True
+  environment:
+              http_proxy: http://proxy.ifmo.ru:3128
+              HTTP_PROXY: http://proxy.ifmo.ru:3128

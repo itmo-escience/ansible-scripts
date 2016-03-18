@@ -1,0 +1,12 @@
+---
+- name: monitoring services
+  hosts: ganglia_meta
+  sudo: True
+  roles:
+    - { role: monitoring_services }
+  environment:
+              http_proxy: http://proxy.ifmo.ru:3128
+              HTTP_PROXY: http://proxy.ifmo.ru:3128
+
+
+
