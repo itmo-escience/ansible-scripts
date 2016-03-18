@@ -1,0 +1,16 @@
+
+####
+[]
+localhost
+
+[mesos_slaves]
+localhost
+
+[ganglia_monitors]
+localhost
+
+[ganglia_meta]
+localhost
+
+[ganglia_web]
+localhost

@@ -1,0 +1,25 @@
+# to run preparing: ansible-playbook update-apt-keys.yml --limit=dstorage-agents -i hosts-test-dstorage.full
+# to run deploy: ansible-playbook test-dstorage.yml -i hosts-test-dstorage.full --tags=dstorage-agents --skip-tags=stop
+---
+- name: update apt keys
+  hosts: all
+  sudo: True
+  tasks:
+    - name: "apt-key update"
+      shell: "apt-key update"
+
+    - name: "apt-get update"
+      apt: update_cache=yes
+
+    - name: "add hdd dir"
+      file: path=/opt/hdd state=directory
+
+    - name: "add hdd dir"
+      file: path=/opt/ssd state=directory
+
+  environment:
+    http_proxy: http://proxy.ifmo.ru:3128
+    HTTP_PROXY: http://proxy.ifmo.ru:3128
+
+
+    ##/usr/bin/git ls-remote origin -t refs/tags/f79478f875ce8696abbdebd84fffb3c0edc24d49

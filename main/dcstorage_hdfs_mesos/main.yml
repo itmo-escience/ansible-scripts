@@ -1,0 +1,32 @@
+---
+- name: apply common configuration to all nodes
+  hosts: all
+  sudo: yes
+  roles:
+    - {role: ../roles/common}
+  any_errors_fatal: yes
+
+- name: create non-root clusteruser user
+  hosts: all
+  sudo:	yes
+  roles:
+    - {role: ../roles/clusteruser_common}
+  any_errors_fatal: yes
+
+- name: deploy dcstorage core
+  hosts: dcstorage-core
+  sudo: yes
+  roles:
+      - {role: ../roles/dstorage, dstorage_install_mode: "core"}
+  any_errors_fatal: yes
+
+- name: deploy dcstorage agent
+  hosts: dcstorage-agents
+  sudo: yes
+  roles:
+      - {role: ../roles/dstorage, dstorage_install_mode: "agent"}
+  any_errors_fatal: yes
+
+## todo: deploy hdfs
+
+## todo: deploy mesos
