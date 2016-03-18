@@ -16,7 +16,7 @@ Vagrant.configure("2") do |config|
   end
 
   # read data for vagrant run
-  nds = File.open("./ansible-bdas/hosts-test-dstorage","r") do |hosts|
+  nds = File.open("./hosts","r") do |hosts|
 	nodes = {}
 	while(line = hosts.gets) do
 		if line.start_with?("###")
@@ -58,7 +58,7 @@ Vagrant.configure("2") do |config|
       c.vm.provision "shell", path: "install-sshkey.sh", args: project_dir
 
       c.vm.provider :virtualbox do |vb|
-      	vb.memory = 8192
+      	vb.memory = 2048
 	    vb.cpus = 2
       end
       c.vm.synced_folder "hdfs_data/data_#{name}", "/hdfs_data", create: true, mount_options: ["dmode=777,fmode=777"]

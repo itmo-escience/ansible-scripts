@@ -1,16 +1,49 @@
+node-50-11 ansible_ssh_host=192.168.50.11
+node-50-12 ansible_ssh_host=192.168.50.12
+node-50-13 ansible_ssh_host=192.168.50.13
+node-50-14 ansible_ssh_host=192.168.50.14
 
 ####
-[]
-localhost
+[ntp-server]
+node-50-11
 
-[mesos_slaves]
-localhost
+[dns-server]
+node-50-11
 
-[ganglia_monitors]
-localhost
+[dcstorage-core]
+node-50-11
 
-[ganglia_meta]
-localhost
+[dcstorage-agents]
+node-50-11
+node-50-12
+node-50-13
+node-50-14
 
-[ganglia_web]
-localhost
+[hdfs-namenodes]
+node-50-11
+node-50-12
+node-50-13
+
+[hdfs-datanodes]
+node-50-11
+node-50-12
+node-50-13
+node-50-14
+
+[zookeeper-nodes]
+node-50-11
+node-50-12
+node-50-13
+
+[mesos-masters]
+node-50-11
+node-50-12
+
+[mesos-slaves]
+node-50-11
+node-50-12
+node-50-13
+node-50-14
+
+[edge-nodes]
+node-50-11

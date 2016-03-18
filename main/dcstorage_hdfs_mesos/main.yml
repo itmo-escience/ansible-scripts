@@ -13,6 +13,12 @@
     - {role: ../roles/clusteruser_common}
   any_errors_fatal: yes
 
+- name: deploy dns-server
+  hosts: dns-server
+  sudo: yes
+  roles:
+    - {role: ../roles/}
+
 - name: deploy dcstorage core
   hosts: dcstorage-core
   sudo: yes
@@ -26,6 +32,8 @@
   roles:
       - {role: ../roles/dstorage, dstorage_install_mode: "agent"}
   any_errors_fatal: yes
+
+## todo: deploy zookeeper
 
 ## todo: deploy hdfs
 
