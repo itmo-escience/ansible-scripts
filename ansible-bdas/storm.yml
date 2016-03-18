@@ -1,0 +1,19 @@
+---
+- name: process storm_master hosts
+  hosts: storm_master
+  sudo: True
+  roles:
+    - { role: storm_on_mesos, is_storm_master: 1 }
+  environment:
+              http_proxy: http://proxy.ifmo.ru:3128
+              HTTP_PROXY: http://proxy.ifmo.ru:3128
+
+
+- name: process storm_slave hosts
+  hosts: storm_slave
+  sudo: True
+  roles:
+    - { role: storm_on_mesos }
+  environment:
+              http_proxy: http://proxy.ifmo.ru:3128
+              HTTP_PROXY: http://proxy.ifmo.ru:3128
