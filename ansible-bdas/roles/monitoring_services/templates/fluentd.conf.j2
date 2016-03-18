@@ -1,7 +1,7 @@
 <source>
   type tail
   refresh_interval 5
-  path {{dstorage_log_dir}}/*
+  path {{dstorage_log_dir}}/*.log*
   pos_file {{dstorage_log_dir}}/logs.pos
   format multi_format
    <pattern>
@@ -20,7 +20,7 @@
 <match dstorage>
   type rewrite_tag_filter
   capitalize_regex_backreference yes
-  rewriterule1 request ^.* mongo.dstorage.requests
+  rewriterule1 request ^.* mongo.Monitoring.DstorageRequests
   rewriterule2 message ^.* unsorted
   rewriterule3 unsorted ^.* unsorted
 </match>

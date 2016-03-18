@@ -50,12 +50,3 @@
     - install
     - td-agent
 
-- name: creating pos-files
-  file: path={{item}} state=directory
-  with_items:
-    - /var/log/dstorage/
-    - /var/log/dstorage/logs/
-  sudo: yes
-  tags:
-    - install
-    - td-agent

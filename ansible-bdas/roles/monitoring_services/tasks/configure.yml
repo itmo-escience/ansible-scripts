@@ -35,8 +35,19 @@
 #  with_items:
 #    - {{dstorage_log_dir}}/logs.pos
 #    #- /var/log/dstorage/requests.pos
-#  sudo: yes
+#  sudo: yes-tags
 
+#- name: Ensures {{dstorage_log_dir}}/pos dir exists
+#  file: path={{dstorage_log_dir}}/pos state=directory
+#  tags:
+#    - configure
+#    - td-agent
+
+- name: creating pos-file
+  command: "touch {{dstorage_log_dir}}/logs.pos"
+  tags:
+    - configure
+    - td-agent
 
 - name: configuring chmod
   #command: chmod -R 777 /var/log/dstorage
@@ -47,3 +58,15 @@
   tags:
     - configure
     - td-agent
+
+
+
+#- name: creating pos-files
+#  file: path={{item}} state=directory
+#  with_items:
+#    - /var/log/dstorage/
+#    - /var/log/dstorage/logs/
+#  sudo: yes
+#  tags:
+#    - install
+#    - td-agent

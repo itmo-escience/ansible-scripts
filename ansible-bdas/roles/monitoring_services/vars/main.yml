@@ -8,7 +8,7 @@ repo_key_path: /tmp/monitoring-services
 daemon_name: "java -jar "
 daemon_user: vagrant
 
-dstorage_log_dir: /var/log/dstorage-core/
+dstorage_log_dir: /var/log/dstorage-core
 
 repos:
    'ComputationsMonitor':
@@ -17,10 +17,4 @@ repos:
    'InfrastructureMonitor':
       namespace: ifmo.escience.dapris.monitoring.infrastructureMonitor
       repo_url: https://gitlab.com/CLAVIRE2/Monitoring.InfrastructureMonitor.git
-
-#   'ProvenanceManager':
-#      repo_url: git@gitlab.com:CLAVIRE2/Monitoring.ProvenanceManager.git
-#   'DatalayerMonitor':
-#      namespace: ifmo.escience.dapris.monitoring.datalayerMonitor
-#      repo_url: git@gitlab.com:CLAVIRE2/Monitoring.DatalayerMonitor.git
 
