@@ -13,3 +13,9 @@
 [submodule "ansible-bdas/roles/oracle-java"]
 	path = ansible-bdas/roles/oracle-java
 	url = https://github.com/ansiblebit/oracle-java
+[submodule "ansible-bdas/roles/dnsmasq"]
+	path = ansible-bdas/roles/dnsmasq
+	url = https://github.com/itmo-escience/ansible-dnsmasq
+[submodule "ansible-bdas/roles/ansible-role-dns"]
+	path = ansible-bdas/roles/ansible-role-dns
+	url = https://github.com/jdauphant/ansible-role-dns

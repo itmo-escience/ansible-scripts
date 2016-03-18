@@ -1,36 +1,52 @@
 ---
+- name: deploy dns-server
+  hosts: dns-server
+  sudo: yes
+  roles:
+    - {
+      role: ../../roles/dnsmasq
+      dnsmasq_addn_hosts: ./dns_hosts
+    }
+
+## common for all nodes settings
+- name: configure dns settings
+  hosts: all:!dns-server
+  sudo: yes
+  roles:
+    - {
+      role: ../../roles/ansible-role-dns
+      ## todo: check this later
+      dns_nameservers: [{{ groups["dns-server"]["ansible_default_ipv4"] }}, '8.8.8.8']
+    }
+
 - name: apply common configuration to all nodes
   hosts: all
   sudo: yes
   roles:
-    - {role: ../roles/common}
+    - {role: ../../roles/common}
   any_errors_fatal: yes
 
 - name: create non-root clusteruser user
   hosts: all
   sudo:	yes
   roles:
-    - {role: ../roles/clusteruser_common}
+    - {role: ../../roles/clusteruser_common}
   any_errors_fatal: yes
 
-- name: deploy dns-server
-  hosts: dns-server
-  sudo: yes
-  roles:
-    - {role: ../roles/}
+## deploy dcstorage
 
 - name: deploy dcstorage core
   hosts: dcstorage-core
   sudo: yes
   roles:
-      - {role: ../roles/dstorage, dstorage_install_mode: "core"}
+      - {role: ../../roles/dstorage, dstorage_install_mode: "core"}
   any_errors_fatal: yes
 
 - name: deploy dcstorage agent
   hosts: dcstorage-agents
   sudo: yes
   roles:
-      - {role: ../roles/dstorage, dstorage_install_mode: "agent"}
+      - {role: ../../roles/dstorage, dstorage_install_mode: "agent"}
   any_errors_fatal: yes
 
 ## todo: deploy zookeeper
