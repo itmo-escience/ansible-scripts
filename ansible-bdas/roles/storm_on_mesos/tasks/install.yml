@@ -39,39 +39,52 @@
 #   - install
 
 
-#- name: Ensures /opt/{{storm_name}} dir exists
-#  file: path="/opt/{{storm_name}}" state=directory
-
-#- name: install storm...
-#  command: "sudo tar -xvf {{storm_archive}}"
-#  args:
-#    chdir:  "/opt/{{storm_name}}"
-
-- name: delete previous download
+- name: delete previous /tmp/ download
   command: rm -rf '/tmp/{{ storm_archive }}'
   sudo: yes
-
-- name: download storm...
-  environment: proxy_env
-  get_url: url='{{ storm_url }}' dest='/tmp/{{ storm_archive }}'
+  tags:
+    - install
 
 - name: delete previous /opt/{{storm_name}}
   command: rm -rf '/opt/{{storm_name}}'
   sudo: yes
+  tags:
+    - install
+
+- name: download storm...
+  environment: proxy_env
+  get_url: url='{{ storm_url }}' dest='/tmp/{{ storm_archive }}'
+  tags:
+    - install
+
+#- name: Ensures /opt/{{storm_name}} dir exists
+#  file: path="/opt/{{storm_name}}" state=directory
 
 - name: install storm...
   unarchive: copy=no src='/tmp/{{ storm_archive }}' dest='/opt'
+  tags:
+    - install
+
+#- name: copying defaults
+#  template: src=defaults.yaml-{{storm_ver}}.j2 dest={{storm_dir}}/defaults.yaml
+#  tags:
+#    - install
 
 - name: setting 777 for '/opt/{{storm_name}}'
   command: chmod -R 777 '/opt/{{storm_name}}'
   sudo: yes
+  tags:
+    - install
 
 - name: linking {{storm_dir}}...
   file: src='/opt/{{storm_name}}' dest={{storm_dir}} state=link
+  tags:
+    - install
 
 - name: include storm in the default path...
   copy: src='etc/profile.d/storm.sh' dest='/etc/profile.d/storm.sh' mode=644
-
+  tags:
+    - install
 #- name: setting 777 for '{{storm_dir}}'
 #  command: chmod -R 777 '{{storm_dir}}'
 #  sudo: yes
@@ -82,5 +95,8 @@
       - supervisor
       - zookeeper
       - zookeeperd
-
+  notify:
+    - restart zookeeper
+  tags:
+    - install
 

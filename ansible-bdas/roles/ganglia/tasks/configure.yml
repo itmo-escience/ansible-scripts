@@ -96,6 +96,7 @@
   tags:
     - ganglia-monitor
     - configure
+    - restart
 
 # Configures the web frontend service in apache
 
