@@ -1,5 +1,4 @@
 ---
-
 - name: Ensures /var/log/storm dir exists
   file: path={{item}} state=directory
   with_items:
@@ -33,9 +32,10 @@
   service: >-
     name=supervisor
     state=stopped
-    enabled=yes
+    enabled=no
   tags:
     - configure
+    - restart
 
 - name: delete previos supervisor-master conf (nimbus, drpc, ui)
   command: "rm -rf /etc/supervisor/conf.d/storm-{{item}}.conf"
@@ -91,13 +91,23 @@
     - slave
     - configure
 
-- name: deleting storm-local & restart supervisor
+- name: deleting storm-local
   command: rm -rf '{{storm_dir}}/storm-local'
   sudo: yes
-  notify:
-    - restart supervisor
   tags:
     - configure
+    - restart
+
+- name: starting supervisor
+  service: >-
+   name=supervisor
+   state=restarted
+   enabled=yes
+  ignore_errors: yes
+  tags:
+    - configure
+    - restart
+
 #sudo mkdir -p /mnt/seizure_data
 #sudo mount -t cifs //192.168.13.101/smirnp /mnt/seizure_data -o user=nano,password=Yt1NyDpQNm
 

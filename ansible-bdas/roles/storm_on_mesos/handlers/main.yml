@@ -5,22 +5,10 @@
     state=restarted
     enabled=yes
 
-- name: restart supervisor
+
+- name: start supervisor
   service: >-
     name=supervisor
-    state=restarted
+    state=started
     enabled=yes
-
-#- name: restart storm-nimbus
-#  service: >-
-#    name=storm-nimbus-daemon
-#    state=restarted
-#    enabled=yes
-
-#- name: restart storm-ui
-#  service: >-
-#    name=storm-ui-daemon
-#    state=restarted
-#    enabled=yes
-
 
