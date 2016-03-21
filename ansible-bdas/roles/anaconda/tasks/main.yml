@@ -1,5 +1,4 @@
 ---
-#tasks file for anaconda
 - name: download installer.sh
   get_url: >
     url={{anaconda_installer_url}}
@@ -56,3 +55,9 @@
 
 - name: chmod /etc/environment 644
   file: path=/etc/environment mode=0644
+
+- name: installing natsort python module
+  pip: >-
+    name=natsort
+    executable=/opt/anaconda/bin/pip
+
