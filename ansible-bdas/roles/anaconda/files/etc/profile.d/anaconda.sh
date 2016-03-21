@@ -1,0 +1,1 @@
+export PATH=/opt/anaconda/bin:/opt/anaconda/lib:$PATH
