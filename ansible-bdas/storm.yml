@@ -3,7 +3,8 @@
   hosts: storm_master
   sudo: True
   roles:
-    - { role: storm_on_mesos, storm_master: 1 }
+    - { role: storm_on_mesos, storm_master: 1, tags: master }
+    - { role: anaconda, storm_master: 1, anaconda_make_sys_default: true, tags: anaconda }
   environment:
               http_proxy: http://proxy.ifmo.ru:3128
               HTTP_PROXY: http://proxy.ifmo.ru:3128
@@ -14,7 +15,8 @@
   hosts: storm_slave
   sudo: True
   roles:
-    - { role: storm_on_mesos, storm_slave: 1 }
+    - { role: storm_on_mesos, storm_slave: 1, tags: slave }
+    - { role: anaconda, storm_slave: 1, anaconda_make_sys_default: true, tags: anaconda }
   environment:
               http_proxy: http://proxy.ifmo.ru:3128
               HTTP_PROXY: http://proxy.ifmo.ru:3128

@@ -2,7 +2,7 @@
 #
 # Ganglia Monitor is installed on all nodes.
 # The Python modules support is automatically added.
-- name: Install Ganglia Monitor
+- name: Install Ganglia Monitor (RedHat)
   yum: >-
     name={{item}}
     state=latest
@@ -14,10 +14,10 @@
     - ganglia-monitor
     - install
 
-- name: Install Ganglia Monitor
+- name: Install Ganglia Monitor (Debian)
   apt: >-
     name={{item}}
-    state=latest
+    state=present
   with_items:
     - ganglia-monitor
     - ganglia-monitor-python
@@ -30,7 +30,7 @@
 - name: Install Ganglia Meta
   yum: >-
     name={{item}}
-    state=latest
+    state=present
   with_items:
     - ganglia-gmetad
   when: ansible_os_family == 'RedHat' and ganglia_meta is defined
@@ -50,23 +50,23 @@
     - install
 
 # Ganglia Web is installed only on nodes marked is_ganglia_web=1
-- name: Install Ganglia Web
+- name: Install Ganglia Web/Apache2
   yum: >-
     name={{item}}
     state=latest
   with_items:
-    - ganglia-web, git
+    - ganglia-web, git, apache2
   when: "ansible_os_family == 'RedHat' and is_ganglia_web is defined"
   tags:
     - ganglia-web
     - install
 
-- name: Install Ganglia Web
+- name: Install Ganglia Web/Apache2
   apt: >-
     name={{item}}
     state=latest
   with_items:
-    - ganglia-webfrontend
+    - ganglia-webfrontend, apache2
   when: "ansible_os_family == 'Debian' and is_ganglia_web is defined"
   tags:
     - ganglia-web

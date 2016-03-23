@@ -28,14 +28,15 @@
   tags:
     - configure
 
-- name: stopping supervisor
-  service: >-
-    name=supervisor
-    state=stopped
-    enabled=no
-  tags:
-    - configure
-    - restart
+#- name: stopping supervisor
+#  service: >-
+#    name=supervisor
+#    state=stopped
+#    enabled=yes
+#  ignore_errors: yes
+#  tags:
+#    - configure
+#    - restart
 
 - name: delete previos supervisor-master conf (nimbus, drpc, ui)
   command: "rm -rf /etc/supervisor/conf.d/storm-{{item}}.conf"
@@ -101,7 +102,7 @@
 - name: starting supervisor
   service: >-
    name=supervisor
-   state=restarted
+   state=started
    enabled=yes
   ignore_errors: yes
   tags:

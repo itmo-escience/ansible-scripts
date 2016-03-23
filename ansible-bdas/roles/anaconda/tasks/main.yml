@@ -44,7 +44,7 @@
     mode=0644
     owner=root
     group=root
-  sudo: True
+  sudo: yes
 
 - name: chmod /etc/environment 777
   file: path=/etc/environment mode=0777
@@ -58,6 +58,21 @@
 
 - name: installing natsort python module
   pip: >-
-    name=natsort
+    name={{item}}
     executable=/opt/anaconda/bin/pip
+  with_items:
+    - natsort
 
+### Not working below
+#- name: relinking default python...
+#  file: src='/opt/anaconda/bin/python2.7' dest='/usr/bin/python' state=link
+#  sudo: yes
+#  file: src='/opt/anaconda/bin/python2.7' dest='/opt/anaconda/bin/python' state=link
+
+#- name: deleting default python link...
+#  command: "sudo rm -rf /usr/bin/python"
+#  sudo: yes
+
+#- name: relinking default python...
+#  shell: "sudo ln -s /opt/anaconda/bin/python2.7 /usr/bin/python"
+#  sudo: yes

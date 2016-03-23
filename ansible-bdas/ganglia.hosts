@@ -17,14 +17,14 @@ node-92-13
 node-92-14
 node-92-15
 node-92-16
-node-92-51
-node-92-52
+#node-92-51
+#node-92-52
 
 [ganglia_meta]
-node-92-11
+node-92-13
 
 [ganglia_web]
-node-92-11
+node-92-13
 
 [fluentd]
 node-92-11

@@ -100,6 +100,7 @@
 
 # Configures the web frontend service in apache
 
+
 - name: Enable the httpd frontend
   template: >-
     src=webfrontend-apache.conf.j2

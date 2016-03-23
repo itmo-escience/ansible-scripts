@@ -3,6 +3,8 @@ storm.zookeeper.servers:
 
 nimbus.host: "192.168.92.11"
 
+supervisor.worker.timeout.secs: 180
+worker.childopts: "-Xmx3072m"
 storm.messaging.transport: "backtype.storm.messaging.netty.Context"
 
 drpc.servers:

@@ -38,15 +38,15 @@
 #  tags:
 #   - install
 
-
+## TODO: Below is ok
 - name: delete previous /tmp/ download
-  command: rm -rf '/tmp/{{ storm_archive }}'
+  file: path='/tmp/{{ storm_archive }}' state=absent
   sudo: yes
   tags:
     - install
 
 - name: delete previous /opt/{{storm_name}}
-  command: rm -rf '/opt/{{storm_name}}'
+  file: path='/opt/{{storm_name}}' state=absent
   sudo: yes
   tags:
     - install
@@ -85,18 +85,35 @@
   copy: src='etc/profile.d/storm.sh' dest='/etc/profile.d/storm.sh' mode=644
   tags:
     - install
-#- name: setting 777 for '{{storm_dir}}'
-#  command: chmod -R 777 '{{storm_dir}}'
-#  sudo: yes
+- name: setting 777 for '{{storm_dir}}'
+  command: chmod -R 777 '{{storm_dir}}'
+  sudo: yes
 
-- name: install supervisor/zookeeper/zookeeperd
-  apt: name={{item}}
+## TODO: Some problems may be here
+- name: installing supervisor python module
+  pip: >-
+    name=supervisor
+    version=3.0b2
+    executable=/opt/anaconda/bin/pip
+  tags:
+    - install
+    - slave
+
+- name: install supervisor
+  apt: name={{item}} state=present
   with_items:
       - supervisor
+  tags:
+    - install
+
+- name: install zookeeper/zookeeperd
+  apt: name={{item}}
+  with_items:
       - zookeeper
       - zookeeperd
   notify:
     - restart zookeeper
   tags:
     - install
+    - master
 
