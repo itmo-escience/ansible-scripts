@@ -74,5 +74,5 @@
 #  sudo: yes
 
 #- name: relinking default python...
-#  shell: "sudo ln -s /opt/anaconda/bin/python2.7 /usr/bin/python"
+#  shell: "sudo ln -s /opt/anaconda/bin/python2.7 /usr/bin/condapython"
 #  sudo: yes

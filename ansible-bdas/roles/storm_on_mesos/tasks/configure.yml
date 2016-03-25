@@ -18,15 +18,17 @@
   tags:
     - configure
 
-#- name: copying cluster.xml
-#  template: src=Cluster.xml-{{storm_ver}}.j2 dest={{storm_dir}}/conf/cluster.xml
-#  tags:
-#    - configure
+- name: copying cluster.xml
+  template: src=Cluster.xml-{{storm_ver}}.j2 dest={{storm_dir}}/conf/cluster.xml
+  tags:
+    - configure
+    - master
 
 - name: copying worker.xml
   template: src=worker.xml.j2 dest={{storm_dir}}/conf/worker.xml
   tags:
     - configure
+    - slave
 
 #- name: stopping supervisor
 #  service: >-
