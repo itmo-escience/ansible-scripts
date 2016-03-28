@@ -30,8 +30,8 @@
   command: /opt/anaconda/bin/conda install -y {{item}}
   with_items: '{{ anaconda_pkg_list }}'
 
-- name: conda updates
-  command: /opt/anaconda/bin/conda update -y --all
+#- name: conda updates
+#  command: /opt/anaconda/bin/conda update -y --all
 
 - name: remove conda-curl since it conflicts with the system curl
   command: /opt/anaconda/bin/conda remove -y curl
@@ -56,12 +56,13 @@
 - name: chmod /etc/environment 644
   file: path=/etc/environment mode=0644
 
-- name: installing natsort python module
+- name: installing natsort/pymongo modules
   pip: >-
     name={{item}}
     executable=/opt/anaconda/bin/pip
   with_items:
     - natsort
+    - pymongo
 
 ### Not working below
 #- name: relinking default python...

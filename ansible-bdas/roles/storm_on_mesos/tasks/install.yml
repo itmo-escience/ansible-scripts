@@ -90,30 +90,33 @@
   sudo: yes
 
 ## TODO: Some problems may be here
-- name: installing supervisor python module
-  pip: >-
-    name=supervisor
-    version=3.0b2
-    executable=/opt/anaconda/bin/pip
-  tags:
-    - install
-    - slave
-
-- name: install supervisor
-  apt: name={{item}} state=present
-  with_items:
-      - supervisor
-  tags:
-    - install
-
-- name: install zookeeper/zookeeperd
-  apt: name={{item}}
-  with_items:
-      - zookeeper
-      - zookeeperd
-  notify:
-    - restart zookeeper
-  tags:
-    - install
-    - master
+#- name: installing supervisor python module
+#  pip: >-
+#    name=supervisor
+#    version=3.0b2
+#    executable=/opt/anaconda/bin/pip
+#  tags:
+#    - install
+#    - slave
+#    - supervisor
+#
+#- name: install supervisor
+#  apt: name={{item}} state=present
+#  with_items:
+#      - supervisor
+#  tags:
+#    - install
+#    - supervisor
+#
+#- name: install zookeeper/zookeeperd
+#  apt: name={{item}}
+#  with_items:
+#      - zookeeper
+#      - zookeeperd
+#  notify:
+#    - restart zookeeper
+#  tags:
+#    - install
+#    - master
+#    - zookeeper
 

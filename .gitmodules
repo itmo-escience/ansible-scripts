@@ -13,3 +13,6 @@
 [submodule "ansible-bdas/roles/oracle-java"]
 	path = ansible-bdas/roles/oracle-java
 	url = https://github.com/ansiblebit/oracle-java
+[submodule "ansible-bdas/roles/ntp"]
+	path = ansible-bdas/roles/ntp
+	url = https://github.com/resmo/ansible-role-ntp.git
