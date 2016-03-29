@@ -3,9 +3,10 @@
 ganglia_web_location: /ganglia
 ganglia_lib_dir: /usr/lib/ganglia
 
+
+
 # These parameters has the default value
 ganglia_config_gmetad:
-
 # Mandatory parameters.
  
   grid_name: "Example Grid"
@@ -21,13 +22,16 @@ ganglia_config_gmetad:
   # TODO: maybe I can use facts to do it automatically.
   data_sources:
     'ds1':
-      polling_interval: 15
+      polling_interval: 3
+      host: 'node-92-13'
+      servers:
+        - 'node-92-13:8649'
+        - 'node-92-13:8650'
+    'service':
+      polling_interval: 3
       servers:
         - 'localhost:8649'
         - 'localhost:8650'
-    'ds2':
-      servers:
-        - 'localhost:8660'
 
 # Optional parameters if hash_behaviour=merge. Otherwise these values must be copied.
 # Values below are gmeta's default values.
@@ -101,7 +105,7 @@ ganglia_config_gmond:
 
       udp_send_channel:
         bind_hostname: 'yes'
-         # host: 'monitoring-host'
+        host: "{{ ganglia_config_gmetad.data_sources['ds1'].host }}"
 #        mcast_join: '239.2.11.71'
         port: 8649
         ttl: 1
@@ -317,13 +321,28 @@ ganglia_config_gmond:
             - name: 'disk_total'
               value_threshold: '1.0'
               title: 'Total Disk Space'                  
-               
-    # 'ds2':
-    #   cluster:
-    #     owner: 'unspecified'
-    #     latlong: 'unspecified'
-    #     url: 'unspecified'
-    #   ...
+
+#    'service':
+#      cluster:
+#         owner: 'unspecified'
+#         latlong: 'unspecified'
+#         url: 'unspecified'
+#
+#      udp_send_channel:
+#        bind_hostname: 'yes'
+#         # host: 'monitoring-host'
+##        mcast_join: '239.2.11.71'
+#        port: 8651
+#        ttl: 1
+#
+#      udp_recv_channel:
+#        port: 8652
+##        bind: '239.2.11.71'
+## New options not yet supported in CentOS 6.5 and Ubuntu 13.04
+##        retry_bind: 'true'
+##        buffer: 212990
+#      tcp_accept_channel:
+#        port: 8652
 
 #ganglia-api service deamon template
 ganglia_api_daemon:
@@ -339,3 +358,4 @@ iperf_daemon:
       user: vagrant
       daemon: "/usr/bin/iperf"
       daemon_opts: "-s"
+

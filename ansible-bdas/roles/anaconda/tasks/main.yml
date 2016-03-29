@@ -64,16 +64,6 @@
     - natsort
     - pymongo
 
-### Not working below
-#- name: relinking default python...
-#  file: src='/opt/anaconda/bin/python2.7' dest='/usr/bin/python' state=link
-#  sudo: yes
-#  file: src='/opt/anaconda/bin/python2.7' dest='/opt/anaconda/bin/python' state=link
-
-#- name: deleting default python link...
-#  command: "sudo rm -rf /usr/bin/python"
-#  sudo: yes
-
-#- name: relinking default python...
-#  shell: "sudo ln -s /opt/anaconda/bin/python2.7 /usr/bin/condapython"
-#  sudo: yes
+- name: creating condapython link
+  file: src='/opt/anaconda/bin/python2.7' dest='/usr/bin/condapython' state=link
+  sudo: yes

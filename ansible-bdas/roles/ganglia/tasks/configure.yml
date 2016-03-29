@@ -1,6 +1,6 @@
 ---
 
-# Configures the gmetad service.
+#Configures the gmetad service.
 
 - name: Ensure the gmetad user exists
   user: >-
@@ -32,7 +32,7 @@
     group=root
     mode=0644
   notify:
-    - restart gmetad
+    - restart ganglia-meta
   when: "is_ganglia_meta is defined"
   tags:
     - ganglia-meta
@@ -129,6 +129,7 @@
   tags:
     - ganglia-api
     - configure
+
 
 - name: Configure ganglia-api to be a daemon
   template: >-

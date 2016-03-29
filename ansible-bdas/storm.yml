@@ -1,5 +1,5 @@
 ---
-- name: process storm_master hosts
+- name: applying storm_master hosts
   hosts: storm_master
   sudo: True
   roles:
@@ -11,7 +11,7 @@
   tags:
     - master
 
-- name: process storm_slave hosts
+- name: applying storm_slave hosts
   hosts: storm_slave
   sudo: True
   roles:
@@ -22,3 +22,14 @@
               HTTP_PROXY: http://proxy.ifmo.ru:3128
   tags:
     - slave
+
+- name: applying ntp role
+  hosts: all
+  sudo: True
+  roles:
+    - { role: ntp, tags: ntp }
+  environment:
+              http_proxy: http://proxy.ifmo.ru:3128
+              HTTP_PROXY: http://proxy.ifmo.ru:3128
+  tags:
+    - ntp
