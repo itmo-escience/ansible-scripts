@@ -1,0 +1,7 @@
+- src: kbrebanov.virtualbox
+
+- src: andrewrothstein.vagrant
+
+- src: dochang.docker
+
+- src: andrewrothstein.docker-compose

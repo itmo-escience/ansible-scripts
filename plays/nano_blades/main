@@ -1,0 +1,10 @@
+---
+- name: provision blades to be VM carriers
+  hosts: vm_hosts
+  sudo: True
+  roles:
+    - {role: ../../ansible-bdas/roles/common}
+    - {role: kbrebanov.virtualbox}
+    - {role: andrewrothstein.vagrant}
+    - {role: dochang.docker, docker_users: [nano]}
+    - {role: andrewrothstein.docker-compose}

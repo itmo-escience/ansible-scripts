@@ -1,0 +1,45 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+
+  project_dir = "/home/vagrant/project"
+
+  config.ssh.forward_agent = true
+  config.ssh.insert_key = false
+
+  # mount whole ansible-scripts project due to relative pathes in some plays
+  config.vm.synced_folder "../../../", project_dir, :mount_options => ["dmode=700","fmode=600"]
+
+  proxy = if ENV.has_key?("HTTP_PROXY")
+              ENV["HTTP_PROXY"]
+              elsif ENV.has_key?("http_proxy")
+              ENV["http_proxy"]
+              end
+
+  if Vagrant.has_plugin?("vagrant-proxyconf") && ( proxy != nil && !proxy.empty? )
+     config.proxy.http     = proxy
+     config.proxy.no_proxy = "localhost,127.0.0.1,192.168."
+  end
+
+  config.vm.define name, primary: true do |c|
+    c.vm.network "public_network", netmask: "255.255.255.0"
+    c.vm.box = "centos/7"
+    c.vm.hostname = "testmachine"
+
+    config.vm.provision "installAnsible", type: "shell", path: "../../install-ansible.sh"
+    config.vm.provision "installAnsibleDependencies", type: "shell", path: "../install-dependencies.sh"
+    config.vm.provision "shell" do |s|
+        s.inline = "cur_dir=$(pwd);cd /home/vagrant/project/plays/nano_blades;ansible-playbook  --inventory-file=./test/hosts.test --connection=local main.yml;cd $cur_dir"
+        s.privileged = true
+    end
+
+  end
+
+  c.vm.provider :virtualbox do |vb|
+    vb.memory = 2048
+    vb.cpus = 2
+  end
+
+end
+
