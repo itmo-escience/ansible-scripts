@@ -9,7 +9,7 @@ Vagrant.configure("2") do |config|
   config.ssh.insert_key = false
 
   # mount whole ansible-scripts project due to relative pathes in some plays
-  config.vm.synced_folder "../../../", project_dir, :mount_options => ["dmode=700","fmode=600"]
+  config.vm.synced_folder "../../../", project_dir, :mount_options => ["dmode=700","fmode=600"], type: "rsync"
 
   proxy = if ENV.has_key?("HTTP_PROXY")
               ENV["HTTP_PROXY"]
@@ -22,21 +22,22 @@ Vagrant.configure("2") do |config|
      config.proxy.no_proxy = "localhost,127.0.0.1,192.168."
   end
 
-  config.vm.define name, primary: true do |c|
+  config.vm.define "testmachine", primary: true do |c|
     c.vm.network "public_network", netmask: "255.255.255.0"
     c.vm.box = "centos/7"
     c.vm.hostname = "testmachine"
 
-    config.vm.provision "installAnsible", type: "shell", path: "../../install-ansible.sh"
-    config.vm.provision "installAnsibleDependencies", type: "shell", path: "../install-dependencies.sh"
-    config.vm.provision "shell" do |s|
-        s.inline = "cur_dir=$(pwd);cd /home/vagrant/project/plays/nano_blades;ansible-playbook  --inventory-file=./test/hosts.test --connection=local main.yml;cd $cur_dir"
+    c.vm.provision "installAnsible", type: "shell", path: "../../install-ansible.sh"
+    c.vm.provision "installAnsibleDependencies", type: "shell",
+        inline: "cd /home/vagrant/project/plays/nano_blades;./install-dependencies.sh"
+    c.vm.provision "runPlaybook", type: "shell" do |s|
+        s.inline = "cur_dir=$(pwd);cd /home/vagrant/project/plays/nano_blades;ansible-playbook --inventory-file=./test/hosts.test --connection=local main.yml;cd $cur_dir"
         s.privileged = true
     end
 
   end
 
-  c.vm.provider :virtualbox do |vb|
+  config.vm.provider :virtualbox do |vb|
     vb.memory = 2048
     vb.cpus = 2
   end

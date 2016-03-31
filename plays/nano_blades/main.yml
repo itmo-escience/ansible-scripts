@@ -1,7 +1,7 @@
 ---
-- name: provision blades to be VM carriers
+- name: "provision blades to be VM carriers"
   hosts: vm_hosts
-  sudo: True
+  sudo: yes
   roles:
     - {role: ../../ansible-bdas/roles/common}
     - {role: kbrebanov.virtualbox}

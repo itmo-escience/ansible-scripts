@@ -20,15 +20,15 @@
     - python-pip
     - nmon
     - sockperf
-    - ifotop
+    #- ifotop
     - iotop
     # not available in CentOS
     # - python-swiftclient # can be installed from pip
   tags:
     - install
 
-- name: populate /etc/hosts
-  template: src=etc/hosts.j2 dest=/etc/hosts
-  tags:
-    - configure
+#- name: populate /etc/hosts
+#  template: src=etc/hosts.j2 dest=/etc/hosts
+#  tags:
+#    - configure
 
