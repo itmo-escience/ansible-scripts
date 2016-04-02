@@ -15,7 +15,7 @@
   tasks:
     - include_vars: "vars/main.yml"
     - name: "fetch repository"
-      git: repo=git://foosball.example.org/path/to/repo.git
+      git: repo=git@github.com:itmo-escience/ansible-scripts.git
            dest=/opt
            version=refactoring
     - name: "prepare config for vagrant"
