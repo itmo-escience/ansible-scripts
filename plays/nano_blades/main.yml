@@ -15,9 +15,10 @@
   tasks:
     - include_vars: "vars/main.yml"
     - name: "fetch repository"
-      git: repo=git@github.com:itmo-escience/ansible-scripts.git
-           dest=/opt
+      git: repo=https://github.com/itmo-escience/ansible-scripts.git
+           dest=/opt/ansible-scripts
            version=refactoring
+           accept_hostkey=yes
     - name: "prepare config for vagrant"
       copy: content="{{ blades[inventory_hostname] }}" dest=/opt/ansible-scripts/settings.yml
 
