@@ -1,0 +1,26 @@
+---
+- blades:
+    - node: blade-13-133
+      vms:
+        - { ip: 192.168.92.20, hostname: node-92-20}
+        - { ip: 192.168.92.21, hostname: node-92-21}
+
+    - node: blade-13-109
+      vms:
+        - { ip: 192.168.92.22, hostname: node-92-22}
+        - { ip: 192.168.92.23, hostname: node-92-23}
+
+    - node: blade-13-110
+      vms:
+        - { ip: 192.168.92.24, hostname: node-92-24}
+        - { ip: 192.168.92.25, hostname: node-92-25}
+
+    - node: blade-13-111
+      vms:
+        - { ip: 192.168.92.26, hostname: node-92-26}
+        - { ip: 192.168.92.27, hostname: node-92-27}
+
+    - node: blade-13-1112
+      vms:
+        - { ip: 192.168.92.28, hostname: node-92-28}
+        - { ip: 192.168.92.29, hostname: node-92-29}
