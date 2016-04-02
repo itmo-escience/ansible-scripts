@@ -1,20 +1,24 @@
 ---
-#- name: "provision blades to be VM carriers"
-#  hosts: vm_hosts
-#  sudo: yes
-#  roles:
-#    - {role: ../../ansible-bdas/roles/common}
-#    - {role: kbrebanov.virtualbox}
-#    - {role: andrewrothstein.vagrant}
-#    - {role: dochang.docker, docker_users: [nano]}
-#    - {role: andrewrothstein.docker-compose}
+- name: "provision blades to be VM carriers"
+  hosts: vm_hosts
+  sudo: yes
+  roles:
+    - {role: ../../ansible-bdas/roles/common}
+    - {role: kbrebanov.virtualbox}
+    - {role: andrewrothstein.vagrant}
+    - {role: dochang.docker, docker_users: [nano]}
+    - {role: andrewrothstein.docker-compose}
 
 - name: "copy vagrant files to create VMs environment"
   hosts: vm_hosts
   sudo: yes
   tasks:
-#    - name: "fetch repository"
-#      git:
-#        -----
+    - include_vars: "vars/main.yml"
+    - name: "fetch repository"
+      git: repo=git://foosball.example.org/path/to/repo.git
+           dest=/opt
+           version=refactoring
     - name: "prepare config for vagrant"
-      copy: content="{{ blades[inventory_hostname] }}" dest=/opt/mesos-vagrant/settings.yml
+      copy: content="{{ blades[inventory_hostname] }}" dest=/opt/ansible-scripts/settings.yml
+
+

@@ -1,3 +1,8 @@
+blade-13-133 ansible_ssh_host=127.0.0.1
+
 [vm_hosts]
-localhost
+blade-13-133
+
+#[vm_hosts]
+#localhost
 
