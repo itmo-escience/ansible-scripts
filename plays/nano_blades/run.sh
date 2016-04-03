@@ -5,6 +5,7 @@ function run {
     local status=$?
     if [ $status -ne 0 ]; then
         echo "error with $1. Exit status $status is not equal 0" >&2
+        exit 1
     fi
     return $status
 }
