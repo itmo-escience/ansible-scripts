@@ -28,6 +28,7 @@ Vagrant.configure("2") do |config|
   vms.each do |vm|
     ip = vm['ip']
     hostname = vm['hostname']
+    hdfs_volume = vm['hdfs_volume']
 
     config.vm.define name, primary: true do |c|
       c.vm.network "public_network", ip: ip, netmask: "255.255.255.0", bridge: "enp22s0f5"
@@ -48,7 +49,7 @@ Vagrant.configure("2") do |config|
 	    vb.cpus = 8
       end
 
-      c.vm.synced_folder "hdfs_data/data_#{name}", "/hdfs_data", create: true, mount_options: ["dmode=777,fmode=777"]
+      c.vm.synced_folder "#{hdfs_volume}", "/hdfs_data", create: true, mount_options: ["dmode=777,fmode=777"]
 
     end
 
