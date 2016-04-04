@@ -30,14 +30,14 @@ Vagrant.configure("2") do |config|
     hostname = vm['hostname']
     hdfs_volume = vm['hdfs_volume']
 
-    config.vm.define name, primary: true do |c|
+    config.vm.define hostname, primary: true do |c|
       c.vm.network "public_network", ip: ip, netmask: "255.255.255.0", bridge: "enp22s0f5"
       c.vm.box = "ubuntu/trusty64"
       c.vm.hostname = hostname
 
       c.vm.provision "shell" do |s|
          dns_server = "if ! grep -q \'nameserver 192.168.13.132\' /etc/resolvconf/resolv.conf.d/head; then echo 'nameserver 192.168.13.132'|tee --append /etc/resolvconf/resolv.conf.d/head; fi;resolvconf -u;"
-         hosts_file = "echo '127.0.0.1 localhost'|tee /etc/hosts;echo '#{ip} #{name}'|tee --append /etc/hosts;"
+         hosts_file = "echo '127.0.0.1 localhost'|tee /etc/hosts;echo '#{ip} #{hostname}'|tee --append /etc/hosts;"
          s.inline = "#{hosts_file}#{dns_server}"
          s.privileged = true
       end
