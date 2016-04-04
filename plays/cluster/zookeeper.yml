@@ -1,0 +1,6 @@
+---
+  - name: "deploy zookeeper"
+    hosts: zookeeper
+    sudo: yes
+    tasks:
+      - {role: tkuhlman.zookeeper}

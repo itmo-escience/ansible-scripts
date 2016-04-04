@@ -8,6 +8,8 @@
     - {role: andrewrothstein.vagrant}
     - {role: dochang.docker, docker_users: [nano]}
     - {role: andrewrothstein.docker-compose}
+  tags:
+    - blades_provision
 
 - name: "copy vagrant files to create VMs environment"
   hosts: vm_hosts
@@ -21,5 +23,6 @@
            accept_hostkey=yes
     - name: "prepare config for vagrant"
       copy: content="{{ blades[inventory_hostname] }}" dest=/opt/ansible-scripts/settings.yml
-
+  tags:
+    - vagrant_configuration
 

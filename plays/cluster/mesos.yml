@@ -1,34 +1,14 @@
 ---
-# Run with   $ ansible-playbook site.yml --skip-tags: 'stop' See: site.yml
-
-- name: apply common configuration to all nodes
-  hosts: all
-  sudo: yes
-  roles:
-    - common
-  any_errors_fatal: yes
-
-- name: install java and scala
-  hosts: all
-  sudo: yes
-  roles:
-    - java
-    - scala
-  any_errors_fatal: yes
-
-- name: create non-root clusteruser user
-  hosts: all
-  sudo:	yes
-  roles:
-    - clusteruser_common
-  any_errors_fatal: yes
-
-
 - name: deploy and configure the mesos masters
   hosts: mesos_masters
   sudo: True
   roles:
-    - { role: mesos, mesos_install_mode: "master", tags: ["mesos-master"] }
+    - { role: ../../ansible-bdas/roles/mesos,
+        mesos_install_mode: "master",
+        mesos_cluster_mode: "zookeeper",
+        ## {%  for host in groups['mesos_masters'] %}
+        ## {% endif %}
+        tags: ["mesos-master"] }
   any_errors_fatal: yes
 
 
@@ -36,5 +16,8 @@
   hosts: mesos_slaves
   sudo: True
   roles:
-    - { role: mesos, mesos_install_mode: "slave", tags: ["mesos-slave"] }
+    - { role: ../../ansible-bdas/roles/mesos,
+        mesos_install_mode: "slave",
+        mesos_cluster_mode: "zookeeper",
+        tags: ["mesos-slave"] }
   any_errors_fatal: yes

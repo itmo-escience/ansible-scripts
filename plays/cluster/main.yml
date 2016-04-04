@@ -1,0 +1,11 @@
+---
+  - include: common.yml
+
+  - include: zookeeper.yml
+
+  - include: hdfs.yml
+
+  - include: mesos.yml
+
+  - include: spark.yml
+
