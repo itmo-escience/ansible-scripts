@@ -7,7 +7,7 @@
     owner=root
     group=root
     mode=0751
-  with_dict: repos
+  with_dict: services
   tags:
     - configure
 
@@ -17,7 +17,7 @@
     state=restarted
     enabled=yes
   sudo: yes
-  with_dict: repos
+  with_dict: services
   tags:
     - configure
 

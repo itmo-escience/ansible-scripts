@@ -11,25 +11,25 @@
 
 - name: clean dest dirs
   file: path={{clone_dir}}/{{item.key}} state=absent
-  with_dict: repos
+  with_dict: services
   tags:
     - install
 
 - name: copy repo deploy key to obtain sources
   synchronize: src={{item.key}} dest={{clone_dir}}
-  with_dict: repos
+  with_dict: services
   tags:
     - install
 
 - name: copy common Mongo.conf files
   copy: src=Mongo.conf dest={{clone_dir}}/{{item.key}}
-  with_dict: repos
+  with_dict: services
   tags:
     - install
 
 - name: copy common log4j2.xml files
   copy: src=log4j2.xml dest={{clone_dir}}/{{item.key}}
-  with_dict: repos
+  with_dict: services
   tags:
     - install
 

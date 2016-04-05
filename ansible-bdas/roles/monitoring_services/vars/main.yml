@@ -10,10 +10,10 @@ daemon_user: vagrant
 
 dstorage_log_dir: /var/log/dstorage-core
 
-repos:
-   'ComputationsMonitor':
-      namespace: ifmo.escience.dapris.monitoring.computationsMonitor
-      repo_url: git@gitlab.com:CLAVIRE2/Monitoring.ComputationsMonitor.git
+services:
+#   'ComputationsMonitor':
+#      namespace: ifmo.escience.dapris.monitoring.computationsMonitor
+#      repo_url: git@gitlab.com:CLAVIRE2/Monitoring.ComputationsMonitor.git
    'InfrastructureMonitor':
       namespace: ifmo.escience.dapris.monitoring.infrastructureMonitor
       repo_url: https://gitlab.com/CLAVIRE2/Monitoring.InfrastructureMonitor.git
