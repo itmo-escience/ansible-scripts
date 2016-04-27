@@ -10,6 +10,9 @@
         ## {% endif %}
         tags: ["mesos-master"] }
   any_errors_fatal: yes
+  environment:
+      http_proxy: http://proxy.ifmo.ru:3128
+      HTTP_PROXY: http://proxy.ifmo.ru:3128
 
 
 - name: deploy and configure the mesos slaves
@@ -21,3 +24,6 @@
         mesos_cluster_mode: "zookeeper",
         tags: ["mesos-slave"] }
   any_errors_fatal: yes
+  environment:
+      http_proxy: http://proxy.ifmo.ru:3128
+      HTTP_PROXY: http://proxy.ifmo.ru:3128
