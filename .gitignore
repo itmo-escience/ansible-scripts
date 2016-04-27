@@ -4,3 +4,4 @@ swift.yml
 .idea
 hdfs_data
 ansible-bdas.iml
+ansible-scripts.iml

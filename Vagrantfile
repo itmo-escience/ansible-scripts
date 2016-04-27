@@ -31,7 +31,7 @@ Vagrant.configure("2") do |config|
     hdfs_volume = vm['hdfs_volume']
 
     config.vm.define hostname, primary: true do |c|
-      c.vm.network "public_network", ip: ip, netmask: "255.255.255.0", bridge: "enp22s0f5"
+      c.vm.network "public_network", ip: ip, netmask: "255.255.0.0", bridge: "enp7s0f0"
       c.vm.box = "ubuntu/trusty64"
       c.vm.hostname = hostname
 
