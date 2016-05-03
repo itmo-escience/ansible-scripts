@@ -11,9 +11,15 @@
         tags: ["mesos-master"] }
   any_errors_fatal: yes
   environment:
+
     http_proxy: http://proxy.ifmo.ru:3128
     HTTP_PROXY: http://proxy.ifmo.ru:3128
     
+
+
+
+
+
 
 - name: deploy and configure the mesos slaves
   hosts: mesos_slaves
@@ -25,5 +31,10 @@
         tags: ["mesos-slave"] }
   any_errors_fatal: yes
   environment:
+
     http_proxy: http://proxy.ifmo.ru:3128
     HTTP_PROXY: http://proxy.ifmo.ru:3128  
+
+
+
+
