@@ -1,0 +1,9 @@
+---
+  - name: "deploy zookeeper"
+    hosts: zookeeper
+    sudo: yes
+    roles:
+        - { role: zookeeper, zookeeper_action: "install", tags: ["zookeeper"] }
+    environment:
+      http_proxy: http://proxy.ifmo.ru:3128
+      HTTP_PROXY: http://proxy.ifmo.ru:3128

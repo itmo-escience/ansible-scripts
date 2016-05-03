@@ -32,9 +32,9 @@
 
 # Tasks for Master, Slave, and ZooKeeper nodes
 - name: Install mesos package
-  apt: pkg={{item}} state=present
-  with_items:
-    - mesos
+  apt: pkg=mesos update_cache=yes state=present
+  #with_items:
+    #- mesos
     #- marathon
   sudo: yes
   register: mesos_package_installation
@@ -53,19 +53,12 @@
   tags:
     - install
 
-- name: Disable the Mesos Master service
-  service: name=mesos-master state=stopped enabled=no
-  sudo: yes
-  when: mesos_package_installation.changed
-  tags:
-    - install
-
-- name: Disable the Mesos Master service
-  service: name=marathon state=stopped enabled=no
-  sudo: yes
-  when: mesos_package_installation.changed
-  tags:
-    - install
+#- name: Disable the Mesos Master service
+#  service: name=marathon state=stopped enabled=no
+#  sudo: yes
+#  when: mesos_package_installation.changed
+#  tags:
+#    - install
 
 ####################################
 ### Installation
@@ -96,15 +89,23 @@
   tags:
     - configure
 
-#- name: Enable the Mesos Master service
-#  copy:
-#    content: ""
-#    dest: /etc/init/mesos-master.override
-#    mode: 0644
-#  sudo: yes
-#  when: mesos_install_mode == "master"
-#  tags:
-#    - start
+- name: Set ZooKeeper URL for mesos
+  copy:
+    content: "zk://{{ groups.zookeeper | join(':' + '2181' + ',') }}:2181/mesos"
+    dest: /etc/mesos/zk
+    mode: 0644
+  sudo: yes
+  when: mesos_cluster_mode == "zookeeper"
+
+- name: Enable the Mesos Master service
+  copy:
+    content: "manual"
+    dest: /etc/init/mesos-master.override
+    mode: 0644
+  sudo: yes
+  when: mesos_install_mode == "slave"
+  tags:
+    - start
 
 - name: Start mesos-master
   service: name=mesos-master state=started enabled=yes
@@ -133,15 +134,15 @@
   tags:
     - configure
 
-#- name: Enable the Mesos Slave service
-#  copy:
-#    content: ""
-#    dest: /etc/init/mesos-slave.override
-#    mode: 0644
-#  sudo: yes
-#  when: mesos_install_mode == "slave"
-#  tags:
-#     - start
+- name: Enable the Mesos Slave service
+  copy:
+    content: "manual"
+    dest: /etc/init/mesos-slave.override
+    mode: 0644
+  sudo: yes
+  when: mesos_install_mode == "master"
+  tags:
+     - start
 
 - name: Start mesos-slave
   service: name=mesos-slave state=started enabled=yes

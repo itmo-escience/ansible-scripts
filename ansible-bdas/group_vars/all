@@ -17,6 +17,11 @@ hdfs_namenode_hostname: "{{ hostvars[groups['hdfs_namenodes'][0]]['ansible_hostn
 spark_master_ip: "{{ hostvars[groups['spark_masters'][0]]['ansible_' + iface]['ipv4']['address'] }}"
 spark_master_hostname: "{{ hostvars[groups['spark_masters'][0]]['ansible_hostname'] }}"
 
+zookeeper_client_port: "2181"
+zookeeper_url: "zk://{{ groups.zookeeper | join(':' + zookeeper_client_port + ',') }}:{{ zookeeper_client_port }}"
+
+
+
 clusteruser: "hadoop"
 clusteruser_home: "/home/hadoop"
 sshkeys_path: "../sshkey"

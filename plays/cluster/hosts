@@ -39,6 +39,7 @@ node-92-29
 [mesos_masters]
 node-92-22
 node-92-24
+node-92-26
 
 [mesos_slaves]
 node-92-22
