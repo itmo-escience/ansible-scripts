@@ -46,7 +46,8 @@
     - install
 
 - name: delete previous /opt/{{storm_name}}
-  file: path='/opt/{{storm_name}}' state=absent
+  #file: path='/opt/{{storm_name}}' state=absent
+  command: "sudo rm -rf /opt/{{storm_name}}"
   sudo: yes
   tags:
     - install

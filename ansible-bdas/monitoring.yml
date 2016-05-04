@@ -1,0 +1,33 @@
+---
+- name: installing on master
+  hosts: master
+  sudo: True
+  roles:
+    - { role: monitoring_services, monitoring: true }
+  environment:
+              http_proxy: http://proxy.ifmo.ru:3128
+              HTTP_PROXY: http://proxy.ifmo.ru:3128
+  tags:
+    - monitoring
+
+- name: installing td-agent on master
+  hosts: master
+  sudo: True
+  roles:
+    - { role: monitoring_services, td-agent: true }
+  environment:
+              http_proxy: http://proxy.ifmo.ru:3128
+              HTTP_PROXY: http://proxy.ifmo.ru:3128
+  tags:
+    - td-agent
+
+- name: installing iperf on slaves
+  hosts: all
+  sudo: True
+  roles:
+    - { role: monitoring_services, iperf: true }
+  environment:
+              http_proxy: http://proxy.ifmo.ru:3128
+              HTTP_PROXY: http://proxy.ifmo.ru:3128
+  tags:
+    - iperf

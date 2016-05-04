@@ -1,0 +1,25 @@
+storm.zookeeper.servers:
+    - "192.168.92.11"
+
+nimbus.seeds : ["192.168.92.11"]
+
+java.library.path: "/usr/local/lib:/opt/local/lib:/usr/lib"
+
+supervisor.worker.timeout.secs: 600
+supervisor.slots.ports:
+    - 6700
+#    - 6701
+#   - 6702
+#- 6703
+
+supervisor.memory.capacity.mb: 9000.0
+supervisor.cpu.capacity: 200.0
+
+### worker.* configs are for task workers
+#worker.heap.memory.mb: 9000.0
+
+#topology.worker.max.heap.size.mb: 9000
+#topology.acker.executors: 0
+
+drpc.servers:
+  - "192.168.92.11"

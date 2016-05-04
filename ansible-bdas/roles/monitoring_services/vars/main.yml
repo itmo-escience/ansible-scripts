@@ -1,20 +1,22 @@
-git_repo_url: git@github.com:itmo-escience/MonitoringSystem.git
-version_tag: c5dd8e04ad1a7b0639eba1ca06f49a3355b7b084
-#git_repo_url: git@gitlab.com:CLAVIRE2/Monitoring.git
-#version_tag: c5dd8e04ad1a7b0639eba1ca06f49a3355b7b084
-clone_dir: /opt/monitoring_services
-repo_key_path: /tmp/monitoring-services
+dest_dir: /opt/monitoring_services
 
 daemon_name: "java -jar "
 daemon_user: vagrant
 
 dstorage_log_dir: /var/log/dstorage-core
+mongoHost: 192.168.13.132
 
 services:
-#   'ComputationsMonitor':
-#      namespace: ifmo.escience.dapris.monitoring.computationsMonitor
-#      repo_url: git@gitlab.com:CLAVIRE2/Monitoring.ComputationsMonitor.git
-   'InfrastructureMonitor':
-      namespace: ifmo.escience.dapris.monitoring.infrastructureMonitor
-      repo_url: https://gitlab.com/CLAVIRE2/Monitoring.InfrastructureMonitor.git
+   'computations-monitor':
+      namespace: itmo.escience.dapris.monitoring.computations.ComputationsMonitor
+   'infrastructure-monitor':
+      namespace: itmo.escience.dapris.monitoring.infrastructure.InfrastructureMonitor
+
+
+iperf_daemon:
+    'key1':
+      service_name: iperf-server
+      user: vagrant
+      daemon: "/usr/bin/iperf"
+      daemon_opts: "-s"
 

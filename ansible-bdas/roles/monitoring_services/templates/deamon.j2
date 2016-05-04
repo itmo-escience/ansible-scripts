@@ -1,9 +1,10 @@
 #!/bin/sh
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
-NAME={{item.key}}
-DAEMON="/usr/bin/java"
-DAEMON_ARGS="-cp {{clone_dir}}/{{item.key}}/{{item.key}}-1.0-jar-with-dependencies.jar -Duser.dir={{clone_dir}}/{{item.key}} -Dlog4j.configurationFile={{clone_dir}}/{{item.key}}/log4j2.xml {{item.value.namespace}}.{{item.key}}"
-DAEMON_USER={{daemon_user}}
+NAME={{item.value.service_name}}
+DAEMON="{{item.value.daemon}}"
+DAEMON_ARGS="{{item.value.daemon_opts}}"
+PIDFILE=/var/run/{{item.value.service_name}}.pid
+DAEMON_USER={{item.value.user}}
 PIDFILE="/var/run/$NAME.pid"
 LOGFILE="/var/log/$NAME.log"
 
@@ -14,9 +15,8 @@ fi
 
 start_service() {
   echo -n " * Starting $NAME... "
-  #start-stop-daemon --start --background --pidfile $PIDFILE --make-pidfile --user $DAEMON_USER --chuid $DAEMON_USER --startas $DAEMON -- $DAEMON_ARGS
-  #echo 'start-stop-daemon --start --background --pidfile $PIDFILE --make-pidfile --chuid $DAEMON_USER --startas /bin/bash -- -c "exec $DAEMON $DAEMON_ARGS > /var/log/some.log 2>&1"'
-  start-stop-daemon --start --background --pidfile $PIDFILE --make-pidfile --startas /bin/bash -- -c "exec $DAEMON $DAEMON_ARGS > $LOGFILE 2>&1"
+  #start-stop-daemon --start  --pidfile $PIDFILE -chuid $DAEMON_USER --startas $DAEMON -- $DAEMON_ARGS
+  start-stop-daemon --start --background --pidfile $PIDFILE --make-pidfile --user $DAEMON_USER --chuid $DAEMON_USER --startas $DAEMON -- $DAEMON_ARGS >> $LOGFILE
   e=$?
   if [ $e -eq 1 ]; then
     echo "already running"

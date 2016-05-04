@@ -8,6 +8,15 @@
   tags:
     - configure
 
+- name: stopping supervisor
+  service: >-
+   name=supervisor
+   state=stopped
+   enabled=yes
+  ignore_errors: yes
+  tags:
+    - restart
+
 - name: creating storm.yml
   template: src=storm.yaml-{{storm_ver}}.j2 dest={{storm_dir}}/conf/storm.yaml
   tags:
@@ -19,16 +28,17 @@
     - configure
 
 - name: copying cluster.xml
+  when: "master is defined"
   template: src=Cluster.xml-{{storm_ver}}.j2 dest={{storm_dir}}/conf/cluster.xml
   tags:
     - configure
-    - master
 
 - name: copying worker.xml
+  when: "slave is defined"
   template: src=worker.xml.j2 dest={{storm_dir}}/conf/worker.xml
   tags:
     - configure
-    - slave
+
 
 #- name: stopping supervisor
 #  service: >-
@@ -41,23 +51,22 @@
 #    - restart
 
 - name: delete previos supervisor-master conf (nimbus, drpc, ui)
+  when: "master is defined"
   command: "rm -rf /etc/supervisor/conf.d/storm-{{item}}.conf"
   with_items:
     - nimbus
     - drpc
     - ui
-  when: "storm_master is defined"
   tags:
     - configure
-    - master
 
 - name: creating supervisor-slave conf.d (nimbus, drpc, ui)
+  when: "master is defined"
   template: src="supervisord.j2" dest=/etc/supervisor/conf.d/storm-{{item}}.conf  owner=root group=root mode=0751
   with_items:
     - nimbus
     - drpc
     - ui
-  when: "storm_master is defined"
   tags:
     - configure
     - master
@@ -74,24 +83,22 @@
 #  when: "storm_master is defined"
 
 - name: deleting previous supervisor-slave conf (supervisor,logviewer)
+  when: "slave is defined"
   command: "rm -rf /etc/supervisor/conf.d/storm-{{item}}.conf"
   with_items:
     - supervisor
     - logviewer
   sudo: yes
-  when: "storm_slave is defined"
   tags:
-    - slave
     - configure
 
 - name: creating supervisor-slave conf.d (supervisor,logviewer)
+  when: "slave is defined"
   template: src="supervisord.j2" dest="/etc/supervisor/conf.d/storm-{{item}}.conf"  owner=root group=root mode=0751
   with_items:
     - supervisor
     - logviewer
-  when: "storm_slave is defined"
   tags:
-    - slave
     - configure
 
 - name: deleting storm-local
@@ -101,12 +108,11 @@
     - configure
     - restart
 
-- name: starting supervisor
-  service: >-
-   name=supervisor
-   state=started
-   enabled=yes
-  ignore_errors: yes
+- name: restarting supervisor
+  command: service supervisor restart
+#  service: >-
+#   name=supervisor
+#   enabled=yes
   tags:
     - configure
     - restart

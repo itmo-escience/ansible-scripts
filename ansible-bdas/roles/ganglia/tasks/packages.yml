@@ -92,19 +92,3 @@
     - ganglia-api
     - install
 
-# I-perf
-- name: install iperf
-  apt: >-
-    name=iperf
-    state=latest
-  when: "is_iperf is defined"
-  tags:
-    - iperf
-    - install
-
-- name: add iperf user
-  user: name=iperf shell=/sbin/nologin
-  when: "is_iperf is defined"
-  tags:
-    - iperf
-    - install

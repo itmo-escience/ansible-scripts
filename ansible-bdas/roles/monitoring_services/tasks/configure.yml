@@ -1,17 +1,30 @@
 ---
 
+- name: copying log4j2.xml files
+  template: >-
+    src=log4j2.xml.j2
+    dest={{dest_dir}}/{{item.key}}/log4j2.xml
+  with_dict: services
+  when: "monitoring is defined"
+  tags:
+    - install
+    - monitoring
+
 - name: Configuring deaemons
   template: >-
-    src=deamon.j2
+    src=service_deamon.j2
     dest=/etc/init.d/{{item.key}}
     owner=root
     group=root
     mode=0751
   with_dict: services
+  when: "monitoring is defined"
   tags:
+    - monitoring
     - configure
 
 - name: restarting daemons
+  when: "monitoring is defined"
   service: >-
     name={{item.key}}
     state=restarted
@@ -19,12 +32,14 @@
   sudo: yes
   with_dict: services
   tags:
+    - monitoring
     - configure
 
 # Configures and starts the td-agent service for
 
 - name: creating td-agent.conf
-  template: src=fluentd.conf.j2 dest=/etc/td-agent/td-agent.conf
+  when: "td-agent is defined"
+  template: src=td-agent.conf.j2 dest=/etc/td-agent/td-agent.conf
   tags:
     - configure
     - td-agent
@@ -44,12 +59,14 @@
 #    - td-agent
 
 - name: creating pos-file
+  when: "td-agent is defined"
   command: "touch {{dstorage_log_dir}}/logs.pos"
   tags:
     - configure
     - td-agent
 
 - name: configuring chmod
+  when: "td-agent is defined"
   #command: chmod -R 777 /var/log/dstorage
   command: chmod -R 777 {{dstorage_log_dir}}
   sudo: yes
@@ -58,7 +75,6 @@
   tags:
     - configure
     - td-agent
-
 
 
 #- name: creating pos-files
@@ -70,3 +86,21 @@
 #  tags:
 #    - install
 #    - td-agent
+
+# Configure iperf
+
+
+- name: Configure iperf-server deaemon
+  when: "iperf is defined"
+  template: >-
+    src=deamon.j2
+    dest=/etc/init.d/iperf-server
+    owner=root
+    group=root
+    mode=0751
+  with_dict: iperf_daemon
+  notify:
+    - restart iperf-server
+  tags:
+    - iperf
+    - configure

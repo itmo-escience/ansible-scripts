@@ -116,7 +116,7 @@
     - configure
 
 
-# Configures ganglia-api settings.py
+##Configures ganglia-api settings.py
 
 - name: Configure ganglia-api before run
   template: >-
@@ -147,18 +147,3 @@
     - configure
 
 
-# Configure iperf
-
-- name: Configure iperf-server deaemon
-  template: >-
-    src=deamon.j2
-    dest=/etc/init.d/iperf-server
-    owner=root
-    group=root
-    mode=0751
-  with_dict: iperf_daemon
-  notify:
-    - restart iperf-server
-  tags:
-    - iperf
-    - configure

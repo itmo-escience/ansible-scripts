@@ -22,13 +22,13 @@ ganglia_config_gmetad:
   # TODO: maybe I can use facts to do it automatically.
   data_sources:
     'ds1':
-      polling_interval: 3
+      polling_interval: 1
       host: 'node-92-13'
       servers:
         - 'node-92-13:8649'
         - 'node-92-13:8650'
     'service':
-      polling_interval: 3
+      polling_interval: 1
       servers:
         - 'localhost:8649'
         - 'localhost:8650'
@@ -351,11 +351,4 @@ ganglia_api_daemon:
       service_name: ganglia-api-daemon
       daemon: "python {{ganglia_api_dir}}/ganglia/ganglia_api.py &"
       daemon_opts: ""
-
-iperf_daemon:
-    'key1':
-      service_name: iperf-server
-      user: vagrant
-      daemon: "/usr/bin/iperf"
-      daemon_opts: "-s"
 

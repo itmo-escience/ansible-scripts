@@ -1,5 +1,10 @@
 ---
 
 - include_vars: "main.yml"
+
+
 - include: install.yml
+  when: "master is defined or slave is defined"
+
 - include: configure.yml
+  when: "master is defined or slave is defined"
