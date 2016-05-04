@@ -4,4 +4,4 @@ WORK_DIR=/var/run/mesos
 ISOLATION=cgroups
 {% if mesos_cluster_mode == "zookeeper" %}
 MASTER=zk://{{ groups.zookeeper | join(':' + '2181' + ',') }}:2181/mesos
-{% endif %}[nano@node13n templates]
+{% endif %}
