@@ -7,6 +7,10 @@
   roles:
     - common
   any_errors_fatal: yes
+  environment:
+    http_proxy: http://proxy.ifmo.ru:3128
+    HTTP_PROXY: http://proxy.ifmo.ru:3128
+          
 
 - name: install java and scala
   hosts: all
@@ -15,7 +19,10 @@
     - java
 #    - scala
   any_errors_fatal: yes
-
+  environment:
+    http_proxy: http://proxy.ifmo.ru:3128
+    HTTP_PROXY: http://proxy.ifmo.ru:3128
+          
 #- name: create non-root clusteruser user
 #  hosts: all
 #  sudo:	yes

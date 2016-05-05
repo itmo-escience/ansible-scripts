@@ -97,15 +97,15 @@
   sudo: yes
   when: mesos_cluster_mode == "zookeeper"
 
-- name: Enable the Mesos Master service
-  copy:
-    content: "manual"
-    dest: /etc/init/mesos-master.override
-    mode: 0644
-  sudo: yes
-  when: mesos_install_mode == "slave"
-  tags:
-    - start
+#- name: Enable the Mesos Master service
+#  copy:
+#    content: "manual"
+#    dest: /etc/init/mesos-master.override
+#    mode: 0644
+#  sudo: yes
+#  when: mesos_install_mode == "slave"
+#  tags:
+#    - start
 
 - name: Start mesos-master
   service: name=mesos-master state=started enabled=yes
@@ -134,15 +134,15 @@
   tags:
     - configure
 
-- name: Enable the Mesos Slave service
-  copy:
-    content: "manual"
-    dest: /etc/init/mesos-slave.override
-    mode: 0644
-  sudo: yes
-  when: mesos_install_mode == "master"
-  tags:
-     - start
+#- name: Enable the Mesos Slave service
+#  copy:
+#    content: "manual"
+#    dest: /etc/init/mesos-slave.override
+#    mode: 0644
+#  sudo: yes
+#  when: mesos_install_mode == "master"
+#  tags:
+#     - start
 
 - name: Start mesos-slave
   service: name=mesos-slave state=started enabled=yes
