@@ -1,0 +1,10 @@
+---
+
+- name: install Cassandra
+  hosts: cassandra
+  sudo: yes  
+  roles:
+    - cassandra
+  environment:
+      http_proxy: http://proxy.ifmo.ru:3128
+      HTTP_PROXY: http://proxy.ifmo.ru:3128
