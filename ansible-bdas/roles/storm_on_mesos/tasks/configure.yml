@@ -117,16 +117,8 @@
     - configure
     - restart
 
-#sudo mkdir -p /mnt/seizure_data
-#sudo mount -t cifs //192.168.13.101/smirnp /mnt/seizure_data -o user=nano,password=Yt1NyDpQNm
 
-#- name: mount 13.101 share
-#  command: "mkdir -p /mnt/seizure_data"
-#  with_items:
-#    - supervisor
-#    - logviewer
-#  notify:
-#    - restart supervisor
+
 
 
 
