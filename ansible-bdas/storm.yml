@@ -14,7 +14,8 @@
   sudo: True
   roles:
     #- { role: storm_on_mesos, slave: 1, tags: slave }
-    - { role: maven, tags: maven }
+    - { role: williamyeh.oracle-java, java_download_from_oracle: true, tags: java }
+    - { role: tecris.maven, tags: maven }
     - { role: wfdb, tags: wfdb }
     #- { role: anaconda, storm_slave: 1, anaconda_make_sys_default: true, tags: anaconda }
     
