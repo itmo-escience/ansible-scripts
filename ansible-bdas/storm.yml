@@ -9,15 +9,17 @@
   # tags:
     # - master
 
-# - name: applying storm_slave hosts
-  # hosts: storm_slave
-  # sudo: True
-  # roles:
-    # - { role: storm_on_mesos, slave: 1, tags: slave }
-    # - { role: anaconda, storm_slave: 1, anaconda_make_sys_default: true, tags: anaconda }
-  # environment: "{{proxy_env}}"
-  # tags:
-    # - slave
+- name: applying storm_slave hosts
+  hosts: storm_slave
+  sudo: True
+  roles:
+    #- { role: storm_on_mesos, slave: 1, tags: slave }
+    - { role: wfdb, tags: wfdb }
+    #- { role: anaconda, storm_slave: 1, anaconda_make_sys_default: true, tags: anaconda }
+    
+  environment: "{{proxy_env}}"
+  tags:
+    - slave
 
 # - name: applying ntp role
   # hosts: all
@@ -26,11 +28,3 @@
     # - { role: ntp, tags: ntp }
   # tags:
     # - ntp
-
-- name: applying wave role
-  hosts: storm_slave
-  sudo: True
-  roles:
-     - { role: storm_on_mesos, wave : 1, tags: wave }
-  tags:
-    - wave 
