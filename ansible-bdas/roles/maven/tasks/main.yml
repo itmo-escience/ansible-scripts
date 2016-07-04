@@ -1,0 +1,9 @@
+- name: copy settings.xml to /home/vagrant/.m2
+  apt: name="maven" state=present
+  tags:
+     - install
+
+- name: copy settings.xml to /home/vagrant/.m2
+  copy: src=settings.xml dest=/home/vagrant/.m2
+  tags:
+     - configure
