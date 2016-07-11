@@ -10,3 +10,9 @@ ganglia_gmond_binary: /usr/sbin/gmond
 
 ganglia_api_dir: /opt/ganglia-api
 
+proxy_env:
+          http_proxy: http://proxy.ifmo.ru:3128
+          HTTP_PROXY: http://proxy.ifmo.ru:3128
+          no_proxy: 192.168.1.36
+
+ganglia_api_daemon: "{{ganglia_api_daemon}}"

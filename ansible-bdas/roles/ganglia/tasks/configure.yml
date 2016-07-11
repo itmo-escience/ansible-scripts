@@ -19,7 +19,7 @@
     group=root
     mode=0755
     state=directory
-  when: "is_ganglia_meta is defined"
+  when: "ganglia_meta is defined"
   tags:
     - ganglia-meta
     - configure
@@ -33,7 +33,7 @@
     mode=0644
   notify:
     - restart ganglia-meta
-  when: "is_ganglia_meta is defined"
+  when: "ganglia_meta is defined"
   tags:
     - ganglia-meta
     - configure
@@ -45,7 +45,7 @@
     name=gmond
     enabled=no
     state=stopped
-  when: "ansible_os_family == 'RedHat' and is_ganglia_monitor is defined"
+  when: "ansible_os_family == 'RedHat' and ganglia_monitor is defined"
   tags:
     - ganglia-monitor
     - configure
@@ -55,7 +55,7 @@
     name=ganglia-monitor
     enabled=no
     state=stopped
-  when: "ansible_os_family == 'Debian' and is_ganglia_monitor is defined"
+  when: ansible_os_family == 'Debian' and ganglia_monitor is defined
   tags:
     - ganglia-monitor
     - configure
@@ -68,7 +68,7 @@
     group=root
     mode=0644
   with_dict: ganglia_config_gmond
-  when: "is_ganglia_monitor is defined"
+  when: "ganglia_monitor is defined"
   tags:
     - ganglia-monitor
     - configure
@@ -81,7 +81,7 @@
     group=root
     mode=0755
   with_dict: ganglia_config_gmond
-  when: "is_ganglia_monitor is defined"
+  when: "ganglia_monitor is defined"
   tags:
     - ganglia-monitor
     - configure
@@ -92,16 +92,16 @@
     enabled=yes
     state=restarted
   with_dict: ganglia_config_gmond
-  when: "is_ganglia_monitor is defined"
+  when: ganglia_monitor is defined
   tags:
     - ganglia-monitor
     - configure
-    - restart
+    - ganglia_restart
 
 # Configures the web frontend service in apache
 
 
-- name: Enable the httpd frontend
+- name: Enable the apache2 frontend
   template: >-
     src=webfrontend-apache.conf.j2
     dest={{ httpd_conf_d_dir }}/ganglia.conf
@@ -109,7 +109,7 @@
     group=root
     mode=0644
   notify:
-    - restart httpd
+    - restart apache2
   when: ganglia_web is defined
   tags:
     - ganglia-web

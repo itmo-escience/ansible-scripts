@@ -26,7 +26,7 @@
     - ganglia-monitor
     - install
 
-# Ganglia Meta is installed only on nodes marked is_ganglia_meta=1
+# Ganglia Meta is installed only on nodes marked ganglia_meta=1
 - name: Install Ganglia Meta
   yum: >-
     name={{item}}
@@ -42,21 +42,27 @@
   apt: >-
     name={{item}}
     state=latest
+    update_cache=yes
+    force=yes
   with_items:
     - gmetad
-  when: "ansible_os_family == 'Debian' and is_ganglia_meta is defined"
+  when: "ansible_os_family == 'Debian' and ganglia_web is defined"
   tags:
-    - ganglia-meta
+    - ganglia-web
     - install
 
-# Ganglia Web is installed only on nodes marked is_ganglia_web=1
+# Ganglia Web is installed only on nodes marked ganglia_meta=1
 - name: Install Ganglia Web/Apache2
   yum: >-
     name={{item}}
     state=latest
+    force=yes
+    update_cache=yes
   with_items:
-    - ganglia-web, git, apache2
-  when: "ansible_os_family == 'RedHat' and is_ganglia_web is defined"
+    - git
+    - apache2
+    - ganglia-webfrontend
+  when: "ansible_os_family == 'RedHat' and ganglia_web is defined"
   tags:
     - ganglia-web
     - install
@@ -65,9 +71,13 @@
   apt: >-
     name={{item}}
     state=latest
+    force=yes
+    update_cache=yes
   with_items:
-    - ganglia-webfrontend, apache2
-  when: "ansible_os_family == 'Debian' and is_ganglia_web is defined"
+    - git
+    - apache2
+    - ganglia-webfrontend
+  when: "ansible_os_family == 'Debian' and ganglia_web is defined"
   tags:
     - ganglia-web
     - install
@@ -77,7 +87,7 @@
   git: repo=https://github.com/smirnp/ganglia-api.git
        dest={{ ganglia_api_dir }}
        clone=yes
-  when: "is_ganglia_api is defined"
+  when: ganglia_api is defined
   tags:
     - ganglia-web
     - install
@@ -87,7 +97,7 @@
     name={{item}}
   with_items:
     - tornado
-  when: "is_ganglia_api is defined"
+  when: ganglia_api is defined
   tags:
     - ganglia-api
     - install

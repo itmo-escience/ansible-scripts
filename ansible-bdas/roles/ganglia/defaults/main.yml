@@ -22,13 +22,13 @@ ganglia_config_gmetad:
   # TODO: maybe I can use facts to do it automatically.
   data_sources:
     'ds1':
-      polling_interval: 1
-      host: 'node-92-13'
+      polling_interval: 5
+      host: '{{ds1_source}}'
       servers:
-        - 'node-92-13:8649'
-        - 'node-92-13:8650'
+        - '{{ds1_source}}:8649'
+        - '{{ds1_source}}:8650'
     'service':
-      polling_interval: 1
+      polling_interval: 5
       servers:
         - 'localhost:8649'
         - 'localhost:8650'

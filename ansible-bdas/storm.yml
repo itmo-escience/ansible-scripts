@@ -1,27 +1,39 @@
 ---
-# - name: applying storm_master hosts
-  # hosts: storm_master
+- name: applying storm_master hosts
+  hosts: storm_master
+  sudo: True
+  roles:
+    - { role: storm_on_mesos, master: 1, tags: master }
+    - { role: ganglia, ganglia_meta: true, ganglia_web: true, ds1_source: 192.168.92.14, tags: ganglia }
+    - { role: anaconda, storm_master: 1, anaconda_make_sys_default: true, tags: anaconda }
+  environment: "{{proxy_env}}"
+  tags:
+    - master
+
+# - name: ganglia_meta role
+  # hosts: ganglia_meta
   # sudo: True
   # roles:
-    # - { role: storm_on_mesos, master: 1, tags: master }
-    # - { role: anaconda, storm_master: 1, anaconda_make_sys_default: true, tags: anaconda }
+    # - { role: ganglia, ganglia_meta: true }
   # environment: "{{proxy_env}}"
   # tags:
-    # - master
+    # - ganglia_meta
 
 - name: applying storm_slave hosts
   hosts: storm_slave
   sudo: True
   roles:
-    #- { role: storm_on_mesos, slave: 1, tags: slave }
+    - { role: storm_on_mesos, slave: 1, tags: slave }
     - { role: williamyeh.oracle-java, java_download_from_oracle: true, tags: java }
     - { role: tecris.maven, tags: maven }
     - { role: wfdb, tags: wfdb }
-    #- { role: anaconda, storm_slave: 1, anaconda_make_sys_default: true, tags: anaconda }
-    
+    - { role: ganglia, is_ganglia_monitor: false }
+    - { role: dstorage, dstorage_install_mode: "agent", oracle_java_set_as_default: yes, agent_hdd_dir: "/opt/hdd", agent_ssd_dir: "/opt/ssd", core_address: "{{groups['dstorage-core'][0]}}", tags: ['dstorage-agents'] }
+    - { role: anaconda, storm_slave: 1, anaconda_make_sys_default: true, tags: anaconda }
   environment: "{{proxy_env}}"
   tags:
     - slave
+
 
 # - name: applying ntp role
   # hosts: all

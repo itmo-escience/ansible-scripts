@@ -1,0 +1,21 @@
+
+### Installing fluentd required files
+- name: install fluent-plugin-multi-format-parser
+  when: "td-agent is defined"
+  command: /opt/td-agent/embedded/bin/fluent-gem install fluent-plugin-multi-format-parser
+  sudo: yes
+  tags:
+    - install
+    - td-agent
+
+- name: create /etc/td-agent dir
+  when: "td-agent is defined"
+  #command: fluentd --setup /etc/td-agent
+  command: mkdir -p /etc/td-agent
+  sudo: yes
+  tags:
+    - install
+    - td-agent
+
+
+
