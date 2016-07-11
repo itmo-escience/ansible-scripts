@@ -1,0 +1,6 @@
+---
+proxy_env:
+          http_proxy: http://proxy.ifmo.ru:3128
+          HTTP_PROXY: http://proxy.ifmo.ru:3128
+          no_proxy: 192.168.1.36
+

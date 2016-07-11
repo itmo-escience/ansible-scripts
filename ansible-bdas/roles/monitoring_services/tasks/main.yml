@@ -4,6 +4,10 @@
 #- include_vars: "{{ ansible_os_family }}.yml"
 
 - include: install.yml
+
+- include: td-agent.yml
+  when: "td-agent is defined"
+  
 - include: configure.yml
 
 

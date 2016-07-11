@@ -16,13 +16,13 @@
 #- fail: msg="stop - {{agent_ssd_dir}} doesn't exist"
 #  when: ssd_dir.stat.isdir is defined and ssd_dir.stat.isdir
 
-- name: install necessary tools
-  apt: name={{ item }} state=present update_cache=no
-  with_items:
-    - git
-    - maven
-  tags:
-    - install
+# - name: install necessary tools
+  # apt: name={{ item }} state=present update_cache=no force=yes
+  # with_items:
+    # - git
+    # - maven
+  # tags:
+    # - install
 
 - name: correct /usr/lib/jvm/default-java value
   file: src=/usr/lib/jvm/java-8-oracle dest=/usr/lib/jvm/default-java state=link
