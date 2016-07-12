@@ -2,27 +2,46 @@
 
 # TODO: correct checks if there can be situation when only hdd or ssd pnly can be working
 
-#- name: check hdd dir {{agent_hdd_dir}}
-#  stat: path={{agent_hdd_dir}}
-#  register: hdd_dirstat
-#
+# - name: check hdd dir {{agent_hdd_dir}}
+  # stat: path={{agent_hdd_dir}}
+  # register: hdd_dirstat
+
+# - fail: msg="stop - {{agent_hdd_dir}} doesn't exist"
+  # when: hdd_dir.stat.isdir is defined and hdd_dir.stat.isdir
+
+# - name: check hdd dir {{agent_ssd_dir}}
+  # stat: path={{agent_ssd_dir}}
+  # register: ssd_dir
+
+# - fail: msg="stop - {{agent_ssd_dir}} doesn't exist"
+  # when: ssd_dir.stat.isdir is defined and ssd_dir.stat.isdir
+
+- name: create hdd dir {{agent_hdd_dir}}
+  file: path={{agent_hdd_dir}} state=directory
+
+- name: create ssd dir {{agent_ssd_dir}}
+  file: path={{agent_ssd_dir}} state=directory
+  
+  #stat: path={{agent_hdd_dir}}
+  #register: hdd_dirstat
+
 #- fail: msg="stop - {{agent_hdd_dir}} doesn't exist"
 #  when: hdd_dir.stat.isdir is defined and hdd_dir.stat.isdir
-#
+
 #- name: check hdd dir {{agent_ssd_dir}}
 #  stat: path={{agent_ssd_dir}}
 #  register: ssd_dir
-#
+
 #- fail: msg="stop - {{agent_ssd_dir}} doesn't exist"
 #  when: ssd_dir.stat.isdir is defined and ssd_dir.stat.isdir
 
-# - name: install necessary tools
-  # apt: name={{ item }} state=present update_cache=no force=yes
-  # with_items:
-    # - git
-    # - maven
-  # tags:
-    # - install
+- name: install necessary tools
+  apt: name={{ item }} state=present update_cache=no force=yes
+  with_items:
+    - maven
+    #- git
+  tags:
+    - install
 
 - name: correct /usr/lib/jvm/default-java value
   file: src=/usr/lib/jvm/java-8-oracle dest=/usr/lib/jvm/default-java state=link

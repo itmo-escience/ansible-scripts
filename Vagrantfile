@@ -21,7 +21,7 @@ Vagrant.configure("2") do |config|
   end
 
   # read data for vagrant run
-  nds = File.open("./ansible-bdas/storm.hosts","r") do |hosts|
+  nds = File.open("./ansible-bdas/storm-12.hosts","r") do |hosts|
 	nodes = {}
 	while(line = hosts.gets) do
 			

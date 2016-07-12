@@ -3,7 +3,7 @@
   file: path=/home/vagrant/.m2 state=directory
   tags:
      - configure
-	 
+
 - name: copy settings.xml to /home/vagrant/.m2
   copy: src=settings.xml dest=/home/vagrant/.m2
   tags:

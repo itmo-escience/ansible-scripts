@@ -9,9 +9,6 @@ node-92-16 ansible_ssh_host=192.168.92.16 cpus=4 memory=8096
 [storm_master]
 node-92-12
 
-[ganglia_meta]
-node-92-13
-
 [storm_slave]
 node-92-13
 node-92-14

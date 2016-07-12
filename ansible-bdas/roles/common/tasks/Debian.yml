@@ -5,6 +5,7 @@
     - vim
     - tmux
     - git
+    - ntp
     - htop
     - nmon
     - build-essential

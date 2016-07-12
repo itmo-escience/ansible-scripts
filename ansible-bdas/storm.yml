@@ -3,9 +3,9 @@
   hosts: all
   sudo: True
   roles:
-    - { role: ntp, tags: ntp }
+    - { role: common, tags: common }
     - { role: williamyeh.oracle-java, java_download_from_oracle: true, tags: java }
-    - { role: tecris.maven, tags: ['maven', 'dstorage-core','dstorage-agents'] }
+    #- { role: groover.maven, tags: ['maven', 'dstorage-core','dstorage-agents'] }
     - { role: davidkarban.git, tags: ['git', 'dstorage-core','dstorage-agents'] }
   vars_files: 
     - vars/proxy.yml
@@ -19,6 +19,8 @@
   roles:
     - { role: storm_on_mesos, master: 1, tags: master }
     - { role: ganglia, ganglia_meta: true, ganglia_web: true, ds1_source: 192.168.92.14, tags: ganglia }
+  vars_files: 
+    - vars/proxy.yml
   environment: "{{proxy_env}}"
   tags:
     - master
@@ -32,6 +34,8 @@
     - { role: wfdb, tags: wfdb }
     - { role: ganglia, is_ganglia_monitor: false }
     - { role: anaconda, storm_slave: 1, anaconda_make_sys_default: true, tags: anaconda }
+  vars_files: 
+    - vars/proxy.yml
   environment: "{{proxy_env}}"
   tags:
     - slave

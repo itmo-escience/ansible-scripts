@@ -1,11 +1,11 @@
 ## core settings
 core_port: 8084
 core_version: 0.42.027
-core_clone_dir: /tmp/dstorage-core
-core_install_dir: /opt/dstorage-core
+core_clone_dir: "/tmp/dstorage-core"
+core_install_dir: "/opt/dstorage-core"
 #core_tag: v{{core_version}}
 core_tag: 1f58e27b44d4355e5489dff58150248c3711eb41
-core_repo_key_path: /tmp/dstorage-core-id_rsa
+core_repo_key_path: "/tmp/dstorage-core-id_rsa"
 mongodb_address: localhost
 mongodb_port: 27017
 security_level: 0
@@ -15,11 +15,12 @@ agent_clone_dir: /tmp/dstorage-agent
 agent_install_dir: /opt/dstorage-agent
 agent_binary_name: dstorage-agent-0.0.1-jar-with-dependencies.jar
 agent_repo_key_path: /tmp/dstorage-agent-id_rsa
-agent_ssd_quota: 10000000000  #10 gb
-agent_mem_quota: 10000000000  #10 gb
-agent_quota: 10000000000      #10 gb
+agent_ssd_quota: 300000000000  #N gb
+agent_mem_quota: 300000000000  #N gb
+agent_quota: 300000000000      #N gb
 
 # this variables should be set in the playbook
-## agent_hdd_dir:
-## agent_ssd_dir:
-## core_address
+agent_hdd_dir: "/opt/hdd"
+agent_ssd_dir: "/opt/sdd"
+#core_address: "{{groups['dstorage-core'][0]}}",
+
