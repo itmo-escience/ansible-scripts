@@ -43,7 +43,7 @@
     name={{item}}
     state=latest
     update_cache=yes
-    force=yes
+    force=no
   with_items:
     - gmetad
   when: "ansible_os_family == 'Debian' and ganglia_web is defined"

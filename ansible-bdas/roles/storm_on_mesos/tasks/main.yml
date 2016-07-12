@@ -7,6 +7,3 @@
 
 - include: configure.yml
   when: "master is defined or slave is defined"
-
-- include: install_wave.yml
-  when: "wave is defined"

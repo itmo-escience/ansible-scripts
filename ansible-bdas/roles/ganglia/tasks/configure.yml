@@ -59,7 +59,7 @@
   tags:
     - ganglia-monitor
     - configure
-
+  
 - name: Configure Ganglia Monitors
   template: >-
     src=gmond.conf.j2
@@ -67,7 +67,7 @@
     owner=root
     group=root
     mode=0644
-  with_dict: ganglia_config_gmond
+  with_dict: "{{ganglia_config_gmond}}"
   when: "ganglia_monitor is defined"
   tags:
     - ganglia-monitor
@@ -80,8 +80,8 @@
     owner=root
     group=root
     mode=0755
-  with_dict: ganglia_config_gmond
-  when: "ganglia_monitor is defined"
+  with_dict: "{{ganglia_config_gmond}}"
+  when: ganglia_monitor is defined
   tags:
     - ganglia-monitor
     - configure
@@ -91,7 +91,7 @@
     name=gmond-{{ item.key }}
     enabled=yes
     state=restarted
-  with_dict: ganglia_config_gmond
+  with_dict: "{{ganglia_config_gmond}}"
   when: ganglia_monitor is defined
   tags:
     - ganglia-monitor
@@ -131,6 +131,9 @@
     - configure
 
 
+#- name: "Debugging"
+#  debug: msg={{ganglia-api-daemon}}
+
 - name: Configure ganglia-api to be a daemon
   template: >-
     src=deamon.j2
@@ -138,7 +141,7 @@
     owner=root
     group=root
     mode=0751
-  with_dict: ganglia-api-daemon
+  with_dict: "{{ganglia_api_daemon}}"
   notify:
     - restart ganglia-api
   when: ganglia_api is defined
