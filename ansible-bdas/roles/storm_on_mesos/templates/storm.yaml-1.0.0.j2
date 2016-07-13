@@ -1,7 +1,7 @@
 storm.zookeeper.servers:
-    - "192.168.92.11"
+    - "{{master_host}}"
 
-nimbus.seeds : ["192.168.92.11"]
+nimbus.seeds : ["{{master_host}}"]
 
 java.library.path: "/usr/local/lib:/opt/local/lib:/usr/lib"
 
@@ -22,4 +22,4 @@ supervisor.cpu.capacity: 200.0
 #topology.acker.executors: 0
 
 drpc.servers:
-  - "192.168.92.11"
+  - "{{master_host}}"

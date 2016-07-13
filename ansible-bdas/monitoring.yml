@@ -14,6 +14,7 @@
   hosts: master
   sudo: True
   roles:
+    - { role: kawasakitoshiya.td-agent }
     - { role: monitoring_services, td-agent: true }
   environment:
               http_proxy: http://proxy.ifmo.ru:3128

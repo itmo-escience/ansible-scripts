@@ -1,4 +1,29 @@
 ---
+###JAVA
+# - name: dpkg --configure -a
+  # become: true
+  # shell: "dpkg --configure -a"
+
+# - name: Install add-apt-repostory
+  # become: yes
+  # apt: name=software-properties-common dpkg_options="force-confnew,force-confmiss" state=present
+
+# - name: Add Oracle Java Repository
+  # become: yes
+  # apt_repository: repo='ppa:webupd8team/java'
+
+# - name: Accept Java 8 License
+  # become: yes
+  # debconf: name='oracle-java8-installer' question='shared/accepted-oracle-license-v1-1' value='true' vtype='select'
+
+# - name: Install Oracle Java 8
+  # become: yes
+  # apt: name={{item}} state=present
+  # with_items:
+    # - oracle-java8-installer
+    # - ca-certificates
+    # - oracle-java8-set-default
+
 #- name: check storm_dir dir exist
 #  stat: path = {{storm_dir}}
 #  register: storm_dir
@@ -56,32 +81,6 @@
     - install
 
 
-###JAVA
-# - name: dpkg --configure -a
-  # become: true
-  # shell: "dpkg --configure -a"
-
-# - name: Install add-apt-repostory
-  # become: yes
-  # apt: name=software-properties-common dpkg_options="force-confnew,force-confmiss" state=present
-
-# - name: Add Oracle Java Repository
-  # become: yes
-  # apt_repository: repo='ppa:webupd8team/java'
-
-# - name: Accept Java 8 License
-  # become: yes
-  # debconf: name='oracle-java8-installer' question='shared/accepted-oracle-license-v1-1' value='true' vtype='select'
-
-# - name: Install Oracle Java 8
-  # become: yes
-  # apt: name={{item}} state=present
-  # with_items:
-    # - oracle-java8-installer
-    # - ca-certificates
-    # - oracle-java8-set-default
-
-# Below is ok
 - name: delete previous /tmp/ download
   file: path='/tmp/{{ storm_archive }}' state=absent
   sudo: yes

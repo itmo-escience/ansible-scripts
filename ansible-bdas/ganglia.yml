@@ -25,7 +25,7 @@
   hosts: ganglia_web
   sudo: True
   roles:
-    - { role: ganglia, is_ganglia_meta: 1, tags: ganglia-web }
+    - { role: ganglia, is_ganglia_web: 1, tags: ganglia-web }
   environment:
               http_proxy: http://proxy.ifmo.ru:3128
               HTTP_PROXY: http://proxy.ifmo.ru:3128

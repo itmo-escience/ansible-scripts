@@ -4,7 +4,7 @@
   sudo: True
   roles:
     - { role: common, tags: common }
-    - { role: williamyeh.oracle-java, java_download_from_oracle: true, tags: java }
+    - { role: williamyeh.oracle-java, java_download_from_oracle: false, tags: java }  #files\jdk-8u92-linux-x64.tar.gz
   vars_files: 
     - vars/proxy.yml
   environment: "{{proxy_env}}"
@@ -15,7 +15,7 @@
   hosts: storm_master
   sudo: True
   roles:
-    - { role: storm_on_mesos, master: 1, tags: master }
+    - { role: storm_on_mesos, master: true, tags: storm }
     - { role: ganglia, ganglia_meta: true, ganglia_web: true, ds1_source: 192.168.92.14, tags: ganglia }
   vars_files: 
     - vars/proxy.yml
@@ -27,7 +27,7 @@
   hosts: storm_slave
   sudo: True
   roles:
-    - { role: storm_on_mesos, slave: 1, tags: slave }
+    - { role: storm_on_mesos, slave: true, master_host: "{{ groups['storm_master'][0] }}", tags: storm }
     - { role: dstorage, dstorage_install_mode: "agent", oracle_java_set_as_default: yes, agent_hdd_dir: "/opt/hdd", agent_ssd_dir: "/opt/ssd", core_address: "node-92-11", core_address0: "{{groups['dstorage-core'][0]}}", tags: dstorage-agents }
     - { role: wfdb, tags: wfdb }
     - { role: ganglia, ganglia_monitor: true, ds1_source: 192.168.92.14, tags: ganglia }

@@ -5,12 +5,13 @@
     - vim
     - tmux
     - git
+    - maven
     - ntp
     - htop
     - nmon
     - build-essential
-    - python-swiftclient
-    - libgfortran3
+#    - python-swiftclient
+#    - libgfortran3
     - python-pycurl
   tags:
     - install

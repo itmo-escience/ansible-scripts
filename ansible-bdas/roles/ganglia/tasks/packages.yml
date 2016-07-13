@@ -41,9 +41,7 @@
 - name: Install Ganglia Meta
   apt: >-
     name={{item}}
-    state=latest
-    update_cache=yes
-    force=no
+    force=yes
   with_items:
     - gmetad
   when: "ansible_os_family == 'Debian' and ganglia_web is defined"
@@ -71,10 +69,8 @@
   apt: >-
     name={{item}}
     state=latest
-    force=yes
     update_cache=yes
   with_items:
-    - git
     - apache2
     - ganglia-webfrontend
   when: "ansible_os_family == 'Debian' and ganglia_web is defined"

@@ -34,4 +34,4 @@ daemon: "python /opt/{{storm_name}}/bin/storm.py &"
 pidfile: /var/run/{{service_name}}.pid
 daemon_opts: ""
 
-java_home: "/usr/lib/jvm/java-8-oracle"
+java_home: "/usr/lib/jvm/jdk1.8.0_92"

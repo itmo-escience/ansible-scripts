@@ -17,10 +17,6 @@
   tags:
     - restart
 
-- name: creating storm.yml
-  template: src=storm.yaml-{{storm_ver}}.j2 dest={{storm_dir}}/conf/storm.yaml
-  tags:
-    - configure
 
 - name: creating default env variables
   template: src=storm_env.ini.j2 dest={{storm_dir}}/conf/storm_env.ini
@@ -30,6 +26,12 @@
 - name: copying cluster.xml
   when: "master is defined"
   template: src=Cluster.xml-{{storm_ver}}.j2 dest={{storm_dir}}/conf/cluster.xml
+  tags:
+    - configure
+
+- name: creating storm.yml
+  template: src=storm.yaml-{{storm_ver}}.j2 dest={{storm_dir}}/conf/storm.yaml
+  when: "slave is defined"
   tags:
     - configure
 
