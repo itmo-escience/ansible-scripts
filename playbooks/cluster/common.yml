@@ -13,7 +13,7 @@
   sudo: yes
   roles:
     - java
-    - scala
+    - andrewrothstein.scala
   any_errors_fatal: yes
 
 - name: create non-root clusteruser user

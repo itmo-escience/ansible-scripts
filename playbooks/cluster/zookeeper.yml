@@ -3,7 +3,7 @@
   hosts: zookeeper
   sudo: yes
   roles:
-    -{role: zookeeper }
+    - {role: zookeeper }
   environment:
     http_proxy: http://proxy.ifmo.ru:3128
     HTTP_PROXY: http://proxy.ifmo.ru:3128
