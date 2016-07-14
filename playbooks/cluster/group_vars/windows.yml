@@ -1,0 +1,5 @@
+ansible_ssh_user: magistr
+ansible_ssh_pass: 75M62DmV483K68M
+ansible_ssh_port: 5985
+ansible_connection: winrm
+ansible_ssh_winrm_scheme: http

@@ -1,0 +1,47 @@
+---
+# tasks file for zookeeper
+- name: Install zookeeper packages
+  apt: pkg={{item}} state=present update_cache=yes
+  with_items:
+    - zookeeper
+    - zookeeper-bin
+    - zookeeperd
+  sudo: yes
+#  when: zookeeper_action == "install"
+
+- name: Create zookeeper config file
+  template: src=zoo.cfg.j2 dest=/etc/zookeeper/conf/zoo.cfg
+  sudo: yes
+#  when: zookeeper_action == "install"
+
+- name: Create zookeeper myid file
+  template: src=zoo_id.j2 dest=/etc/zookeeper/conf/myid
+  sudo: yes
+  notify:
+    - Restart zookeeper
+#  when: zookeeper_action == "install"
+
+
+#- name: make sure "{{ mesos_install_prefix }}"/etc/mesos dir exists
+#  file:  path={{ mesos_install_prefix }}/etc/mesos state=directory
+#  tags:
+#    - install
+          
+# used for leader election amongst masters
+#- name: Set ZooKeeper URL
+#  copy:
+#    content: "{{zookeeper_url}}/mesos"
+#    dest: /etc/mesos/zk
+#    mode: 0644
+#  sudo: yes
+#  when: zookeeper_action == "install"
+
+# Remove "ZooKeeper" packages
+#- name: Remove zookeeper packages
+#  apt: pkg={{item}} state=absent purge=yes
+#  with_items:
+#    - zookeeper
+#    - zookeeper-bin
+#    - zookeeperd
+#  sudo: yes
+#  when: zookeeper_action == "remove"

@@ -1,0 +1,86 @@
+---
+#- name: check storm_dir dir exist
+#  stat: path = {{storm_dir}}
+#  register: storm_dir
+
+#- debug: msg="{{storm_dir}} is dir"
+#  when: storm_dir.stat.islink is defined and storm_dir.stat.stat.islink
+
+#- fail: msg="{{storm_dir}} is defined (path exists)"
+#  when: storm_dir_stat.islnk is defined
+
+####Package storm from sources (not ideal)
+#- name: install necessary tools
+#  apt: name={{ item }} state=present update_cache=no
+#  with_items:
+#    - git
+#    - maven
+#  tags:
+#    - install
+#
+#- name: cloning storm sources to /opt/{{storm_name}}
+#  git: repo=https://github.com/apache/storm.git
+#       dest="/opt/{{storm_name}}"
+#       clone=yes
+#  tags:
+#      - install
+#
+## TODO: should be changed and implemented correctly!!!
+#- name: change maven settings (add proxy)
+#  copy: src=maven-settings.xml dest=/etc/maven/settings.xml
+#  tags:
+#    - install
+#
+#- name: build storm from {{storm_name}}
+#  shell: "mvn package -DproxySet=true -DproxyHost=proxy.ifmo.ru -DproxyPort=3128 -DskipTests=true"
+#  args:
+#    chdir: "/opt/{{storm_name}}"
+#  tags:
+#   - install
+
+
+#- name: Ensures /opt/{{storm_name}} dir exists
+#  file: path="/opt/{{storm_name}}" state=directory
+
+#- name: install storm...
+#  command: "sudo tar -xvf {{storm_archive}}"
+#  args:
+#    chdir:  "/opt/{{storm_name}}"
+
+- name: delete previous download
+  command: rm -rf '/tmp/{{ storm_archive }}'
+  sudo: yes
+
+- name: download storm...
+  environment: proxy_env
+  get_url: url='{{ storm_url }}' dest='/tmp/{{ storm_archive }}'
+
+- name: delete previous /opt/{{storm_name}}
+  command: rm -rf '/opt/{{storm_name}}'
+  sudo: yes
+
+- name: install storm...
+  unarchive: copy=no src='/tmp/{{ storm_archive }}' dest='/opt'
+
+- name: setting 777 for '/opt/{{storm_name}}'
+  command: chmod -R 777 '/opt/{{storm_name}}'
+  sudo: yes
+
+- name: linking {{storm_dir}}...
+  file: src='/opt/{{storm_name}}' dest={{storm_dir}} state=link
+
+- name: include storm in the default path...
+  copy: src='etc/profile.d/storm.sh' dest='/etc/profile.d/storm.sh' mode=644
+
+#- name: setting 777 for '{{storm_dir}}'
+#  command: chmod -R 777 '{{storm_dir}}'
+#  sudo: yes
+
+- name: install supervisor/zookeeper/zookeeperd
+  apt: name={{item}}
+  with_items:
+      - supervisor
+      - zookeeper
+      - zookeeperd
+
+

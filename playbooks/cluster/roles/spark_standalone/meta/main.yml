@@ -1,0 +1,3 @@
+---
+dependencies:
+  - { role: smola.java, java_packages: [oracle-java8-installer] }

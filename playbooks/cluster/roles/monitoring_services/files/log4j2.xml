@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+
+    <Appenders>
+        <File name="File" fileName="InfrastructureMonitor.log">
+            <PatternLayout pattern="%d{HH:mm:ss} %-10.10p %-25.25c{2} %msg%n"/>
+            <!--<PatternLayout pattern="%d{HH:mm:ss}    %p  [%t]    %msg%n"/>-->
+        </File>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss} %-10.10p %-30.30c{2} %msg%n"/>
+            <!--%d %p %c{1.} [%t] %m%n-->
+        </Console>
+    </Appenders>
+
+    <Loggers>
+        <Root level="trace">
+            <AppenderRef ref="Console"/>
+        </Root>
+        <!--<Logger level="debug" name="debug">-->
+            <!--<AppenderRef ref="File"/>-->
+        <!--</Logger>-->
+        <Logger level="off" name="org.mongodb.driver">
+            <AppenderRef ref="File"/>
+        </Logger>
+    </Loggers>
+</Configuration>

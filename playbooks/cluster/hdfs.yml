@@ -1,0 +1,25 @@
+---
+# see: http://www.edureka.co/blog/how-to-set-up-hadoop-cluster-with-hdfs-high-availability/
+# see: https://hadoop.apache.org/docs/r2.7.1/hadoop-project-dist/hadoop-hdfs/HDFSHighAvailabilityWithQJM.html#Automatic_Failover to install
+
+- name: apply common configuration to all nodes
+  hosts: hdfs_namenodes
+  sudo: yes
+  tags:
+    - prepare
+  roles:
+    - {role: hdfs_namenode, cluster_mode: "zookeeper" }
+  environment:
+              http_proxy: http://proxy.ifmo.ru:3128
+              HTTP_PROXY: http://proxy.ifmo.ru:3128
+
+- name: apply common configuration to all nodes
+  hosts: hdfs_datanodes
+  sudo: yes
+  tags:
+    - prepare
+  roles:
+    - {role: hdfs_datanode, cluster_mode: "zookeeper" }
+  environment:
+              http_proxy: http://proxy.ifmo.ru:3128
+              HTTP_PROXY: http://proxy.ifmo.ru:3128

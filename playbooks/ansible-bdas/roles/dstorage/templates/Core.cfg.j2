@@ -1,0 +1,133 @@
+########### Core config ###########
+# Local port for listen
+StoragePort = {{core_port}}
+
+Daemon=true
+# Connection Pool. Number of threads to process incoming connections
+ConnectionPool = 2
+
+# Database config
+#Db_user = Andrew
+#Db_password = secret
+Db_host = {{mongodb_address}}
+Db_port = {{mongodb_port}}
+Db_database = coreTest
+
+# HeartBeatPeriod in milliseconds. 120000 = 2 min; 300000 = 5 min // CHANGED sin
+ce 0.42.014
+# HeartBeatPeriod in minutes.
+HeartBeatPeriod = 5
+
+# Security level. Integer since 0.42.002.
+# 0 - no security. No rights checks, no tickets, no https
+# 1 - only rights checks. No tickets, no https
+# 2 - right check + tickets for agents. No https
+# 3 - right check + tickets + http + https # FUTURE RELEASE
+# 4 - right check + tickets + https (mandatory). No http # FUTURE RELEASE
+Security = {{security_level}}
+
+# Number of agents where file can be stored (in addition to primary agent)
+BackupLevel = 3
+
+# Time period of coping files between agents. In milliseconds. 120000 = 2 min; 3
+00000 = 5 min // CHANGED since 0.42.014
+# Time period of coping files between agents. In seconds.
+BackupPeriod = 5
+
+# Time period for deleting files. In milliseconds. 120000 = 2 min; 300000 = 5 mi
+n // CHANGED since 0.42.014
+# Time period for deleting files. In seconds.
+DeletePeriod = 5
+
+# Messages language by default. If client doesn't send "Accept-Language" in requ
+est header, this language will be used
+# Possible values: ru, en
+Lang = en
+
+# Elements in cache will expire after the specified time has elapsed since the m
+ost recent access. In minutes.
+CacheTTL = 5
+
+# Path to Silverlog XML config file for access
+SilverlightXMLConfig = clientaccesspolicy.xml
+
+# file with ContentType
+ContentType = Core.ct
+
+# path to folder with private and public keys
+PathToKeys = ./keys/
+
+# Private key file name
+PrivateKey = private.der
+
+# Public key file name
+PublicKey = public.der
+
+# Encoding messages. By default local encoding will be used
+# Common-used encodings:
+# UTF-8
+# Windows-1251
+#Encoding = UTF-8
+Encoding = Windows-1251
+
+# absolute path to mongo bin files. For backup and restore functions
+MongoBinPath = /usr/bin/
+
+# path to backup directory
+BackupPath = /tmp/backup
+
+# path to BigData reports, analytics, profiles etc
+BigDataPath = /tmp/bigdata
+
+#### log config #####
+
+# Root logger option
+log4j.rootLogger=DEBUG, FILE, stdout
+
+
+# Set path to logs
+log = /var/log/dstorage-core
+
+# Config log messages to a log file
+#log4j.appender.FILE=org.apache.log4j.RollingFileAppender
+
+# Set the maximum file size before rollover
+#log4j.appender.FILE.MaxFileSize=100MB
+
+# Set the the backup index
+#log4j.appender.FILE.MaxBackupIndex=2
+
+# Define the file appender
+log4j.appender.FILE=org.apache.log4j.DailyRollingFileAppender
+
+# Set the DatePattern
+log4j.appender.FILE.DatePattern='.'yyyy-MM-dd
+
+# Set the name of the file
+log4j.appender.FILE.File=${log}/Core.log
+
+
+# Define the layout for file appender
+log4j.appender.FILE.layout=org.apache.log4j.PatternLayout
+log4j.appender.FILE.layout.ConversionPattern=%d [%c] %-5p %m%n
+
+# HttpClient too much communicative, so put it off
+log4j.logger.org.apache.http=WARN
+log4j.logger.org.apache.http.impl.conn.PoolingHttpClientConnectionManager=DEBUG
+#log4j.logger.org.apache.http.wire=WARN
+#log4j.logger.org.apache.http.headers=WARN
+
+# Set encoding for file
+log4j.appender.FILE.encoding=UTF-8
+
+# Direct log messages to stdout
+log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+log4j.appender.stdout.Target=System.out
+log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+log4j.appender.stdout.layout.ConversionPattern=%d [%c] %-5p %m%n
+# Console show only errors
+log4j.appender.stdout.Threshold=INFO
+# For Windows
+#log4j.appender.stdout.encoding=CP866
+# For *nix
+log4j.appender.stdout.encoding=UTF-8

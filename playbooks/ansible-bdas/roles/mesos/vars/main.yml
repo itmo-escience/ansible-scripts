@@ -1,0 +1,8 @@
+---
+
+mesos_version: 0.25.0-1.0.ubuntu1404
+mesos_install_prefix: "/usr"
+mesos_master_host: "{{ mesos_master_hostname }}"
+mesos_master_port: 5050
+mesos_cluster_name: "ITMO_mesos_cluster"
+mesos_cluster_mode: "masters_file"

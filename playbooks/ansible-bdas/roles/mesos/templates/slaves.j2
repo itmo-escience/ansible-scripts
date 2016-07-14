@@ -1,0 +1,5 @@
+# Mesos slaves
+{% for host in groups['mesos_slaves'] %}
+{{ host }}
+{% endfor %}
+

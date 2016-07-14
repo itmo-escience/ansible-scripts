@@ -1,0 +1,6 @@
+---
+# vars file for zookeeper
+zookeeper_leader_port: "2888"
+zookeeper_election_port: "3888"
+zookeeper_client_port: "2181"
+zookeeper_url: "zk://{{ groups.zookeeper | join(':' + zookeeper_client_port + ',') }}:{{ zookeeper_client_port }}"

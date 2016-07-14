@@ -1,0 +1,3 @@
+---
+# Log file to send write to instead of stdout
+mongodb_conf_logpath: /var/log/mongodb/mongod.log

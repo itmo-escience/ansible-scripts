@@ -1,0 +1,5 @@
+PORT=5050
+IP={{.ipv4.address}}
+CLUSTER={{mesos_cluster_name}}
+LOG_DIR=/var/log/mesos
+WORK_DIR=/var/run/mesos

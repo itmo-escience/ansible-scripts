@@ -1,0 +1,175 @@
+---
+####################################
+### Installation
+####################################
+# Common tasks for all Mesos nodes
+- name: Add key for Mesosphere repository
+  apt_key: url=http://keyserver.ubuntu.com/pks/lookup?op=get&fingerprint=on&search=0xE56151BF state=present
+  sudo: yes
+  tags:
+    - install
+
+- name: Determine Linux distribution distributor
+  shell: lsb_release -is | tr '[:upper:]' '[:lower:]'
+  register: release_distributor
+  tags:
+      - install
+
+- name: Determine Linux distribution codename
+  command: lsb_release -cs
+  register: release_codename
+  tags:
+      - install
+
+- name: Add Mesosphere repository to sources list
+  copy:
+    content: "deb http://repos.mesosphere.io/{{release_distributor.stdout}} {{release_codename.stdout}} main"
+    dest: /etc/apt/sources.list.d/mesosphere.list
+    mode: 0644
+  sudo: yes
+  tags:
+      - install
+
+# Tasks for Master, Slave, and ZooKeeper nodes
+- name: Install mesos package
+  apt: pkg=mesos update_cache=yes state=present
+  #with_items:
+    #- mesos
+    #- marathon
+  sudo: yes
+  register: mesos_package_installation
+  tags:
+      - install
+
+- name: make sure "{{ mesos_install_prefix }}"/etc/mesos dir exists
+  file:  path={{ mesos_install_prefix }}/etc/mesos state=directory
+  tags:
+      - install
+
+- name: Disable the Mesos Slave service
+  service: name=mesos-slave state=stopped enabled=no
+  sudo: yes
+  when: mesos_package_installation.changed
+  tags:
+    - install
+
+#- name: Disable the Mesos Master service
+#  service: name=marathon state=stopped enabled=no
+#  sudo: yes
+#  when: mesos_package_installation.changed
+#  tags:
+#    - install
+
+####################################
+### Installation
+####################################
+
+- name: configure masters file
+  template: src=masters.j2 dest={{ mesos_install_prefix }}/etc/mesos/masters
+  tags:
+      - configure
+
+####################################
+### Master settings
+####################################
+
+- name: configure cluster slaves
+  template: src=slaves.j2 dest={{ mesos_install_prefix }}/etc/mesos/slaves
+  when: mesos_install_mode == "master"
+  notify:
+   - Restart mesos master
+  tags:
+       - configure
+
+- name: configure master settings
+  template: src=mesos-master.j2 dest=/etc/default/mesos-master
+  when: mesos_install_mode == "master"
+  notify:
+    - Restart mesos master
+  tags:
+    - configure
+
+- name: Set ZooKeeper URL for mesos
+  copy:
+    content: "zk://{{ groups.zookeeper | join(':' + '2181' + ',') }}:2181/mesos"
+    dest: /etc/mesos/zk
+    mode: 0644
+  sudo: yes
+  when: mesos_cluster_mode == "zookeeper"
+
+#- name: Enable the Mesos Master service
+#  copy:
+#    content: "manual"
+#    dest: /etc/init/mesos-master.override
+#    mode: 0644
+#  sudo: yes
+#  when: mesos_install_mode == "slave"
+#  tags:
+#    - start
+
+- name: Start mesos-master
+  service: name=mesos-master state=started enabled=yes
+  sudo: yes
+  when: mesos_install_mode == "master"
+  tags:
+    - start
+
+#- name: Start marathon
+#  service: name=marathon state=started enabled=yes
+#  sudo: yes
+#  when: mesos_install_mode == "master"
+#  tags:
+#    - start
+
+
+####################################
+### Slave settings
+####################################
+
+- name: configure slave settings
+  template: src=mesos-slave.j2 dest=/etc/default/mesos-slave
+  when: mesos_install_mode == "slave"
+  notify:
+    - Restart mesos slave
+  tags:
+    - configure
+
+#- name: Enable the Mesos Slave service
+#  copy:
+#    content: "manual"
+#    dest: /etc/init/mesos-slave.override
+#    mode: 0644
+#  sudo: yes
+#  when: mesos_install_mode == "master"
+#  tags:
+#     - start
+
+- name: Start mesos-slave
+  service: name=mesos-slave state=started enabled=yes
+  sudo: yes
+  when: mesos_install_mode == "slave"
+  tags:
+    - start
+
+
+
+
+####################################
+### Stop services
+####################################
+- name: Stop mesos slaves
+  service: name=mesos-slave state=stopped enabled=no
+  sudo: yes
+  when: mesos_install_mode == "slave"
+  tags:
+    - stop
+
+- name: Stop mesos masters
+  service: name=mesos-master state=stopped enabled=no
+  sudo: yes
+  when: mesos_install_mode == "master"
+  tags:
+    - stop
+
+
+
