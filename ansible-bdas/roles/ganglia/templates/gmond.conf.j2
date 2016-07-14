@@ -227,3 +227,5 @@ modules {
    }
 {% endfor %}
 {% endif %}
+
+include("{{ ganglia_config_dir }}/conf.d/*.conf")

@@ -59,7 +59,20 @@
   tags:
     - ganglia-monitor
     - configure
-  
+
+- name: Copy diskstat.pyconf to {{ ganglia_config_dir }}/conf.d
+  template: >-
+    src=diskstat.pyconf.j2
+    dest={{ ganglia_config_dir }}/conf.d/diskstat.pyconf
+    owner=root
+    group=root
+    mode=0644
+  with_dict: "{{ganglia_config_gmond}}"
+  when: "ganglia_monitor is defined"
+  tags:
+    - ganglia-monitor
+    - configure
+
 - name: Configure Ganglia Monitors
   template: >-
     src=gmond.conf.j2
@@ -100,6 +113,19 @@
 
 # Configures the web frontend service in apache
 
+- name: Copy diskstat_report.json.j2 to {{ ganglia_webfrontend_dir }}/graph.d
+  template: >-
+    src=diskstat_report.json.j2
+    dest={{ ganglia_webfrontend_dir }}/graph.d/diskstat_report.json
+    owner=root
+    group=root
+    mode=0644
+  notify:
+    - restart ganglia-meta
+  when: "ganglia_web is defined"
+  tags:
+    - ganglia-web
+    - configure
 
 - name: Enable the apache2 frontend
   template: >-

@@ -2,6 +2,8 @@
 # Path to the ganglia configuration.
 ganglia_config_dir: /etc/ganglia
 
+ganglia_webfrontend_dir: /usr/share/ganglia-webfrontend
+
 # Path to init scripts.
 ganglia_init_d_dir: /etc/init.d
 
@@ -9,7 +11,6 @@ ganglia_init_d_dir: /etc/init.d
 ganglia_gmond_binary: /usr/sbin/gmond
 
 ganglia_api_dir: /opt/ganglia-api
-
 ganglia_api_daemon: "{{ganglia_api_daemon}}"
 
 
@@ -66,7 +67,6 @@ ganglia_config_gmetad:
   server_threads: 4
   rrd_rootdir: '/var/lib/ganglia/rrds'
   unsummarized_metrics:
-    - 'diskstat'
     - 'CPU'    
   case_sensitive_hostnames: 0
 
@@ -171,6 +171,9 @@ ganglia_config_gmond:
 
         - name: 'sys_module'
           path: '{{ganglia_lib_dir}}/modsys.so'
+
+        - name: 'diskstat'
+          path: '{{ganglia_lib_dir}}/python_modules/diskstat.py'
 
       collection_groups:
         - collect_once: 'yes'
@@ -333,7 +336,15 @@ ganglia_config_gmond:
 
             - name: 'disk_total'
               value_threshold: '1.0'
-              title: 'Total Disk Space'                  
+              title: 'Total Disk Space'                
+            
+            - name: 'diskstat_sda1_read_bytes_per_sec'
+              value_threshold: '1.0'
+              title: 'Disc Bytes Read'  
+  
+            - name: 'diskstat_sda1_write_bytes_per_sec'
+              value_threshold: '1.0'
+              title: 'Disc Bytes Write'  
 
 #    'service':
 #      cluster:
