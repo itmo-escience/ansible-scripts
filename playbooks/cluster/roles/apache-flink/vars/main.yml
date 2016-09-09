@@ -1,0 +1,13 @@
+---
+mirror_url: "http://mirrors.myaegean.gr/apache/flink"
+version: "1.1.2"
+version_for: "bin-hadoop27"
+download_path: "/tmp"
+installation_path: "/usr/lib"
+jobmanager_heap_mb: 256 
+taskmanager_heap_mb: 512 
+taskmanager_numberOfTaskSlots: "{{ ansible_processor_count * ansible_processor_cores }}"
+parallelization_degree_default: "{{ (ansible_processor_count * ansible_processor_cores * groups['flink_slaves']|count / 2)|int }}"
+number_of_taskmanagers: "{{ groups['flink_slaves']|count }}"
+ram_per_task_manager: 768
+

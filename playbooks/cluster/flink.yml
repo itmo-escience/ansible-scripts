@@ -1,0 +1,18 @@
+---
+- name: install flink on masters
+  hosts: flink_masters
+  roles:
+    - { role: apache-flink }
+  any_errors_fatal: yes
+  environment:
+              http_proxy: http://proxy.ifmo.ru:3128
+              HTTP_PROXY: http://proxy.ifmo.ru:3128
+
+- name: install flink on slaves
+  hosts: flink_slaves
+  roles:
+    - { role: apache-flink }
+  any_errors_fatal: yes
+  environment:
+              http_proxy: http://proxy.ifmo.ru:3128
+              HTTP_PROXY: http://proxy.ifmo.ru:3128

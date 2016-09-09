@@ -1,0 +1,45 @@
+---
+  - name: Download Apache Flink, Yarn version.
+    get_url: url="{{ mirror_url }}/flink-{{ version }}/flink-{{ version }}-{{ version_for }}-scala_2.11.tgz" dest="{{ download_path }}/flink-{{ version }}-{{ version_for }}.tgz"
+    sudo: yes
+    tags:
+      - download
+
+  - name: Uncompress Apache Flink.
+    unarchive: src="{{ download_path }}/flink-{{ version }}-{{ version_for }}.tgz" dest="{{ installation_path }}" copy=no owner=vagrant
+    sudo: yes
+    tags:
+      - uncompress
+
+  - name: Create softlink for Apache Flink.
+    file: src="{{ installation_path }}/flink-{{ version }}" dest="{{ installation_path }}/flink" state=link
+    sudo: yes
+    tags:
+      - uncompress
+
+  - name: Configure Apache Flink.
+    template: src=flink-conf.j2 dest="{{ installation_path }}/flink/conf/flink-conf.yaml" owner=vagrant mode=0644
+    sudo: yes
+    tags:
+      - configure
+
+  - name: populate conf/slaves file
+    template: src=slaves.j2 dest={{ installation_path }}/flink/conf/slaves owner=vagrant
+    sudo: yes
+    tags:
+      - configure
+              
+
+  - name: Copy Apache Flink init script.
+    sudo: yes
+    template: src=flink-init.j2 dest=/etc/init.d/flink-init owner=vagrant mode=0740
+    tags:
+      - configure
+
+
+  - name: Start Apache Flink.
+    shell: /etc/init.d/flink-init start > /dev/null
+    sudo: yes
+    tags:
+      - start
+

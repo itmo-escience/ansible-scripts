@@ -60,3 +60,10 @@ node-92-26
 node-92-27
 node-92-28
 node-92-29
+
+
+[flink_masters]
+node-92-24
+
+[flink_slaves]
+node-92-2[5:6]
