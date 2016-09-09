@@ -5,40 +5,32 @@
     - install
 
 - name: Extract Spark archive
-  unarchive: copy=no src="/tmp/{{ spark_distribution }}.tgz" dest=/usr/lib
+  unarchive: copy=no src="/tmp/{{ spark_distribution }}.tgz" dest=/usr/lib owner=vagrant
   sudo: yes
   tags:
     - install
 
 - name: Create link to Spark directory
-  file: src=/usr/lib/{{ spark_distribution }} dest={{ spark_root }} state=link
+  file: src=/usr/lib/{{ spark_distribution }} dest={{ spark_root }} state=link force=yes owner=vagrant
   sudo: yes
   tags:
     - install
 
-#- include_vars: roles/hadoop_common/vars/main.yml
-#  tags:
-#    - configure
+- name: Configure Spark to run in standalone deploy mode
+  template: src=conf/spark-env.sh.j2 dest={{ spark_root }}/conf/spark-env.sh
+  sudo: yes
+  tags:
+    - configure
 
-#- include_vars: roles/tachyon/vars/main.yml
-#  tags:
-#    - configure
+- name: populate conf/slaves file
+  template: src=conf/slaves.j2 dest={{ spark_root }}/conf/slaves
+  sudo: yes
+  tags:
+    - configure
 
-#- name: Configure Spark to run in standalone deploy mode
-#  template: src=conf/spark-env.sh.j2 dest={{ spark_root }}/conf/spark-env.sh
-#  sudo: yes
-#  tags:
-#    - configure
-#
-#- name: populate conf/slaves file
-#  template: src=conf/slaves.j2 dest={{ spark_root }}/conf/slaves
-#  sudo: yes
-#  tags:
-#    - configure
-#
-#- name: increase default spark.executor.memory parameter
-#  template: src=conf/spark-defaults.conf.j2 dest={{ spark_root }}/conf/spark-defaults.conf
-#  sudo: yes
-#  tags:
-#    - configure
+- name: increase default spark.executor.memory parameter
+  template: src=conf/spark-defaults.conf.j2 dest={{ spark_root }}/conf/spark-defaults.conf
+  sudo: yes
+  tags:
+    - configure
 
