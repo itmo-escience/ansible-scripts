@@ -9,6 +9,11 @@ echo 'export HTTP_PROXY=http://proxy.ifmo.ru:3128' >> ~/.bashrc
 # get git
 sudo http_proxy=http://proxy.ifmo.ru:3128 HTTP_PROXY=http://proxy.ifmo.ru:3128 apt-get install -y git
 
+# get java
+sudo http_proxy=http://proxy.ifmo.ru:3128 HTTP_PROXY=http://proxy.ifmo.ru:3128 sudo add-apt-repository ppa:webupd8team/java
+sudo http_proxy=http://proxy.ifmo.ru:3128 HTTP_PROXY=http://proxy.ifmo.ru:3128 apt-get update
+sudo http_proxy=http://proxy.ifmo.ru:3128 HTTP_PROXY=http://proxy.ifmo.ru:3128 apt-get install oracle-java8-installer
+
 export http_proxy=http://proxy.ifmo.ru:3128 
 export HTTP_PROXY=http://proxy.ifmo.ru:3128
 
