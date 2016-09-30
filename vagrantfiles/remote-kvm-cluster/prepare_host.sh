@@ -13,6 +13,12 @@ echo "</pool>" >> pool.xml
 
 sudo virsh pool-create pool.xml
 
-sudo service libvirtd restart
+LIBVIRT_ACCESS_POLICY=/etc/polkit-1/localauthority/50-local.d/50-org.libvirt-remote-access.pkla
+echo "[Remote libvirt SSH access]" > $LIBVIRT_ACCESS_POLICY
+echo "Identity=unix-user:nano" >> $LIBVIRT_ACCESS_POLICY
+echo "Action=org.libvirt.unix.manage" >> $LIBVIRT_ACCESS_POLICY
+echo "ResultAny=yes" >> $LIBVIRT_ACCESS_POLICY
+echo "ResultInactive=yes" >> $LIBVIRT_ACCESS_POLICY
+echo "ResultActive=yes" >> $LIBVIRT_ACCESS_POLICY
 
-vagrant plugin install vagrant-libvirt
+sudo service libvirtd restart
