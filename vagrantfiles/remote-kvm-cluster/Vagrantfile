@@ -1,0 +1,41 @@
+Vagrant.configure("2") do |config|
+
+# Require YAML module
+require 'yaml'
+
+# Read YAML file with box details
+cfg = YAML.load_file('config.yaml')
+
+cfg['servers'].each do |server|
+    server['vms'].each do |vm|
+        config.vm.define vm['name'] do |hostedvm|
+            hostedvm.vm.box = "rboyer/ubuntu-trusty64-libvirt"
+            #vm.vm.box = "uvsmtid/centos-7.0-minimal"
+
+            hostedvm.vm.provider :libvirt do |domain|
+              domain.volume_cache = 'none'
+              domain.connect_via_ssh = true
+              domain.id_ssh_key_file = cfg['sshkey_path']
+              domain.host = server['ip']
+              domain.username = cfg['username']
+              domain.storage_pool_name = server['storage_pool_name']
+
+              # domain.storage_pool_name = "default"
+              # how additional storage should be added to a machine. NOT WORKING YET.
+              # domain.storage :file, size: '1G', type: 'raw', device: 'vdddd', path: 'vm_hdfs_disk.img', allow_existing: true, shareable: false
+            end
+
+            hostedvm.vm.cpus = vm['cpus']
+            hostedvm.vm.memory = vm['memory']
+
+            hostedvm.vm.network :public_network,
+                :dev => "enp7s0f0",
+                :mode => "bridge",
+                :type => "direct",
+                :ip => vm['ip'],
+                :netmask => "255.255.0.0"
+
+            hostedvm.vm.synced_folder ".", "/home/vagrant/project"
+        end
+    end
+end
