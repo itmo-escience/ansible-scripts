@@ -34,7 +34,7 @@
         ip: "192.168.13.112"
         storage_pool_name: "fcpir_500G"
         vms:
-          - name: "node-92-73"
-            ip: "192.168.92.73"
+          - name: "node-92-74"
+            ip: "192.168.92.74"
             cpus: 32
             memory: 70000
