@@ -1,0 +1,9 @@
+---
+- name: "Configuring /etc/hosts files"
+  hosts: all
+  sudo: yes
+  tasks:
+    - name: Generate /etc/hosts file
+      template:
+        src=etc_hosts.j2
+        dest=/etc/hosts

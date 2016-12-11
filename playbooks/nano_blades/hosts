@@ -1,9 +1,9 @@
-#node-13-109 ansible_ssh_host=192.168.13.109
-#node-13-110 ansible_ssh_host=192.168.13.110
+node-13-109 ansible_ssh_host=192.168.13.109
+node-13-110 ansible_ssh_host=192.168.13.110
 node-13-111 ansible_ssh_host=192.168.13.111
-#node-13-112 ansible_ssh_host=192.168.13.112
-#node-13-129 ansible_ssh_host=192.168.13.129
-#node-13-131 ansible_ssh_host=192.168.13.131
-#node-13-132 ansible_ssh_host=192.168.13.132
-#node-13-133 ansible_ssh_host=192.168.13.133
+node-13-112 ansible_ssh_host=192.168.13.112
+node-13-129 ansible_ssh_host=192.168.13.129
+node-13-131 ansible_ssh_host=192.168.13.131
+node-13-132 ansible_ssh_host=192.168.13.132
+node-13-133 ansible_ssh_host=192.168.13.133
 
