@@ -1,0 +1,31 @@
+---
+- name: "mounting shared folders"
+  hosts: all
+  sudo: yes
+  tasks:
+    # file smbcreds133 is not presented in files directory
+    # due to it contains security sensitive information
+    # this file must be add manually
+    - name: Creating creds for mounting
+      copy: src=.smbcreds133 dest=/root/.smbcreds133
+
+    - name: Installing cifs-utils to be used for shared directory mounting
+      yum:
+        name: cifs-utils
+        state: present
+
+#    - name: Mount shared folder from 13.133
+#      mount:
+#        name: /mnt/share133
+#        src: //192.168.13.133/share
+#        fstype: cifs
+#        opts: "credentials=/root/.smbcreds133,rw,exec,uid=root,gid=root"
+#        state: mounted
+
+    - name: Mount shared folder from 13.1
+      mount:
+        name: /mnt/share
+        src: //192.168.13.1/share
+        fstype: cifs
+        opts: "credentials=/root/.smbcreds133,rw,exec,uid=nano,gid=nano"
+        state: mounted
